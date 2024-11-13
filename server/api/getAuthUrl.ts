@@ -5,10 +5,10 @@ export default defineEventHandler(async (event) => {
   // Load environment variables
 
   const host = getRequestHeader(event, 'host')
-      let redirectUri
-     if (host === 'localhost:3000') {
-    redirectUri = `http://${host}/api/oauth2callback`
-  } else {
+	let redirectUri
+	if (host?.includes('localhost')) {
+		redirectUri = `http://${host}/api/oauth2callback`
+	} else {
     redirectUri = `https://${host}/api/oauth2callback`
   }
 

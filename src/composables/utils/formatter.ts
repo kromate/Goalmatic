@@ -123,3 +123,7 @@ export const formatTimeRange = (timeDuration: TimeDuration): string => {
 
   return `${formattedStartTime} - ${formattedEndTime}`
 }
+
+export const capitalize = (str: string): string => {
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
+}

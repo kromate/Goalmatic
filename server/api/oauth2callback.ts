@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
   let redirectUri
 
   // Conditionally set the redirect URI based on the host
-  if (host === 'localhost:3000') {
+  if (host?.includes('localhost')) {
     redirectUri = `http://${host}/api/oauth2callback`
   } else {
     redirectUri = `https://${host}/api/oauth2callback`
