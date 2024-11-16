@@ -24,7 +24,7 @@
 						{{ todo.description }}
 					</p>
 					<footer class=" italic mt-auto flex flex-col ">
-						<span><b>Due Date:</b> {{ formatDateString(todo.due_date) }}</span>
+						<span><b>Due Date:</b> {{ formatDateString(todo.date) }}</span>
 						<span><b>Estimated Duration:</b> {{ todo.estimated_duration }}</span>
 						<span><b>Is Reccuring</b> {{ todo.is_reccuring }}</span>
 					</footer>

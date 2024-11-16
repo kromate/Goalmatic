@@ -163,7 +163,7 @@ todos: Array of Object with the following properties: {
     description: string (description of the todo),
     "estimated_duration": string (estimated time to complete the todo, e.g., "30 minutes", "1 hour"),
     "viable_time_range" Array of strings (suggested time slots to complete the todo, e.g., ["8:00 AM - 9:00 AM", "3:00 PM - 4:00 PM"]),
-    "due_date": string (date the todo should be completed, format: YYYY-MM-DD),
+    "date": string (date the todo should be completed, format: YYYY-MM-DD),
     "is_reccuring": boolean (whether the todo is a recurring task),
     "frequency": string (frequency of the todo) - 'HOURLY', 'DAILY', 'WEEKLY', 'MONTHLY', 'YEARLY'
     "frequency_count": number (number of times the todo should be done in the frequency) - e.g. 3 times a week, frequency_count = 3

@@ -7,7 +7,7 @@
 		</header>
 
 		<section>
-			<div class="relative">
+			<div class="relative mb-4">
 				<input type="text" class="input-field" placeholder="Enter a todo for the day">
 				<button class="absolute right-2 top-1/2 -translate-y-1/2">
 					<PlusCircle />
@@ -102,7 +102,7 @@ const deleteTask = (taskId: string) => {
 .column {
   flex: 0 0 300px;
   padding: 1rem;
-  background-color: #f1f5f9;
+  background-color: #cfd4d8;
   border-radius: 0.5rem;
   scroll-snap-align: start;
 }

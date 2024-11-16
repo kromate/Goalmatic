@@ -54,7 +54,8 @@ const createMilestone = async () => {
 
         milestones.value = JSON.parse(data.value).milestones.map((milestone: any) => ({
             ...milestone,
-            id: nanoid()
+            id: nanoid(),
+            goal_id: goalDetails.value.id
         }))
     } catch (e:any) {
         useAlert().openAlert({ type: 'ERROR', msg: e instanceof Error ? e.message : 'An unexpected error occurred, please try again' })
@@ -87,7 +88,8 @@ const createTodo = async () => {
 
         todos.value = JSON.parse(data.value).todos.map((todo: any) => ({
             ...todo,
-            id: nanoid()
+            id: nanoid(),
+            goal_id: goalDetails.value.id
         }))
     } catch (e:any) {
         useAlert().openAlert({ type: 'ERROR', msg: e instanceof Error ? e.message : 'An unexpected error occurred, please try again' })
