@@ -120,3 +120,5 @@ export const isToday = (date: Date | string): boolean => {
 		dateObj.getMonth() === today.getMonth() &&
 		dateObj.getFullYear() === today.getFullYear()
 }
+
+export const capitalize = (text: string) => (text[0] ?? '').toUpperCase() + text.slice(1)
