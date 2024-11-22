@@ -1,4 +1,4 @@
-import { Link, Brain, Settings, Grid3X3, CheckCheck } from 'lucide-vue-next'
+import { Link, Brain, Settings, Grid3X3, CheckCheck, StickyNote, Calendar } from 'lucide-vue-next'
 
 export const dashboardRoutes = () => [
 
@@ -12,8 +12,24 @@ export const dashboardRoutes = () => [
 	},
 	{
 		icon: CheckCheck,
-		name: 'Todo',
+		name: 'Todos',
 		route: '/todos',
+		main: true,
+		bg: '#e5e7eb',
+		color: '#18181B'
+	},
+	{
+		icon: StickyNote,
+		name: 'Notes',
+		route: '/notes',
+		main: true,
+		bg: '#e5e7eb',
+		color: '#18181B'
+	},
+	{
+		icon: Calendar,
+		name: 'Calendar',
+		route: '/calendar',
 		main: true,
 		bg: '#e5e7eb',
 		color: '#18181B'

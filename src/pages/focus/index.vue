@@ -1,7 +1,7 @@
 <template>
 	<main class="flex  h-dvh w-full overflow-hidden">
 		<section id="todo" class="w-full">
-			<FocusTodoMain />
+			<!-- <FocusTodoMain /> -->
 		</section>
 		<section id="calendar" class="w-full">
 			<FocusCalendar />
