@@ -52,7 +52,7 @@ const selectPalette = computed(() => {
 		case 'success':
 		case 'accepted':
 		case 'completed':
-		case 'paid':
+		case 'today':
 		case 'opened':
 		case 'public':
 		case 'active':

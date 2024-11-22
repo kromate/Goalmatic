@@ -28,23 +28,21 @@
 
 <script setup lang="ts">
 import { useUser } from '@/composables/auth/user'
-import { formatDateString, formatTimeRange } from '@/composables/utils/formatter'
-import { UserContact } from '@/composables/types'
+import { formatDateString } from '@/composables/utils/formatter'
+
 import { convertToCurrency } from '@/composables/utils/currency'
 
 const { userProfile } = useUser()
 
 
 defineProps({
-    contacts: {
-        type: Array as PropType<UserContact[]>,
-        required: true
-    }
+	contacts: {
+		type: Array,
+		required: true
+	}
 })
 
 
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

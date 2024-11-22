@@ -9,7 +9,7 @@ import LoadingVerification from '@/components/modals/core/loading.vue'
 
 // ==================== DASHBOARD ===============================
 import StartGoal from '@/components/modals/dashboard/StartGoal.vue'
-
+import EditTodo from '@/components/modals/dashboard/EditTodo.vue'
 // ==================== BOTTOMBAR ===============================
 import BottomMenu from '@/components/layouts/bottomBar/modal/Main.vue'
 
@@ -17,14 +17,14 @@ import BottomMenu from '@/components/layouts/bottomBar/modal/Main.vue'
 
 
 type AuthTypes = 'Logout'
-type DashboardTypes = 'StartGoal'
+type DashboardTypes = 'StartGoal' | 'EditTodo'
 type CoreTypes = 'Confirmation' | 'LoadingVerification'
 type WalletTypes = 'SendMoney'
 type BottombarTypes = 'BottomMenu'
 
 
 const AuthModals = { Logout } as Record<AuthTypes, any>
-const DashboardModals = { StartGoal } as Record<DashboardTypes, any>
+const DashboardModals = { StartGoal, EditTodo } as Record<DashboardTypes, any>
 const CoreModals = { Confirmation, LoadingVerification } as Record<CoreTypes, any>
 const BottombarModals = { BottomMenu } as Record<BottombarTypes, any>
 

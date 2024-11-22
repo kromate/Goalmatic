@@ -47,12 +47,19 @@
 
 <script setup>
 import { CheckSquare } from 'lucide-vue-next'
+import { useFetchUserTodosByGoalId } from '@/composables/dashboard/todo/fetch'
 import { useFetchGoalsById } from '@/composables/dashboard/goals/id'
 import { useStartGoal } from '@/composables/dashboard/goals/start'
 import { formatDateString } from '@/composables/utils/formatter'
 
+
 const { initStartGoal } = useStartGoal()
-const { goalDetails, todos } = useFetchGoalsById()
+const { goalDetails } = useFetchGoalsById()
+const { fetchTodosByGoalId, todos, loading } = useFetchUserTodosByGoalId()
+
+onMounted(async () => {
+	await fetchTodosByGoalId(goalDetails.value.id)
+})
 </script>
 
 <style lang="scss" scoped></style>

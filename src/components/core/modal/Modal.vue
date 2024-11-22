@@ -19,7 +19,7 @@
 						<X
 							v-if="!noClose"
 							name="close"
-							class="text-dark w-7 cursor-pointer  border-[1.5px] border-dark rounded-md"
+							class="text-dark w-7 cursor-pointer  rounded-md"
 							@click="closeBtnPressed()"
 						/>
 					</header>

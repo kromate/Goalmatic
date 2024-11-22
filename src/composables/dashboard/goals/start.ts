@@ -1,12 +1,14 @@
 import { nanoid } from 'nanoid'
+import { writeBatch, doc } from 'firebase/firestore'
 import { useAlert } from '@/composables/core/notification'
 import { useDashboardModal } from '@/composables/core/modals'
-import { updateFirestoreDocument } from '@/firebase/firestore/edit'
+import { db } from '@/firebase/init'
+import { useUser } from '@/composables/auth/user'
 
 const start_date = ref()
 const goalDetails = ref()
 const milestones = ref([])
-const todos = ref([])
+const todos = ref([] as Record<string, any>[])
 const loading = ref(false)
 export const useStartGoal = () => {
     const initStartGoal = async (data: Record<string, any>) => {
@@ -100,12 +102,28 @@ const createTodo = async () => {
 
 const updateGoalDocument = async () => {
     try {
-        await updateFirestoreDocument('goals', goalDetails.value.id, {
+        const { id: user_id } = useUser()
+        const batch = writeBatch(db)
+
+        // Update goal document
+        const goalRef = doc(db, 'goals', goalDetails.value.id)
+        batch.update(goalRef, {
             start_date: start_date.value,
             milestones: milestones.value,
-            todos: todos.value,
             started: true
         })
+
+        // Create todos as sub-documents under the user
+        for (const todo of todos.value) {
+            const todoRef = doc(db, 'users', user_id.value!, 'todos', todo.id)
+            batch.set(todoRef, {
+                ...todo,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString()
+            })
+        }
+
+        await batch.commit()
     } catch (e:any) {
         useAlert().openAlert({ type: 'ERROR', msg: e instanceof Error ? e.message : 'An unexpected error occurred, please try again' })
         throw new Error(e)

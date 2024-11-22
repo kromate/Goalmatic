@@ -1,111 +1,118 @@
 <template>
 	<article class="column">
-		<header class="flex items-center justify-between w-full">
-			<h2 class="text-xl font-medium mb-3">
-				{{ formattedDate }}
-			</h2>
+		<header>
+			<div class="flex items-center justify-start gap-4">
+				<h2 class="text-lg font-semibold text-gray-900">
+					{{ formattedDate }}
+				</h2>
+				<ColorBadge v-if="isToday(props.date)" name="today" class="text-lg  text-center !px-3 !py-1 !text-xs" />
+			</div>
+
+			<p class="text-sm text-gray-500">
+				{{ dayOfWeek }}
+			</p>
 		</header>
 
-		<section>
-			<div class="relative mb-4">
-				<input type="text" class="input-field" placeholder="Enter a todo for the day">
-				<button class="absolute right-2 top-1/2 -translate-y-1/2">
-					<PlusCircle />
-				</button>
-			</div>
-		</section>
-
-		<draggable
-			v-if="tasks.length > 0"
-			:list="tasks"
-			group="tasks"
-			item-key="id"
-			class="flex flex-col gap-4 min-h-[30dvh] h-full"
-			@change="updateTasks"
-		>
-			<template #item="{ element }">
-				<PagesDashboardTodosColumnCard
-					:key="element.id"
-					:task="element"
-					@edit="editTask"
-					@delete="deleteTask"
-				/>
-			</template>
-		</draggable>
-		<div v-else class="flex flex-col gap-4 min-h-[30dvh] h-full center">
-			<ListTodo :size="40" />
-			<p class="w-full text-center">
-				You have no todos for this day
-			</p>
+		<div class="relative">
+			<input
+				v-model="title"
+				type="text"
+				class="w-full pl-4 pr-12 py-2 border border-gray-300 rounded-lg  input-field"
+				placeholder="Enter a todo for the day"
+				@keyup.enter="createNewTodo"
+			>
+			<button class="absolute right-2 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors">
+				<SendHorizonal v-if="title" class="w-6 h-6 text-primary" @click="createNewTodo" />
+				<PlusCircle v-else class="w-6 h-6 text-primary" />
+			</button>
 		</div>
+
+
+		<TransitionGroup
+			name="todo-list"
+			tag="div"
+			class="flex flex-col gap-4"
+		>
+			<draggable :key="'draggable-' + props.date" :list="todo" group="tasks" item-key="id" class="flex flex-col gap-4" @change="moveTodo($event, props.date)">
+				<div v-for="element in todo" :key="element.id">
+					<PagesDashboardTodosColumnCard :todo="element" />
+				</div>
+			</draggable>
+			<div v-if="todo.length === 0" :key="'empty-' + props.date" class="items-center justify-center flex flex-col gap-2">
+				<ListTodo :size="40" class="text-gray-400" />
+				<p class="text-gray-500">
+					You have no todos for this day
+				</p>
+			</div>
+		</TransitionGroup>
 	</article>
 </template>
 
 <script setup lang="ts">
-import { format, parseISO } from 'date-fns'
-import draggable from 'vuedraggable'
-import { ListTodo, PlusCircle } from 'lucide-vue-next'
-import { Task } from '@/composables/types'
+import { useDateFormat } from '@vueuse/core'
+import { VueDraggableNext as draggable } from 'vue-draggable-next'
+import { ListTodo, PlusCircle, SendHorizonal } from 'lucide-vue-next'
+import { Todo } from '@/composables/types'
+import { useCreateTodo } from '@/composables/dashboard/todo/create'
+import { isToday } from '@/composables/utils/formatter'
+import { useMoveTodo } from '@/composables/dashboard/todo/move'
 
+const { createTodo, createBoardForm } = useCreateTodo()
+const { moveTodo } = useMoveTodo()
+const title = ref('')
 
 const props = defineProps({
-  date: {
-    type: String,
-    required: true
-  },
-  tasks: {
-    type: Array as PropType<Task[]>,
-    required: true
-  }
+	date: {
+		type: String,
+		required: true
+	},
+	todo: {
+		type: Array as PropType<Todo[]>,
+		required: true
+	}
 })
 
+const createNewTodo = async () => {
+	createBoardForm.date = new Date(props.date).toISOString()
+	createBoardForm.title = title.value
+	await createTodo()
+	createBoardForm.date = ''
+	title.value = ''
+}
 
+const emit = defineEmits(['addTodo', 'updateTodo', 'deleteTodo'])
 
-const emit = defineEmits<{(e: 'add-task', date: string, task: Task): void;
-  (e: 'update-task', date: string, taskId: string | null, updatedTask:Task[]): void;
-  (e: 'delete-task', date: string, taskId: string): void;
-}>()
 
 const formattedDate = computed(() => {
-  return format(parseISO(props.date), 'EEEE, MMM d')
+	return useDateFormat(props.date, 'MMM D, YYYY').value
 })
 
-const openAddTaskModal = () => {
-  // Implement your modal logic here
-  const newTask: Task = {
-    id: Math.random().toString(36).substr(2, 9),
-    title: 'New Task',
-    description: 'Task description',
-    priority: 'low',
-    isRecurring: false,
-    estimatedDuration: '0',
-    dueDate: props.date
-  }
-  emit('add-task', props.date, newTask)
-}
+const dayOfWeek = computed(() => {
+	return useDateFormat(props.date, 'dddd').value
+})
 
-const updateTasks = () => {
-  emit('update-task', props.date, null, props.tasks)
-}
-
-const editTask = (task: Task[]) => {
-  // Implement your edit modal logic here
-  emit('update-task', props.date, task[0].id, task)
-}
-
-const deleteTask = (taskId: string) => {
-  emit('delete-task', props.date, taskId)
-}
 </script>
 
 <style scoped>
 .column {
+	@apply flex flex-col border border-line rounded-lg p-4 gap-4;
   flex: 0 0 300px;
-  padding: 1rem;
-  background-color: #cfd4d8;
-  border-radius: 0.5rem;
-  scroll-snap-align: start;
+
 }
 
+.todo-list-move,
+.todo-list-enter-active,
+.todo-list-leave-active {
+	transition: all 0.3s ease;
+}
 
+.todo-list-enter-from,
+.todo-list-leave-to {
+	opacity: 0;
+	transform: translateX(30px);
+}
+
+.todo-list-leave-active {
+	position: absolute;
+}
 </style>
