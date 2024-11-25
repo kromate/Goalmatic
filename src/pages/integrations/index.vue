@@ -9,7 +9,7 @@
 					Add Integration
 				</button>
 			</header>
-			<div class="grid md:grid-cols-2  xl:grid-cols-3 gap-4 w-full">
+			<div v-if="fetchedIntegrations.length" class="grid md:grid-cols-2  xl:grid-cols-3 gap-4 w-full">
 				<article v-for="integration in fetchedIntegrations" :key="integration.id" class="flex flex-wrap border border-line rounded-md  p-4 gap-4 items-center">
 					<GoogleIcon class="w-10 h-10" />
 					<div class="flex flex-col gap-2">
@@ -28,6 +28,20 @@
 						</span>
 					</button>
 				</article>
+			</div>
+			<div v-else class="flex flex-col items-center justify-center py-12 gap-4">
+				<!-- <img src="@/assets/images/empty-state.svg" alt="No integrations" class="w-48 h-48 opacity-50"> -->
+				<div class="text-center">
+					<h2 class="text-lg font-medium mb-2">
+						No Calendar Integrations
+					</h2>
+					<p class="text-sm text-gray-500">
+						Connect your calendar to get started
+					</p>
+				</div>
+				<button class="btn-primary text-sm px-4 py-2" @click="link">
+					Add Your First Integration
+				</button>
 			</div>
 		</section>
 	</main>

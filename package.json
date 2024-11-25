@@ -41,6 +41,7 @@
     "nuxt-security": "^2.0.0-rc.6",
     "radix-vue": "^1.8.2",
     "sass": "^1.81.0",
+    "sortablejs": "^1",
     "split.js": "^1.6.5",
     "uuid": "^9.0.0",
     "vue": "^3.4.27",

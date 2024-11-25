@@ -1,6 +1,6 @@
 <template>
 	<div>
-		Notes
+		<PagesDashboardNotesCardList />
 	</div>
 </template>
 
@@ -14,8 +14,8 @@ definePageMeta({
 		'is-authenticated',
 		() => {
 			usePageHeader().setPageHeader({
-				title: 'Calendar',
-				description: 'Manage your calendar here',
+				title: 'Notes',
+				description: 'Manage your notes here',
 				shouldShowFab: false,
 				shouldShowTab: false
 			})
