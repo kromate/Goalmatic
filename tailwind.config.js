@@ -27,16 +27,26 @@ module.exports = {
 				greenx: 'var(--greenx)',
 				grey: 'var(--grey)',
 				light_grey: 'var(--light_grey)',
+				grey_one: 'var(--grey_one)',
 				grey_two: 'var(--grey_two)',
 				grey_four: 'var(--grey_four)',
+				grey_six: 'var(--grey_six)',
+				grey_eight: 'var(--grey_eight)',
+				grey_nine: 'var(--grey_nine)',
 				soft_purple: 'var(--soft_purple)',
 				baby_purple: 'var(--baby_purple)',
 				dark_purple: 'var(--dark_purple)',
 				light: 'var(--light)',
 				dark: 'var(--dark)',
 				line: 'var(--line)',
-				hover: 'var(--hover)'
-			}
+				hover: 'var(--hover)',
+
+				textHeadline: 'var(--text-headline)',
+				textSecondary: 'var(--text-secondary)'
+			},
+			borderColor: {
+				DEFAULT: '#D0D5DD'
+			  }
 		}
 	},
 	plugins: [

@@ -91,6 +91,7 @@ export const useUsername = () => {
 	const loading = ref(false)
 
 	const checkUsername = async () => {
+		isUsernameAvailable.value = true
 		loading.value = true
 		profileFormState.username.value = profileFormState.username.value.replace(/ /g, '').toLowerCase()
 
