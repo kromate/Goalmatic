@@ -1,5 +1,5 @@
 <template>
-	<main id="landing_bg" class="min-h-screen center p-4 relative">
+	<main id="landing_bg" class="min-h-screen center p-4 pt-20 relative">
 		<div class="flex items-center gap-4 justify-between bg-transparent absolute px-4 md:px-8 py-6 top-0 w-full">
 			<img src="@/assets/img/logo-white.svg">
 			<div class="hidden md:flex items-center gap-8">
