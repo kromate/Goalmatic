@@ -1,6 +1,10 @@
 <template>
-	<div class="tab-body border-b border-dark hide-scrollbar">
-		<span v-for="tab in (tabs as string[])" :key="tab" :class="['tab-item transite', tab == selected ? 'active' : '']" @click="onClick(tab)">{{ formatTabText(tab) }}</span>
+	<div class="border border-[#E9E9E9] flex items-center rounded-md">
+		<button v-for="tab,i in (tabs as string[])" :key="tab" class="px-4 py-2.5 capitalize text-sm font-semibold"
+			:class="['text-[#908F93] transite', tab == selected ? 'active' : '', i === 1 ? 'border-l border-r border-[#E9E9E9]' : '']" @click="onClick(tab)"
+		>
+			{{ formatTabText(tab) }}
+		</button>
 	</div>
 </template>
 
@@ -41,6 +45,6 @@ const onClick = (selected) => {
 }
 
 .active {
-    @apply opacity-100 border-[2px] rounded-lg border-dark text-primary bg-light;
+    @apply text-[#00003B] bg-[#F5F1FE];
 }
 </style>

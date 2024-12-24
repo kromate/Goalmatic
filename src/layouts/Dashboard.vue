@@ -1,9 +1,9 @@
 <template>
 	<ClientOnly>
 		<div class="flex w-full h-screen bg-light relative  md:py-0  px-0 overflow-y-hidden ">
-			<LayoutsSideBarLeftSidebar :routes="mainShowRoutes" />
+			<LayoutsSideBarLeftSidebar :routes="mainShowRoutes" class="!w-[268px]" />
 
-			<div class="relative bg-light page w-full border-x border-dark mx  h-screen sm:h-auto   overflow-hidden">
+			<div class="relative bg-light page w-full border-dark h-screen sm:h-auto   overflow-hidden md:!w-[calc(100vw-268px)]">
 				<LayoutsDashboadHeader :is-business="false" />
 				<Alert />
 				<div class="w-full h-full relative  overflow-x-hidden bg-light   pb-40">
