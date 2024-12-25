@@ -9,6 +9,7 @@ export const useUser = () => {
     const _userCookie = useCookie('user')
     const _userProfileCookie = useCookie('userProfile')
     const redirectUrl = useCookie('redirectUrl')
+    const currentGoogleCalToken = useCookie('currentGoogleCalToken')
 
     const user = computed(() => {
     if (_userCookie.value) {
@@ -64,5 +65,5 @@ export const useUser = () => {
             return _userProfileCookie
         }
     }
-    return { setUser, clearUser, user, userProfile, redirectUrl, isLoggedIn, username, id, fetchUserProfile, setUserProfile }
+    return { setUser, clearUser, user, userProfile, redirectUrl, isLoggedIn, username, id, fetchUserProfile, setUserProfile, currentGoogleCalToken }
 }

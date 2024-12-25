@@ -1,9 +1,12 @@
 import { watchDebounced } from '@vueuse/core'
 import { ProfileType } from '../types/profile'
+import { afterAuthCheck } from '../utils'
 import { convertObjWithRefToObj } from '@/composables/utils/formatter'
 import { useAlert } from '@/composables/core/notification'
 import { useUser } from '@/composables/auth/user'
 import { callFirebaseFunction } from '@/firebase/functions'
+import { useGenerateGoalActionableStep } from '@/composables/genericGoals/timeline'
+import { getSingleFirestoreDocument } from '@/firebase/firestore/fetch'
 
 
 
@@ -18,6 +21,7 @@ const profileFormState = {
 
 
 export const useCreateProfile = () => {
+	const { unauthorisedGoalSync } = useGenerateGoalActionableStep()
 	const { id, setUserProfile } = useUser()
 	const loading = ref(false)
 	const phoneNumError = ref()
@@ -36,10 +40,12 @@ export const useCreateProfile = () => {
 		try {
 			const sent_date = { id: id.value, ...convertObjWithRefToObj(profileFormState), created_at: new Date().toISOString(), updated_at: new Date().toISOString() } as ProfileType
 
-			const res = await callFirebaseFunction('createUserProfileForBooking', sent_date) as any
+			const res = await callFirebaseFunction('createUserProfileForGoals', sent_date) as any
 			if (res.success) {
 				setUserProfile(sent_date)
-				useRouter().push('/booking-types')
+				const redirectUrl = useUser().redirectUrl.value
+				useUser().redirectUrl.value = null
+				useRouter().push(redirectUrl ?? '/goals')
 			} else {
 				useAlert().openAlert({ type: 'ERROR', msg: res.msg })
 				loading.value = false
@@ -55,8 +61,20 @@ export const useCreateProfile = () => {
 		profileFormState.email.value = useUser().user.value?.email as string
 		profileFormState.name.value = useUser().user.value?.displayName as string
 	}
+
+	const checkIfProfileExists = async () => {
+		const { id: user_id } = useUser()
+		const userProfile = ref<ProfileType>()
+		await getSingleFirestoreDocument('users', user_id.value as string, userProfile)
+		if (userProfile.value?.id) {
+			const redirectUrl = useUser().redirectUrl.value
+			useUser().redirectUrl.value = null
+			useRouter().push(redirectUrl ?? '/goals')
+		}
+	}
+
 	return {
-		createProfile,
+		createProfile, checkIfProfileExists,
 		profileFormState,
 		loading,
 		initForm,
@@ -65,15 +83,7 @@ export const useCreateProfile = () => {
 }
 
 
-const createUserProfile = async (sent_data: any) => {
-			const { data, error } = await useFetch('/api/createUserProfile', {
-    method: 'POST',
-    body: sent_data
-			})
 
-
-	return { success: data.value?.success, msg: data.value!.msg }
-}
 
 
 export const useUsername = () => {
@@ -85,7 +95,7 @@ export const useUsername = () => {
 		profileFormState.username.value = profileFormState.username.value.replace(/ /g, '').toLowerCase()
 
 
-			const { exists } = await callFirebaseFunction('checkUsernameForBooking', { username: profileFormState.username.value }) as any
+		const { exists } = await callFirebaseFunction('checkUsernameForGoals', { username: profileFormState.username.value }) as any
 
 
 

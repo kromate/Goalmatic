@@ -18,26 +18,57 @@
 			<p class="max-w-[900px] mx-auto mb-9 font-medium md:text-lg">
 				Our app provides you with a personalized list of actionable steps and to-dos to help you reach your goals efficiently. Say goodbye to feeling overwhelmed and hello to progress!
 			</p>
-			<div class=" relative  w-full md:max-w-[560px] flex flex-wrap">
-				<input v-model="userGoal" type="text" class="input-field rounded-full !py-7 pr-36" placeholder="Enter your goal (e.g., Learn a new language)">
+			<form class="relative w-full md:max-w-[560px] flex flex-wrap" @submit.prevent="checkIfGoalIsSmart">
+				<textarea
+					ref="textarea"
+					v-model="userGoal"
+					class="input-field  !pb-4 !pt-4 pr-36 w-full resize-none overflow-hidden h-auto rounded-full transition-all duration-300 ease-in-out"
+					placeholder="Enter your goal (e.g., Learn a new language)"
+					rows="1"
+					@input="adjustTextareaHeight"
+					@keydown="handleKeyDown"
+				/>
 
-				<button class="btn-sm bg-dark text-light rounded-full absolute top-2.5 right-4" :disabled="!userGoal" @click="checkIfGoalIsSmart">
+				<button class="btn-sm bg-dark text-light rounded-full absolute bottom-2.5 right-4" type="submit" :disabled="!userGoal">
 					Generate
 				</button>
-			</div>
+			</form>
 		</div>
 	</main>
 </template>
 
 <script lang='ts' setup>
-import { useSmartGoal } from '@/composables/goals/smart'
-
+import { useSmartGoal } from '@/composables/genericGoals/smart'
 
 const { checkIfGoalIsSmart, userGoal } = useSmartGoal()
+
+const textarea = ref()
+
+const adjustTextareaHeight = () => {
+  if (textarea.value) {
+	  textarea.value.style.height = 'auto'
+	  textarea.value.style.height = textarea.value.scrollHeight + 'px'
+	  if (textarea.value.scrollHeight < 80) {
+		  textarea.value.style.borderRadius = '9999999px'
+	  } else {
+		  textarea.value.style.borderRadius = '0.5rem'
+	}
+  }
+}
+const handleKeyDown = (event: KeyboardEvent) => {
+  if (event.key === 'Enter' && !event.shiftKey) {
+    event.preventDefault()
+    checkIfGoalIsSmart()
+  }
+}
+
+onMounted(() => {
+  adjustTextareaHeight()
+})
 </script>
 
 <style scoped>
-input::placeholder {
-  @apply text-[#252525ea] font-semibold text-lg
+textarea::placeholder {
+  @apply text-[#252525ea] font-semibold text-lg text-nowrap truncate
 }
 </style>

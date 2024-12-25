@@ -9,9 +9,9 @@ export const afterAuthCheck = async (user: User | null) => {
             useRouter().push('/auth/profile')
             return
         }
-        const redirectUrl = useUser().redirectUrl.value
-        useUser().redirectUrl.value = null
-         useRouter().push(redirectUrl ?? '/booking-types')
+         const redirectUrl = useUser().redirectUrl.value
+         useUser().redirectUrl.value = null
+         useRouter().push(redirectUrl ?? '/goals')
     }
 }
 

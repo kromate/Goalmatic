@@ -1,5 +1,5 @@
 <template>
-	<div class="flex gap-2 mb-4 w-full">
+	<div class="flex gap-2 mb-4 w-full ">
 		<span
 			class="auth_tab transite"
 			:class="{ 'auth_tab_active': modelValue === 'email' }"
