@@ -82,7 +82,7 @@
 						<Avatar :size="30" />
 						<p class="text-[#101928] text-sm font-medium">Abubakri Sherif</p>
 					</div>
-					<button>
+					<button @click="useSignin().signOut()">
 						<IconsLogout />
 					</button>
 				</div>
@@ -94,6 +94,7 @@
 <script lang="ts" setup>
 import { Link, Brain, Settings, Grid3X3, CheckCheck, StickyNote, Calendar } from 'lucide-vue-next'
 import AvatarDropdown from '@/components/core/AvatarDropdown.vue'
+import { useSignin } from '@/composables/auth/auth'
 
 
 type RouteType = {
