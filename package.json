@@ -11,15 +11,19 @@
     "prestart": "yarn generate-sprite && yarn generate-icon-name-enum",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "deploy": "firebase deploy --only functions"
+    "deploy": "firebase deploy --only functions",
+    "ds": "firebase deploy --only functions:",
+    "emu": "firebase emulators:start --import=./dummy_data --export-on-exit"
   },
   "dependencies": {
+    "@firebasegen/default-connector": "link:dataconnect-generated/js/default-connector",
     "@fullcalendar/core": "^6.1.15",
     "@fullcalendar/daygrid": "^6.1.15",
     "@fullcalendar/interaction": "^6.1.15",
     "@fullcalendar/list": "^6.1.15",
     "@fullcalendar/timegrid": "^6.1.15",
     "@fullcalendar/vue3": "^6.1.15",
+    "@genkit-ai/googleai": "^0.9.12",
     "@google/generative-ai": "^0.21.0",
     "@tailwindcss/container-queries": "^0.1.1",
     "@tailwindcss/forms": "^0.5.7",
@@ -33,6 +37,7 @@
     "firebase": "^9.12.1",
     "firebase-admin": "^11.2.1",
     "firebase-functions": "^4.1.0",
+    "genkit": "^0.9.12",
     "googleapis": "^144.0.0",
     "gsap": "^3.12.2",
     "lucide-vue-next": "^0.379.0",

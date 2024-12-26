@@ -1,3 +1,5 @@
+import { z } from 'genkit'
+
 const smartCheckerPrompt = `
 You are a goal-setting system designed to help users set S.M.A.R.T goals. Your primary users are Africans, mainly Nigerians.
 Input:
@@ -61,6 +63,19 @@ Note: Adjusted Goal is the same as Refined Goal.
 IMPORTANT: is_measurable and  is_time_bound are the most important criteria for a goal to be SMART. Ensure that the adjusted goal is measurable and time-bound.
 `
 
+const smartCheckerPromptSchema = z.object({
+  has_error: z.boolean(),
+  error_msg: z.string(),
+  is_smart: z.boolean(),
+  adjusted_goal: z.string(),
+  is_specific: z.number(),
+  is_measurable: z.number(),
+  is_achievable: z.number(),
+  is_relevant: z.number(),
+  is_time_bound: z.number(),
+  percentage: z.number()
+})
+
 const smartActionableStepPrompt = `
 You are a goal-oriented timeline generator designed to assist users in breaking down their SMART goals into actionable steps.
 Input:
@@ -76,6 +91,16 @@ steps: Array of Object with the following properties: {
     estimated_duration: string (duration of the step) 
 } 
 `
+
+const smartActionableStepPromptSchema = z.object({
+    steps: z.array(z.object({
+        title: z.string(),
+        description: z.string(),
+        frequency: z.string(),
+        frequency_count: z.number(),
+        estimated_duration: z.string()
+    }))
+})
 
 const smartTitleCreator = `
 You are a goal-oriented title generator designed to help users create compelling titles for their SMART goals.
@@ -94,6 +119,10 @@ Guidelines:
 5. Ensure the title is motivating and inspiring to the user.
 6. limit the title to 15 words or less for clarity and impact.
 `
+
+const smartTitleCreatorSchema = z.object({
+    title: z.string()
+})
 
 const smartMilestoneGenetatorPrompt = `
 You are a goal-oriented milestone generator designed to assist users in breaking down their SMART goals into key checkpoints.
@@ -134,6 +163,15 @@ For a 6-month weight loss goal, milestones might include:
 3. Maintaining new habits and reaching 70% of weight loss goal (4 months in, 75% complete)
 4. Reaching target weight and solidifying lifestyle changes (5.5 months in, 95% complete)
 `
+
+const smartMilestoneGenetatorPromptSchema = z.object({
+    milestones: z.array(z.object({
+        title: z.string(),
+        description: z.string(),
+        estimated_due_date: z.string(),
+        percentage_complete: z.number()
+    }))
+})
 
 const smartTodoGeneratorPrompt = `
 You are a todo list generator designed to create actionable, day-to-day tasks that help users progress towards their SMART goals and milestones. Your task is to break down the actionable steps and milestones into specific, manageable todos.
@@ -184,12 +222,38 @@ Guidelines:
 12. the max number of todos generated should not exceed 25.
 `
 
-
+const smartTodoGeneratorPromptSchema = z.object({
+    todos: z.array(z.object({
+        title: z.string(),
+        description: z.string(),
+        estimated_duration: z.string(),
+        viable_time_range: z.array(z.string()),
+        date: z.string(),
+        is_reccuring: z.boolean(),
+        frequency: z.string(),
+        frequency_count: z.number()
+    }))
+})
 
 export const systemPrompts = {
-    SMART_CHECKER: smartCheckerPrompt,
-    SMART_TIMELINE: smartActionableStepPrompt,
-    SMART_TITLE: smartTitleCreator,
-    SMART_MILESTONE: smartMilestoneGenetatorPrompt,
-    SMART_TODO: smartTodoGeneratorPrompt
-} as Record<string, string>
+    SMART_CHECKER: {
+        info: smartCheckerPrompt,
+        schema: smartCheckerPromptSchema
+    },
+    SMART_TIMELINE: {
+        info: smartActionableStepPrompt,
+        schema: smartActionableStepPromptSchema
+    },
+    SMART_TITLE: {
+        info: smartTitleCreator,
+        schema: smartTitleCreatorSchema
+    },
+    SMART_MILESTONE: {
+        info: smartMilestoneGenetatorPrompt,
+        schema: smartMilestoneGenetatorPromptSchema
+    },
+    SMART_TODO: {
+        info: smartTodoGeneratorPrompt,
+        schema: smartTodoGeneratorPromptSchema
+    }
+} as Record<string, { info: string; schema: z.ZodObject<any, any, any, any> }>

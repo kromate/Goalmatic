@@ -1,15 +1,11 @@
-import { GoogleGenerativeAI } from '@google/generative-ai'
+import { gemini15Pro, gemini15Flash8b, googleAI } from '@genkit-ai/googleai'
+import { genkit } from 'genkit'
 import { systemPrompts } from './utils/system_prompt'
 import { isRateLimited } from './utils/rateLimit'
-import { safetySetting } from './utils/safety'
-
-
-
 
 export default defineEventHandler(async (event) => {
   try {
     const ip = event.node.req.headers['x-forwarded-for'] as string || event.node.req.socket.remoteAddress as string
-
 
     if (isRateLimited(ip)) {
       throw createError({
@@ -28,25 +24,25 @@ export default defineEventHandler(async (event) => {
       throw new Error('Missing required parameters: prompt or promptType')
     }
 
-    const genAI = new GoogleGenerativeAI(GEMINI_API_KEY)
-    const systemInst = systemPrompts[promptType]
+    // Initialize Genkit with Google AI plugin
+    const ai = genkit({
+      plugins: [googleAI({ apiKey: GEMINI_API_KEY })],
+      model: gemini15Pro
+    })
+
+    const systemInst = systemPrompts[promptType].info
     if (!systemInst) {
       throw new Error(`Invalid promptType: ${promptType}`)
     }
 
-    const model = genAI.getGenerativeModel({
-      model: 'gemini-1.5-flash',
-      generationConfig: { responseMimeType: 'application/json' },
-      systemInstruction: systemInst,
-      safetySettings: safetySetting
+    // Generate content using Genkit
+    const { text } = await ai.generate({
+      prompt,
+      system: systemInst,
+      output: { schema: systemPrompts[promptType].schema }
     })
 
-
-    const result = await model.generateContent(prompt)
-    const response = result.response
-    const gemini_response = response.text()
-
-    return gemini_response
+    return text
   } catch (error) {
     console.error('Error in Gemini API handler:', error)
 
