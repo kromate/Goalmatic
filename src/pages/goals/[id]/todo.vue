@@ -1,6 +1,6 @@
 <template>
 	<section>
-		<section v-if="!goalDetails.started" class="center flex-col  gap-4">
+		<!-- <section v-if="!goalDetails.started" class="center flex-col  gap-4">
 			<CheckSquare :size="80" />
 			<h1 class="text-xl font-bold mt-3">
 				Start the goal to generate todos
@@ -9,6 +9,10 @@
 			<button class="btn-primary" @click="initStartGoal(goalDetails)">
 				Start Goal
 			</button>
+		</section> -->
+
+		<section class="flex flex-col gap-2 rounded-lg bg-[#F9F8FB] p-2">
+			<ModulesGoalsTodocard v-for="n in 4" :key="n" />
 		</section>
 
 		<section v-if="todos.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-x-4 gap-y-6 ">

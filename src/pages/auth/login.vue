@@ -1,108 +1,89 @@
 <template>
-	<div class="auth-box">
-		<nuxt-link to="/">
-			<img src="/lt2.svg" alt="logo">
-		</nuxt-link>
-
-		<h1 class="auth-title">
-			Welcome Home
-		</h1>
-		<p class="text-2xl text-dark text-center font-semibold  tracking-wide -mt-3">
-			Login to your account
-		</p>
-		<AuthTabs v-model="authType" />
-
-		<form v-if="authType=== 'email'" class="auth-form" @submit.prevent="signIn()">
-			<div class="field">
-				<label for="email">Email Address</label>
-				<input
-					id="email"
-					v-model="authCredentienalsForm.email.value"
-					placeholder="Enter a valid Email address"
-					type="email"
-					class="input-field"
-					autocomplete="off"
-					required
-				>
+	<div class="h-full p-4 overflow-auto" :class="windowHeight < 650 ? 'py-8' : 'center'">
+		<div class="flex flex-col gap-8 w-full max-w-[400px] mx-auto">
+			<div class="flex flex-col gap-2.5 text-center">
+				<h2 class="text-textHeadline text-[34px] font-bold leading-[40px]">
+					Login to your account
+				</h2>
+				<p class="text-textSecondary text-base font-semibold">
+					Create your free account
+				</p>
 			</div>
-			<div class="field relative">
-				<section class="flex w-full justify-between">
-					<label for="password">Password</label>
-					<button class="font-medium text-primary underline disabled:text-grey_four disabled:cursor-not-allowed text-sm" :disabled="authCredentienalsForm.loading.value || valid_email" type="button" @click="send_email">
-						login with email link
-					</button>
-				</section>
 
-				<input
-					id="passowrd"
-					v-model="authCredentienalsForm.passord.value"
-					autocomplete="off"
-					placeholder="Enter password"
-					:type="showPassword ? 'text' : 'Password'"
-					class="input-field"
-					required
-				>
-				<EyeIcon class="w-5 h-5 absolute top-[53%] right-4" @click="toggleShow" />
+			<form class="flex flex-col gap-6 mt-3" @submit.prevent="signIn">
+				<div class="flex flex-col gap-0.5">
+					<div class="flex items-center gap-4 justify-between">
+						<label class="label">{{ isEmail ? 'Email Address' : 'Phone Number' }}</label>
+						<button type="button" class="text-sm font-semibold text-grey_four" @click="isEmail = !isEmail">
+							{{ isEmail ? 'Use Phone Number' : 'Use Email' }}
+						</button>
+					</div>
+					<input v-if="isEmail" v-model.trim="authCredentienalsForm.email.value" required type="email" class="input-field" placeholder="Enter email">
+					<NewPhoneInput v-else />
+				</div>
+
+				<div class="flex flex-col gap-0.5">
+					<label class="label">Password</label>
+					<div class="w-full h-fit relative">
+						<input v-model.trim="authCredentienalsForm.passord.value" :type="show ? 'text' : 'password'" required class="input-field" placeholder="Enter password">
+						<component :is="!show ? EyeOff : Eye" class="text-grey_six absolute top-1/2 -translate-y-1/2 right-4 w-5 cursor-pointer" @click="show = !show" />
+					</div>
+					<div class="flex justify-end mt-0.5">
+						<NuxtLink to="/auth/forgot" class="text-sm font-semibold text-grey_four">
+							Forgot password?
+						</NuxtLink>
+					</div>
+				</div>
+
+				<button :disabled="authCredentienalsForm.loading.value" class="btn-primary" type="submit">
+					<Spinner v-if="authCredentienalsForm.loading.value" />
+					<span v-else>Login</span>
+				</button>
+			</form>
+
+			<div class="flex flex-col gap-6">
+				<div class="flex items-center gap-2 justify-between">
+					<div class="flex flex-grow border-b" />
+					<span class="text-sm font-bold text-[#667185]">Or</span>
+					<div class="flex flex-grow border-b" />
+				</div>
+
+				<button type="button" :disabled="loading" class="btn border bg-light gap-3" @click="googleSignin()">
+					<template v-if="!loading">
+						<IconsGoogle class="w-5 h-5" />
+						<span class="text-base font-semibold text-[#344054]">Continue with Google</span>
+					</template>
+					<Spinner v-else />
+				</button>
+				<div class="text-center text-sm font-bold flex items-center justify-center gap-2">
+					<span class="text-[#667185]">New to Goalmatic?</span>
+					<NuxtLink to="/auth/signup">
+						Create an account
+					</NuxtLink>
+				</div>
 			</div>
-			<div class="flex justify-between items-center text-xs w-full">
-				<label for="remember" class="mb-0">
-					<input id="remember" type="checkbox">
-					<span class="text-grey6">Remember me</span>
-				</label>
-
-				<nuxt-link to="/auth/forgot" class="text-primary underline font-medium">
-					Forgot Password?
-				</nuxt-link>
-			</div>
-			<button class="btn-primary w-full mt-2" :disabled="authCredentienalsForm.loading.value || disabled" type="submit">
-				<span v-if="!authCredentienalsForm.loading.value">Login</span>
-				<Spinner v-else />
-			</button>
-		</form>
-		<AuthPhoneForm v-else />
-
-		<div class="flex justify-between items-center gap-2 my-2 w-full">
-			<div class="border-line border-b h-1 flex-1" />
-			<span class="text-dark leading-none font-bold">OR</span>
-			<div class="border-line border-b h-1 flex-1" />
 		</div>
-		<button class="btn_flat w-full bg-dark text-light" :disabled="loading" type="button" @click="googleSignin()">
-			<span v-if="!loading" class="flex items-center gap-3">	Continue with Google</span>
-			<Spinner v-else />
-		</button>
-
-		<p class="text-sm mt-4 text-dark text-center">
-			Don't have an Account? <nuxt-link to="/auth/register" class="font-bold underline text-dark">
-				Sign up
-			</nuxt-link>
-		</p>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { EyeIcon } from 'lucide-vue-next'
+import { EyeOff, Eye } from 'lucide-vue-next'
+import { windowHeight } from '@/composables/utils/window'
 import { useSignin, authCredentienalsForm } from '@/composables/auth/auth'
 import { usePasswordlessSignin } from '@/composables/auth/passwordless'
 import { useEmailAndPassword } from '@/composables/auth/email_password'
 
-
-const authType = ref('email')
 
 const { googleSignin, loading } = useSignin()
 const { disabled, send_email, valid_email } = usePasswordlessSignin()
 
 const { signIn } = useEmailAndPassword()
 
-const showPassword = ref(false)
-const toggleShow = () => showPassword.value = !showPassword.value
+const show = ref(false)
+const isEmail = ref(true)
 
 definePageMeta({
-	layout: 'auth',
+	layout: 'auth2',
 	middleware: 'is-not-authenticated'
 })
 </script>
-
-<style scoped>
-
-
-</style>
