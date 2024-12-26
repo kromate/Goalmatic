@@ -1,6 +1,6 @@
 <template>
 	<section>
-		<section v-if="!goalDetails.started" class="center flex-col  gap-4">
+		<!-- <section v-if="!goalDetails.started" class="center flex-col  gap-4">
 			<Milestone :size="80" />
 			<h1 class="text-xl font-bold mt-3">
 				Start the goal to generate milestones
@@ -9,9 +9,11 @@
 			<button class="btn-primary" @click="initStartGoal(goalDetails)">
 				Start Goal
 			</button>
+		</section> -->
+
+		<section class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+			<ModulesGoalsMilestoneCard v-for="n in 6" :key="n" />
 		</section>
-
-
 
 		<section v-if="milestones.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-x-4 gap-y-6 ">
 			<div v-for="(milestone, idx) in milestones" :key="milestone.title" class="field h-full">

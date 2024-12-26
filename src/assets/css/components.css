@@ -7,19 +7,22 @@
         @apply transition-all duration-75 md:duration-150 ease-linear;
     }
 
+    .center {
+        @apply flex items-center justify-center
+    }
+
     .field {
         @apply flex flex-col w-full items-start;
     }
 
     label,
-    .label,
-    h4 {
-        @apply font-medium text-base text-dark mb-1 flex gap-2;
+    .label{
+        @apply font-semibold text-sm text-textHeadline;
     }
 
     .input {
         border-width: var(--border);
-        @apply w-full bg-transparent text-dark h-12 px-4 rounded-lg outline-none  border-dark focus:shadow transition-all duration-200 ease-in;
+        @apply w-full text-dark h-12 px-4 rounded-md outline-none  border focus:border-[#7F4AF1] bg-light transition-all duration-200 ease-in;
     }
 
     .input-field {
@@ -50,7 +53,18 @@
         @apply font-light text-2xl text-center flex w-full items-center justify-center relative text-dark;
     }
     .btn {
-        @apply rounded-lg px-8 py-3 flex justify-center items-center font-medium disabled:bg-gray-500 disabled:text-dark disabled:cursor-not-allowed  box-border  border border-secondary hover:shadow-[4px_3.5px_0px_0px_#000] transite;
+        @apply rounded-lg px-8 py-3 center text-base font-medium disabled:bg-gray-500 disabled:text-dark disabled:cursor-not-allowed transite;
+    }
+
+    .button_shadow {
+        box-shadow: 0px 0px 4px 0.3px #A11DED;
+    }
+    
+    .custom_shadow:hover {
+        box-shadow: -1px -1px 1px 0.3px rgba(255, 255, 255, 0.25);
+    }
+    .custom-btn {
+        @apply center px-4 py-2.5 rounded-lg bg-primary text-white text-sm border border-white font-semibold button_shadow
     }
 
     .btn-sm {
@@ -58,7 +72,7 @@
     }
 
     .btn-primary {
-        @apply btn bg-dark text-light;
+        @apply btn bg-primary text-light;
     }
 
     .btn-primary-inverse {

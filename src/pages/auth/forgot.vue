@@ -1,53 +1,50 @@
 <template>
-	<div class="auth-box">
-		<!-- <img src="@/assets/images/main/c_shop.svg" alt="logo" width="90" height="90"> -->
-		<h1 class="auth-title">
-			Hi there
-		</h1>
-		<p class="text-2xl text-dark text-center font-semibold  tracking-wide">
-			Forgot Password
-		</p>
-		<form v-if="step===1" class="auth-form" @submit.prevent="sendRestEmail()">
-			<div class="field">
-				<label for="email">Email Address</label>
-				<input
-					id="email"
-					v-model="authCredentienalsForm.email.value"
-					placeholder="Enter a valid Email address"
-					type="email"
-					class="input-field"
-					autocomplete="off"
-					required
-				>
+	<div class="h-full p-4 overflow-auto" :class="windowHeight < 650 ? 'py-8' : 'center'">
+		<div v-if="step === 1" class="flex flex-col gap-8 w-full max-w-[400px] mx-auto transition-all">
+			<div class="flex flex-col gap-2.5 text-center">
+				<h2 class="text-textHeadline text-[34px] font-bold leading-[40px]">
+					Forgot Password
+				</h2>
+				<p class="text-textSecondary text-base font-semibold">
+					No worries, Enter your email to reset your password.
+				</p>
 			</div>
 
+			<form class="flex flex-col gap-8 mt-3" @submit.prevent="sendRestEmail">
+				<div class="flex flex-col gap-0.5">
+					<label class="label">Email</label>
+					<input v-model.trim="authCredentienalsForm.email.value" required type="email" class="input-field" placeholder="Enter email">
+				</div>
 
-			<button class="btn-primary w-full mt-2" :disabled="authCredentienalsForm.loading.value || valid_email" type="submit">
-				<span v-if="!authCredentienalsForm.loading.value">Continue</span>
-				<Spinner v-else />
-			</button>
-		</form>
-		<div v-else class="auth-form py-4">
-			<p class="text-grey5 ">
-				We sent a link to <b>{{ authCredentienalsForm.email.value }}</b> <br>
-				To reset your password, please go to your email and click the link.
-			</p>
-			<nuxt-link to="/auth/login" class="btn-primary w-full mt-2" :disabled="authCredentienalsForm.loading.value || valid_email" type="submit">
-				<span v-if="!authCredentienalsForm.loading.value">Continue</span>
-				<Spinner v-else />
-			</nuxt-link>
+				<button type="submit" class="btn-primary" :disabled="authCredentienalsForm.loading.value">
+					<Spinner v-if="authCredentienalsForm.loading.value" />
+					<span v-else>Reset Password</span>
+				</button>
+				<NuxtLink to="/auth/login" class="text-dark text-sm font-bold text-center center gap-1.5">
+					<MoveLeft :size="15" :stroke-width="2.6" class="" />
+					Back to login
+				</NuxtLink>
+			</form>
 		</div>
 
-
-		<p v-if="step===1" class="text-sm mt-4 text-dark text-center">
-			Already have an account? <nuxt-link to="/auth/login" class="font-bold underline text-dark">
-				login
-			</nuxt-link>
-		</p>
+		<div v-else class="flex flex-col gap-7 max-w-[300px] mx-auto">
+			<h2 class="text-[28px] font-bold text-textHeadline text-center leading-[33px]">
+				We’ve sent a reset <br> link to your email
+			</h2>
+			<p class="font-medium leading-[28px] text-sm text-textSecondary text-center">
+				Didn't get the email? <br> Check your spam or junk folder. <br> Still no luck? <span class="text-primary">Resend link</span> or <span class="text-primary">contact us</span>
+			</p>
+			<NuxtLink to="/auth/login" class="text-dark text-sm font-bold text-center center gap-1.5">
+				<MoveLeft :size="15" :stroke-width="2.6" class="" />
+				Back to login
+			</NuxtLink>
+		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
+import { MoveLeft } from 'lucide-vue-next'
+import { windowHeight } from '@/composables/utils/window'
 import { useForgotPassword } from '@/composables/auth/forgot'
 import { authCredentienalsForm } from '@/composables/auth/auth'
 import { usePasswordlessSignin } from '@/composables/auth/passwordless'
@@ -62,13 +59,9 @@ onMounted(() => {
 	localStorage.setItem('taaskly_referral', referred.value)
 })
 
+
 definePageMeta({
-	layout: 'auth',
+	layout: 'auth2',
 	middleware: 'is-not-authenticated'
 })
-
 </script>
-
-<style scoped>
-
-</style>

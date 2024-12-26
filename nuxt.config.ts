@@ -19,6 +19,7 @@ export default {
   },
   components: [
     '@/components',
+    '@/assets',
     { path: '@/components/core', extensions: ['vue'] }
   ],
 
