@@ -80,7 +80,9 @@
 				<div class="flex items-center gap-4 justify-between">
 					<div class="flex items-center gap-3">
 						<Avatar :size="30" />
-						<p class="text-[#101928] text-sm font-medium">Abubakri Sherif</p>
+						<p class="text-[#101928] text-sm font-medium">
+							{{ user?.displayName || 'N/A' }}
+						</p>
 					</div>
 					<button @click="useSignin().signOut()">
 						<IconsLogout />
@@ -95,7 +97,9 @@
 import { Link, Brain, Settings, Grid3X3, CheckCheck, StickyNote, Calendar } from 'lucide-vue-next'
 import AvatarDropdown from '@/components/core/AvatarDropdown.vue'
 import { useSignin } from '@/composables/auth/auth'
+import { useUser } from '@/composables/auth/user'
 
+const { user } = useUser()
 
 type RouteType = {
 	route: string;

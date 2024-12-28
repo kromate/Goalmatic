@@ -29,31 +29,32 @@
 		<div class="w-full max-w-[720px] flex flex-col gap-8">
 			<div class="flex flex-col gap-4">
 				<div class="flex items-center gap-4 justify-between bg-[#F9F8FB] rounded-full p-[3px]">
-					<button class="h-11 center bg-white border border-[#E9E9E9] px-4 shadow rounded-full">
+					<button class="h-11 center bg-white border border-[#E9E9E9] px-4 shadow rounded-full" @click="getNextMonth(false)">
 						<ChevronLeft :size="16" :stroke-width="2.5" />
 					</button>
 					<p class="text-lg text-[#1F1F1F] font-semibold">
-						December 2024
+						{{ current_month }} {{ current_year }}
 					</p>
-					<button class="h-11 center bg-white border border-[#E9E9E9] px-4 shadow rounded-full">
+					<button class="h-11 center bg-white border border-[#E9E9E9] px-4 shadow rounded-full" @click="getNextMonth(true)">
 						<ChevronRight :size="16" :stroke-width="2.5" />
 					</button>
 				</div>
+
 				<div class="grid grid-cols-9 items-end gap-1">
-					<button class="border border-[#E9E9E9] rounded center h-10 p-2 text-[#798494]">
+					<button class="border border-[#E9E9E9] rounded center h-10 p-2 text-[#798494]" @click="displayAnotherWeek(false)">
 						<ChevronLeft :size="14" :stroke-width="2.5" />
 					</button>
-					<div v-for="n in 7" :key="n" class="flex flex-col gap-2 items-center">
+					<div v-for="n,i in paginatedDays" :key="i" class="flex flex-col gap-2 items-center">
 						<p class="text-[#798494] text-sm font-semibold">
-							Mo
+							{{ capitalize(n?.day).substring(0,2) }}
 						</p>
 						<button class="border border-[#E9E9E9] bg-[#F6F5FF] rounded center h-10 p-2 text-[#798494] w-full">
 							<span class="text-[#1F1F1F] text-sm font-medium">
-								{{ n }}
+								{{ n?.date }}
 							</span>
 						</button>
 					</div>
-					<button class="border border-[#E9E9E9] rounded center h-10 p-2 text-[#798494]">
+					<button class="border border-[#E9E9E9] rounded center h-10 p-2 text-[#798494]" @click="displayAnotherWeek(true)">
 						<ChevronRight :size="14" :stroke-width="2.5" />
 					</button>
 				</div>
@@ -100,10 +101,18 @@
 import { ArrowRight, ChevronDown, ChevronLeft, ChevronRight, CircleArrowLeft, CircleArrowRight, CirclePlus } from 'lucide-vue-next'
 import { usePageHeader } from '@/composables/utils/header'
 import { useFetchUserTodos } from '@/composables/dashboard/todo/fetch'
+import { capitalize } from '@/composables/utils/formatter'
+import { useTodoDate } from '@/composables/dashboard/todo/date_logic'
+// import { useUser } from '~/src/composables/auth/user'
 // const { fetchUsersTodos, loading, groupTodosByDate, navigateWeek, weekLabel } = useFetchUserTodos()
 
 // await fetchUsersTodos()
+// const { user } = useUser()
+const { current_month, current_year, getCurrentMonthAndYear, getNextMonth, displayAnotherWeek, paginatedDays } = useTodoDate()
 
+
+
+getCurrentMonthAndYear()
 definePageMeta({
 	layout: 'dashboard',
 	middleware: [
