@@ -152,7 +152,7 @@
         @apply p-2 border border-line w-full rounded-md;
     }
     .card_ans_sm {
-        @apply px-2 py-1.5 border border-line w-auto rounded-md;
+        @apply px-4 py-3 border border-grey_one w-auto rounded-lg;
     }
     .pill {
         @apply flex items-center gap-1 text-xs  py-1 px-1.5 rounded bg-hover border;

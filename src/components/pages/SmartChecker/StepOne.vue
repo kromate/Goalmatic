@@ -1,83 +1,142 @@
 <template>
-	<section class=" flex flex-col items-center gap-4">
-		<div class="flex gap-4 items-center justify-center flex-wrap mt-16">
-			<h1 class="outline text-4xl text-center font-black sm:text-5xl md:text-4xl lg:text-6xl xl:text-7xl tracking-normal text-dark poppins w-full center">
-				Checking if your goal is S.M.A.R.T?
-			</h1>
-		</div>
-
-
-		<ul class="list-image-none list-inside flex gap-3  flex-wrap justify-center text-lg md:text-2xl mb-12">
-			<li>Specific</li>
-			<li>Measurable</li>
-			<li>Achievable</li>
-			<li>Relevant</li>
-			<li>Time-bound</li>
-		</ul>
+	<section class=" flex flex-col items-center gap-4 pt-20 p-4 w-full pb-48">
+		<section class="w-full md:max-w-[var(--mw)] overflow-auto flex flex-col gap-6 items-start overflow-x-hidden ">
+			<div class="flex flex-col gap-4 w-full">
+				<div class="flex gap-2 text-[#374151]">
+					<div class="bg-[#eaeaef] flex size-[30px] shrink-0  center rounded-full p-0.5  border-2">
+						<img class="size-5" src="/og.png" alt="goalmatic logo">
+					</div>
+					<p class="w-full overflow-x-hidden font-semibold mt-0.5">
+						Goalmatic
+					</p>
+				</div>
+				<article class="bg-[#F4F3FF] p-4 rounded-lg ">
+					<h4 class="text-lg font-semibold">
+						Hi! Welcome to Goalmatic!
+					</h4>
+					<p class="text-sm text-[#344054]">
+						Goalmatic is a tool that helps you achieve your goals, by making them S.M.A.R.T. and actionable.
+					</p>
+				</article>
+			</div>
+		</section>
 
 
 		<transition name="show" appear>
-			<div v-if="!loading && gemini_response?.has_error" class="flex flex-col gap-4 max-w-[560px] bg-[#f8c2c2] w-full border border-red mx-auto p-4 px-4 shadow-md rounded-lg  text-center">
+			<div v-if="!loading && gemini_response?.has_error" class="flex flex-col gap-4 max-w-[var(--mw)] bg-[#f9d8d8] w-full border border-red mx-auto p-4 px-4 shadow-md rounded-lg  ">
 				<p class="text-base">
 					{{ gemini_response?.error_msg }}
 				</p>
 			</div>
 		</transition>
 		<transition name="show" appear>
-			<div v-if="userGoal && !loading && !hasUserGoalChanged" class="flex flex-col gap-4 max-w-[560px] w-full border border-line mx-auto p-4 px-4 shadow-md rounded-lg mb-12">
+			<div v-if="!loading && smartPercentage" class="flex flex-col gap-4 max-w-[var(--mw)] w-full border border-[#E4E7EC] mx-auto p-4 rounded-lg mb-4">
 				<div class="field">
-					<h4>Your Goal:</h4>
-					<span class="card_ans">{{ userGoal }}</span>
+					<h4 class="text-base font-semibold text-[#4D4D53]">
+						Your Current Goal
+					</h4>
+					<span class="text-sm text-grey_four">{{ userGoal }}</span>
+					<hr class="w-full mt-3">
+
+					<section class="w-full p-0.5 py-4 flex flex-col mt-3">
+						<div class="flex  justify-between w-full text-xs text-[#4D4D53] font-semibold mb-2">
+							<span>{{ smartPercentage }}% SMART</span>
+							<span>{{ 100 - smartPercentage }}% Left</span>
+						</div>
+						<Progressbar v-model="smartPercentage" />
+					</section>
+
 					<div class="flex flex-wrap gap-2.5 text-xs mt-2 items-center justify-start">
-						<span class="card_ans_sm"><b>Specific:</b> {{ gemini_response?.is_specific }} </span>
-						<span class="card_ans_sm"><b>Measurable:</b> {{ gemini_response?.is_measurable }} </span>
-						<span class="card_ans_sm"><b>Achievable:</b> {{ gemini_response?.is_achievable }} </span>
-						<span class="card_ans_sm"><b>Relevant:</b> {{ gemini_response?.is_relevant }} </span>
-						<span class="card_ans_sm"><b>Time-bound:</b> {{ gemini_response?.is_time_bound }} </span>
+						<span class="card_ans_sm"><b>Specific:</b> <span class="badge">{{ errorExists ? 0 : gemini_response?.is_specific }}/20 </span></span>
+						<span class="card_ans_sm"><b>Measurable:</b> <span class="badge">{{ errorExists ? 0 : gemini_response?.is_measurable }}/20 </span></span>
+						<span class="card_ans_sm"><b>Achievable:</b> <span class="badge">{{ errorExists ? 0 : gemini_response?.is_achievable }}/20 </span></span>
+						<span class="card_ans_sm"><b>Relevant:</b> <span class="badge">{{ errorExists ? 0 : gemini_response?.is_relevant }}/20 </span></span>
+						<span class="card_ans_sm"><b>Time-bound:</b> <span class="badge">{{ errorExists ? 0 : gemini_response?.is_time_bound }}/20 </span></span>
+					</div>
+
+					<div v-if="gemini_response?.percentage && gemini_response?.percentage <= 85" class="card_ans flex items-center mt-4 gap-2 px-4 !border-[#FFD3AA] bg-[#FFF4EB] rounded-lg">
+						<Info class="size-4" />
+						You need at least 85% smart goal in order to generate a timeline
 					</div>
 				</div>
-				<transition name="glide_up" appear>
-					<section v-if="gemini_response?.percentage" class="flex flex-col gap-4">
-						<div class="field">
-							<h4>How SMART is your Goal:</h4>
-							<span class="card_ans">{{ smartPercentage }}%</span>
-						</div>
-						<div class="card_ans !border-greenx bg-[#b8e3b8]">
-							You need at least 85% smart gaol in order to generate a timeline
-						</div>
-						<div v-if="gemini_response && gemini_response!.percentage < 85" class="field">
-							<h4 class="flex justify-between w-full ">
-								Refined Goal:
-							</h4>
-							<span class="card_ans">{{ gemini_response?.adjusted_goal }}</span>
-							<button class="btn bg-dark text-light w-full mt-4" @click="userGoal = gemini_response?.adjusted_goal">
-								Use this goal instead
-							</button>
-						</div>
-
-
-						<button v-if="gemini_response && gemini_response!.percentage >= 85" class="btn bg-dark text-light w-full" type="submit" :disabled="!userGoal" @click="generateGoalTimeline(userGoal)">
-							Create actionable steps
-						</button>
-					</section>
-				</transition>
 			</div>
+		</transition>
+
+		<transition name="glide_up" appear>
+			<section v-if="!loading && gemini_response?.adjusted_goal && gemini_response?.percentage <= 85" class="w-full md:max-w-[var(--mw)] overflow-auto flex flex-col gap-6 items-start overflow-x-hidden ">
+				<div class="flex flex-col gap-4 w-full">
+					<div class="flex gap-2 text-[#374151]">
+						<div class="bg-[#eaeaef] flex size-[30px] shrink-0  center rounded-full p-0.5  border-2">
+							<img class="size-5" src="/og.png" alt="goalmatic logo">
+						</div>
+						<p class="w-full overflow-x-hidden font-semibold mt-0.5">
+							Hi!, {{ gemini_response.error_msg ? 'You can try out a sample goal below': 'here is a refined version of your goal' }}
+						</p>
+					</div>
+					<div class="flex flex-col gap-2 justify-end items-end pt-0 p-2">
+						<article class="bg-[#F4F3FF] p-4 rounded-lg ml-8">
+							<p class="text-sm text-[#344054]">
+								{{ gemini_response?.adjusted_goal }}
+							</p>
+						</article>
+						<button
+							class="disabled:opacity-50 disabled:cursor-not-allowed px-4 py-2 md:py-2.5 rounded-lg bg-primary text-white text-sm center gap-2 border border-white font-semibold button_shadow"
+							@click="userGoal = gemini_response?.adjusted_goal">
+							Use this goal
+						</button>
+					</div>
+				</div>
+			</section>
+		</transition>
+
+		<transition name="glide_up" appear>
+			<section v-if="!loading && gemini_response?.percentage >= 85" class="w-full md:max-w-[var(--mw)] overflow-auto flex flex-col gap-6 items-start overflow-x-hidden ">
+				<div class="flex flex-col gap-4 w-full">
+					<div class="flex gap-2 text-[#374151]">
+						<div class="bg-[#eaeaef] flex size-[30px] shrink-0  center rounded-full p-0.5  border-2">
+							<img class="size-5" src="/og.png" alt="goalmatic logo">
+						</div>
+						<p class="w-full overflow-x-hidden font-semibold mt-0.5">
+							Your goal is SMART!
+						</p>
+					</div>
+					<div class="flex flex-col gap-2 justify-end items-end p-2">
+						<article class="bg-[#F4F3FF] p-4 rounded-lg ml-8 w-full">
+							<p class="text-sm text-[#344054]">
+								You can now generate actionable steps to achieve your goal
+							</p>
+						</article>
+						<button :disabled="!userGoal"
+							class="disabled:opacity-50 disabled:cursor-not-allowed px-4 py-2 md:py-2.5 rounded-lg bg-primary text-white text-sm center gap-2 border border-white font-semibold button_shadow"
+							@click="generateGoalTimeline(userGoal)">
+							Proceed to generate steps
+						</button>
+					</div>
+				</div>
+			</section>
 		</transition>
 
 
 
-		<div v-if="loading" class="flex px-4 w-full">
-			<Skeleton radius="12px" height="280px" width="700px" class=" mx-auto px-4 max-w-[90%]" />
+
+
+		<div v-if="loading" class="flex  w-full ">
+			<Skeleton radius="12px" height="280px" width="700px" class=" mx-auto" />
 		</div>
 
 
-		<div class="fixed bottom-2.5 inset-x-0 bg-white pt-2.5 px-3 center">
-			<form v-if="gemini_response && gemini_response!.percentage < 85" class="relative w-full md:max-w-[560px] flex flex-wrap mt-auto" @submit.prevent="checkIfGoalIsSmart">
+		<div class="fixed bottom-2.5 inset-x-0 bg-white pt-2.5 px-3 center z-20">
+			<form class="relative w-full md:max-w-[var(--mw)] flex flex-wrap mt-auto" @submit.prevent="checkIfGoalIsSmart">
 				<textarea ref="textarea" v-model="userGoal" class="input-field  !pb-4 !pt-4 pr-36 w-full resize-none overflow-hidden h-auto  transition-all duration-300 ease-in-out" placeholder="Enter your goal (e.g., Learn a new language)" rows="1" @input="adjustTextareaHeight"
 					@keydown="handleKeyDown" />
 
-				<button class="btn-sm bg-dark text-light rounded-full absolute bottom-2.5 right-4" type="submit" :disabled="!userGoal">
-					Generate
+
+				<button
+					:disabled="!userGoal"
+					class="absolute bottom-2.5 right-4 disabled:opacity-50 disabled:cursor-not-allowed px-4 py-2 md:py-2.5 rounded-lg bg-primary text-white text-sm center gap-2 border border-white font-semibold button_shadow"
+					type="submit"
+				>
+					<MoveRight :stroke-width="2.5" :size="14" class="-rotate-90" />
 				</button>
 			</form>
 		</div>
@@ -85,6 +144,7 @@
 </template>
 
 <script setup lang="ts">
+import { MoveRight, Info } from 'lucide-vue-next'
 import { useSmartGoal } from '@/composables/genericGoals/smart'
 import { useGenerateGoalActionableStep } from '@/composables/genericGoals/timeline'
 
@@ -92,6 +152,10 @@ const { generateGoalTimeline } = useGenerateGoalActionableStep()
 const { loading, userGoal, gemini_response, checkIfGoalIsSmart, hasUserGoalChanged, smartPercentage } = useSmartGoal()
 
 const textarea = ref()
+
+const errorExists = computed(() => {
+	return gemini_response?.value?.has_error
+})
 
 const adjustTextareaHeight = () => {
 	setTimeout(() => {
@@ -109,14 +173,34 @@ const handleKeyDown = (event: KeyboardEvent) => {
 	}
 }
 
+onMounted(() => {
+	adjustTextareaHeight()
+	const goalQuery = useRoute().query.goal
+	if (goalQuery) {
+		userGoal.value = decodeURIComponent(goalQuery as string)
+		setTimeout(() => {
+			checkIfGoalIsSmart()
+		}, 50)
+	}
+})
 watch([userGoal, gemini_response], () => {
 	adjustTextareaHeight()
 }, { deep: true })
 </script>
 
-<style scoped>
+<style lang="scss">
+/* define a max width variable */
+:root {
+	--mw: 720px;
+}
+.badge{
+	@apply  bg-[#F2F2F2] font-medium py-0.5 px-2 rounded-full
+}
+.card_ans_sm > b{
+	@apply text-grey_four font-medium
+}
 textarea::placeholder {
-	@apply text-[#252525ea] font-semibold text-lg text-nowrap truncate
+	@apply text-[#252525ea] text-base text-nowrap truncate
 }
 
 .outline {

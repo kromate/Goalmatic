@@ -1,71 +1,30 @@
 <template>
-	<section class=" flex flex-col items-center gap-4">
-		<div class="flex gap-4 items-center justify-center flex-wrap mt-16 mb-10">
-			<h1 class="outline text-4xl text-center font-black sm:text-5xl md:text-4xl lg:text-6xl xl:text-7xl tracking-normal text-dark poppins w-full center">
-				{{ loading ? 'Generating' : 'Generated' }} Actionable Steps
-			</h1>
-		</div>
-
-
-
-
-		<transition name="show" appear>
-			<section v-if="steps.length && !loading" class="flex flex-col gap-8 max-w-[1500px]">
-				<div class="flex flex-col gap-8 w-full border border-line mx-auto p-4 px-4 shadow-md rounded-lg ">
-					<div class="field">
-						<h4 class="heading">
-							Your Goal:
-						</h4>
-						<span class="card_ans bg-hover">{{ userGoal }}</span>
+	<section class=" flex flex-col items-center gap-4 pt-20 p-4 w-full pb-48">
+		<section class="w-full md:max-w-[var(--mw)] overflow-auto flex flex-col gap-6 items-start overflow-x-hidden ">
+			<div class="flex flex-col gap-4 w-full">
+				<div class="flex gap-2 text-[#374151]">
+					<div class="bg-[#eaeaef] flex size-[30px] shrink-0  center rounded-full p-0.5  border-2">
+						<img class="size-5" src="/og.png" alt="goalmatic logo">
 					</div>
-					<div class="flex flex-col ">
-						<h4 class="heading">
-							Actionable Step:
-						</h4>
-						<div v-if="steps.length && !loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-x-4 gap-y-6 ">
-							<div v-for="(step, idx) in steps" :key="step.title" class="field h-full">
-								<h4 class="pill text-base border-line bg-[#b8e3b8] mb-2.5">
-									Steps {{ idx + 1 }}:
-								</h4>
-								<div class="card_ans h-full justify-between flex flex-col gap-2">
-									<h1 class="font-semibold  underline">
-										{{ step.title }}
-									</h1>
-									<p class="mb-5">
-										{{ step.description }}
-									</p>
-									<footer class=" italic mt-auto flex flex-col ">
-										<span><b>Frequency:</b> {{ transformString(step.frequency) }}</span>
-										<span><b>Frequency Count:</b> {{ step.frequency_count }}</span>
-										<span><b>Estimated Duration:</b> {{ step.estimated_duration }}</span>
-									</footer>
-								</div>
-							</div>
-						</div>
-					</div>
+					<p class="w-full overflow-x-hidden font-semibold mt-0.5">
+						Goalmatic
+					</p>
 				</div>
-				<div v-if="!isLoggedIn" class="card_ans !border-greenx bg-[#000000] text-white flex flex-wrap gap-1 items-center !text-lg">
-					<button class="inline underline font-bold" @click="saveUnauthorisedGoal('/auth/login')">
-						Sign in
-					</button> or <button class="inline underline font-bold" @click="saveUnauthorisedGoal('/auth/register')">
-						create an account
-					</button> to
-					<span class="font-semibold text-[#cadef4]">save your actionable steps</span>,
-					<span class="font-semibold text-[#f9d7cf]">track your progress</span>,
-					<span class="font-semibold text-[#dcffd7]">get reminders</span>,
-					<span class="font-semibold text-[#f0fec8]">share with friends or partners</span>, and
-					<span class="font-semibold text-[#ccf8cd]">more!</span>
+				<article class="bg-[#F4F3FF] p-4 rounded-lg ">
+					<h4 class="text-lg font-semibold">
+						Hi! {{ loading ? 'Generating actionable steps...' : 'Actionable steps ready!' }}
+					</h4>
+					<p class="text-sm text-[#344054]">
+						If you would like to make suggestions about the steps, please let us know.
+					</p>
+				</article>
+			</div>
+		</section>
 
-					<button class="btn bg-white text-dark ml-auto block w-full mt-2 md:w-auto md:mt-0" @click="saveUnauthorisedGoal('/auth/login')">
-						Get Started
-					</button>
-				</div>
-				<button v-else class="btn bg-dark text-light" :disabled="createLoading" @click="createGoals">
-					<span v-if="!createLoading">	Save and proceed</span>
-					<Spinner v-else />
-				</button>
-			</section>
-		</transition>
+
+
+
+
 		<div v-if="loading" class="flex px-4 w-full">
 			<Skeleton radius="12px" height="280px" width="700px" class=" mx-auto px-4 max-w-[90%]" />
 		</div>

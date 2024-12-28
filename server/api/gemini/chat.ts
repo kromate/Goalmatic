@@ -1,7 +1,10 @@
-import { gemini15Pro, gemini15Flash8b, googleAI } from '@genkit-ai/googleai'
+import { gemini15Flash, googleAI } from '@genkit-ai/googleai'
 import { genkit } from 'genkit'
+import { v4 as uuidv4 } from 'uuid'
 import { systemPrompts } from './utils/system_prompt'
 import { isRateLimited } from './utils/rateLimit'
+// Store active sessions
+const sessions = new Map<string, any>()
 
 export default defineEventHandler(async (event) => {
   try {
@@ -19,15 +22,17 @@ export default defineEventHandler(async (event) => {
       throw new Error('Missing GEMINI API key')
     }
 
-    const { prompt, promptType } = await readBody(event)
+    const { prompt, promptType, sessionId } = await readBody(event)
     if (!prompt || !promptType) {
       throw new Error('Missing required parameters: prompt or promptType')
     }
 
+
     // Initialize Genkit with Google AI plugin
     const ai = genkit({
       plugins: [googleAI({ apiKey: GEMINI_API_KEY })],
-      model: gemini15Pro
+      model: gemini15Flash
+
     })
 
     const systemInst = systemPrompts[promptType].info
@@ -35,14 +40,53 @@ export default defineEventHandler(async (event) => {
       throw new Error(`Invalid promptType: ${promptType}`)
     }
 
-    // Generate content using Genkit
-    const { text } = await ai.generate({
-      prompt,
-      system: systemInst,
-      output: { schema: systemPrompts[promptType].schema }
-    })
+    let chat
+    let newSessionId
+    if (sessionId && sessions.has(sessionId)) {
+      // Load existing session
+      const existingChat = sessions.get(sessionId)
+      // Check if promptType has changed
+      if (existingChat.config?.system === systemInst) {
+        chat = existingChat
+      } else {
+        // Create new chat session if promptType is different
+        chat = ai.chat({
+          system: systemInst,
+          output: { schema: systemPrompts[promptType].schema },
+          config: {
+            temperature: 1.0,
+            topP: 0.95,
+            topK: 40
+          }
+        })
+        // Generate new session ID
+        newSessionId = uuidv4()
+        sessions.set(newSessionId, chat)
+      }
+    } else {
+      // Create new chat session
+      chat = ai.chat({
+        system: systemInst,
+        output: { schema: systemPrompts[promptType].schema },
+        config: {
+          temperature: 1.0,
+          topP: 0.95,
+          topK: 40
+        }
+      })
 
-    return text
+      // Store new session with a unique ID if none provided
+      newSessionId = uuidv4()
+      sessions.set(newSessionId, chat)
+    }
+
+    // Send message and get response
+    const { text } = await chat.send(prompt)
+
+    return {
+      text,
+      sessionId: sessionId || newSessionId
+    }
   } catch (error) {
     console.error('Error in Gemini API handler:', error)
 
