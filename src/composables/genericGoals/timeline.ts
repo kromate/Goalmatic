@@ -8,8 +8,15 @@ import { useAlert } from '@/composables/core/notification'
 
 const loading = ref(false)
 const steps = ref<TimeLineObject[]>([])
-const unauthorisedGoalSync = useStorage('unauthorisedGoalSync', {})
+export const unauthorisedGoalSync = useStorage('unauthorisedGoalSync', {} as any)
 
+export const syncAfterAuth = () => {
+    const { step, userGoal, sessionId } = useSmartGoal()
+    step.value = 2
+    userGoal.value = unauthorisedGoalSync.value.goal
+    steps.value = unauthorisedGoalSync.value.steps
+    unauthorisedGoalSync.value = {}
+}
 
 export const useGenerateGoalActionableStep = () => {
     const { step, userGoal, sessionId } = useSmartGoal()

@@ -12,7 +12,7 @@
 		<p class="text-lg font-semibold text-[#4D4D53]">
 			{{ goal.title }}
 		</p>
-		<div class="flex flex-col gap-1">
+		<!-- <div class="flex flex-col gap-1">
 			<div class="flex items-center gap-4 justify-between text-sm font-semibold">
 				<p class="text-[#333D54]">
 					50% Complete
@@ -22,21 +22,21 @@
 				</p>
 			</div>
 			<Progressbar />
-		</div>
+		</div> -->
 
-		<div class="flex flex-col gap-3 mt-2">
+		<div class="flex flex-col gap-3 mt-auto">
 			<div class="flex items-center gap-1.5 text-sm">
 				<IconsStart />
 				<p class="flex items-center gap-1">
-					<span class="text-[#908F93]">Start</span>
-					<span class="text-[#646368]">{{ formatDate(goal.start_date) }}</span>
+					<span class="text-[#908F93]">Start:</span>
+					<span class="text-[#646368]">{{ goal.start_date ? formatDate(goal.start_date) : 'N/A' }}</span>
 				</p>
 			</div>
 			<div class="flex items-center gap-1.5 text-sm">
 				<IconsCalendar />
 				<p class="flex items-center gap-1">
-					<span class="text-[#908F93]">End</span>
-					<span class="text-[#646368]">Dec 1st. 2024</span>
+					<span class="text-[#908F93]">End:</span>
+					<span class="text-[#646368]">{{ goal.end_date ? formatDate(goal.end_date) : 'N/A' }}</span>
 				</p>
 			</div>
 		</div>

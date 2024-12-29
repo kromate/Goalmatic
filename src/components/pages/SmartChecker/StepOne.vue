@@ -11,8 +11,8 @@
 					</p>
 				</div>
 				<article class="bg-[#F4F3FF] p-4 rounded-lg ">
-					<h4 class="text-lg font-semibold">
-						Hi! Welcome to Goalmatic!
+					<h4 class="text-lg font-semibold flex items-center gap-2">
+						Hi! Welcome to Goalmatic! <IconsSmiley2 :size="14" />
 					</h4>
 					<p class="text-sm text-[#344054]">
 						Goalmatic is a tool that helps you achieve your goals, by making them S.M.A.R.T. and actionable.
@@ -121,11 +121,11 @@
 
 
 		<div v-if="loading" class="flex  w-full ">
-			<Skeleton radius="12px" height="280px" width="700px" class=" mx-auto" />
+			<Skeleton radius="12px" height="280px" width="720px" class=" mx-auto" />
 		</div>
 
 
-		<div class="fixed bottom-2.5 inset-x-0 bg-white pt-2.5 px-3 center z-20">
+		<div class="fixed bottom-2.5  bg-white pt-2.5 px-3 center z-20" :class="isHomePage ? 'w-[800px] mx-auto' : 'inset-x-0'">
 			<form class="relative w-full md:max-w-[var(--mw)] flex flex-wrap mt-auto" @submit.prevent="checkIfGoalIsSmart">
 				<textarea ref="textarea" v-model="userGoal" class="input-field  !pb-4 !pt-4 pr-36 w-full resize-none overflow-hidden h-auto  transition-all duration-300 ease-in-out" placeholder="Enter your goal (e.g., Learn a new language)" rows="1" @input="adjustTextareaHeight"
 					@keydown="handleKeyDown" />
@@ -147,6 +147,10 @@
 import { MoveRight, Info } from 'lucide-vue-next'
 import { useSmartGoal } from '@/composables/genericGoals/smart'
 import { useGenerateGoalActionableStep } from '@/composables/genericGoals/timeline'
+
+defineProps<{
+	isHomePage?: boolean
+}>()
 
 const { generateGoalTimeline } = useGenerateGoalActionableStep()
 const { loading, userGoal, gemini_response, checkIfGoalIsSmart, hasUserGoalChanged, smartPercentage } = useSmartGoal()
@@ -177,7 +181,7 @@ onMounted(() => {
 	adjustTextareaHeight()
 	const goalQuery = useRoute().query.goal
 	if (goalQuery) {
-		userGoal.value = decodeURIComponent(goalQuery as string)
+		userGoal.value = goalQuery as string
 		setTimeout(() => {
 			checkIfGoalIsSmart()
 		}, 50)
@@ -189,7 +193,18 @@ watch([userGoal, gemini_response], () => {
 </script>
 
 <style lang="scss">
-/* define a max width variable */
+.mx {
+	margin-left: min(20%, 15rem);
+
+	@media (max-width:1024px) {
+		margin-left: 3.5rem;
+		margin-right: 0;
+	}
+	@media (max-width:768px) {
+		margin-left: 0;
+		margin-right: 0;
+	}
+}
 :root {
 	--mw: 720px;
 }

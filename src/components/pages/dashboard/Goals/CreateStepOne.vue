@@ -44,7 +44,7 @@
 								<span class="card_ans">{{ smartPercentage }}%</span>
 							</div>
 							<div class="card_ans !border-greenx bg-[#b8e3b8]">
-								You need at least 85% smart goal in order to generate a timeline
+								You need at least 85% smart gaol in order to generate a timeline
 							</div>
 							<div v-if="gemini_response && gemini_response!.percentage < 85" class="field">
 								<h4 class="flex justify-between w-full ">

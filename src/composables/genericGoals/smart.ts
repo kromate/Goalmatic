@@ -31,7 +31,6 @@ export const useSmartGoal = () => {
         loading.value = true
         isComponentOpen.value = true
         gemini_response.value = {}
-        console.log(userGoal.value)
         try {
             const { data, error: fetchError } = await useFetch('/api/gemini/chat', {
                 method: 'POST',

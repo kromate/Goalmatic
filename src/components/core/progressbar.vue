@@ -13,7 +13,6 @@
 
 <script setup lang="ts">
 import { ProgressIndicator, ProgressRoot } from 'radix-vue'
-import { defineModel } from 'vue'
 
 const progress = defineModel<number>({ required: true })
 </script>

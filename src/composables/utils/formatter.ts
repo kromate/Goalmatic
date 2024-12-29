@@ -108,6 +108,19 @@ export const transformString = (inputString: string): string => {
 
   return transformedString
 }
+
+export const numberToString = (number: number): string => {
+  switch (number) {
+    case 1:
+      return 'Once'
+    case 2:
+      return 'Twice'
+    case 3:
+      return 'Thrice'
+    default:
+      return 'Unknown'
+  }
+}
 interface TimeDuration {
   time: string; // e.g., "12:00"
   duration: number; // in minutes
