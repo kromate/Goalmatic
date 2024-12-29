@@ -10,6 +10,8 @@ const goalDetails = ref()
 const milestones = ref([])
 const todos = ref([] as Record<string, any>[])
 const loading = ref(false)
+const sessionId = ref('')
+
 export const useStartGoal = () => {
     const initStartGoal = async (data: Record<string, any>) => {
         goalDetails.value = data
@@ -41,9 +43,10 @@ const createMilestone = async () => {
                     steps: JSON.stringify(goalDetails.value.steps),
                     start_date: start_date.value
                 }),
-                promptType: 'SMART_MILESTONE'
+                promptType: 'SMART_MILESTONE',
+                sessionId: sessionId.value
             })
-        }) as { data: Ref<string>, error: any }
+        }) as { data: Ref<{ text: string, sessionId: string }>, error: any }
 
         if (fetchError.value) {
             throw new Error(fetchError.value.message || 'An error occurred while fetching data for the milestone')
@@ -53,8 +56,8 @@ const createMilestone = async () => {
             throw new Error('No response received from the server for the milestone')
         }
 
-
-        milestones.value = JSON.parse(data.value).milestones.map((milestone: any) => ({
+        sessionId.value = data.value.sessionId
+        milestones.value = JSON.parse(data.value.text).milestones.map((milestone: any) => ({
             ...milestone,
             id: nanoid(),
             goal_id: goalDetails.value.id
@@ -76,9 +79,10 @@ const createTodo = async () => {
                     start_date: start_date.value,
                     milestones: JSON.stringify(milestones.value)
                 }),
-                promptType: 'SMART_TODO'
+                promptType: 'SMART_TODO',
+                sessionId: sessionId.value
             })
-        }) as { data: Ref<string>, error: any }
+        }) as { data: Ref<{ text: string, sessionId: string }>, error: any }
 
         if (fetchError.value) {
             throw new Error(fetchError.value.message || 'An error occurred while fetching data for the todo')
@@ -88,7 +92,7 @@ const createTodo = async () => {
             throw new Error('No response received from the server for the todo')
         }
 
-        todos.value = JSON.parse(data.value).todos.map((todo: any) => ({
+        todos.value = JSON.parse(data.value.text).todos.map((todo: any) => ({
             ...todo,
             id: nanoid(),
             goal_id: goalDetails.value.id

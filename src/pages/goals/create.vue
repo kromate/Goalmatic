@@ -1,7 +1,7 @@
 <template>
 	<main class="p-4 flex flex-col gap-4">
-		<PagesDashboardGoalsCreateStepOne v-if="step === 1" />
-		<PagesDashboardGoalsCreateStepTwo v-if="step === 2" />
+		<PagesSmartCheckerStepOne v-if="step === 1" :isHomePage='true'/>
+		<PagesSmartCheckerStepTwo v-if="step === 2" />
 	</main>
 </template>
 

@@ -8,6 +8,7 @@ export const useCreateGoals = () => {
     const { steps, userGoal, step } = useGenerateGoalActionableStep()
     const title = ref('')
     const loading = ref(false)
+    const sessionId = ref('')
 
     const createGoals = async () => {
         const { id: user_id } = useUser()
@@ -18,9 +19,12 @@ export const useCreateGoals = () => {
         try {
             const { data, error: fetchError } = await useFetch('/api/gemini/chat', {
                 method: 'POST',
-                body: JSON.stringify({ prompt: userGoal.value, promptType: 'SMART_TITLE' })
-            }) as { data: Ref<string>, error: any }
-
+                body: JSON.stringify({
+                    prompt: userGoal.value,
+                    promptType: 'SMART_TITLE',
+                    sessionId: sessionId.value
+                })
+            }) as { data: Ref<{ text: string, sessionId: string }>, error: any }
 
             if (fetchError.value) {
                 throw new Error(fetchError.value.message || 'An error occurred while fetching data')
@@ -30,8 +34,8 @@ export const useCreateGoals = () => {
                 throw new Error('No response received from the server')
             }
 
-
-                title.value = JSON.parse(data.value).title
+            sessionId.value = data.value.sessionId
+            title.value = JSON.parse(data.value.text).title
         } catch (e) {
             loading.value = false
             useAlert().openAlert({ type: 'ERROR', msg: e instanceof Error ? e.message : 'An unexpected error occurred, please try again' })

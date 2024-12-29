@@ -1,6 +1,6 @@
 <template>
 	<div class="auth-box">
-		<img src="/lt2.svg" alt="logo">
+		<img src="/lt.svg" alt="logo">
 		<h1 class="text-2xl text-dark text-center font-semibold  tracking-wide">
 			Create a profile
 		</h1>

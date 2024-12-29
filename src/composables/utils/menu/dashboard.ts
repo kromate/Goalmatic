@@ -1,74 +1,60 @@
-import { Link, Brain, Settings, Grid3X3, CheckCheck, StickyNote, Calendar } from 'lucide-vue-next'
+import { Link, Brain, Settings, Grid3X3, CheckCheck, StickyNote } from 'lucide-vue-next'
+import Home from '@/assets/icons/Home.vue'
+import Goal from '@/assets/icons/Goal.vue'
+import Note from '@/assets/icons/Note.vue'
+import Todo from '@/assets/icons/Todo.vue'
+import Bot from '@/assets/icons/Bot.vue'
+import Calendar from '@/assets/icons/Calendar2.vue'
 
 export const dashboardRoutes = () => [
 
 	{
-		icon: Link,
+		icon: Home,
+		name: 'Home',
+		route: '/dashboard',
+		main: true
+	},
+	{
+		icon: Goal,
 		name: 'Goals',
 		route: '/goals',
-		main: true,
-		bg: '#e5e7eb',
-		color: '#18181B'
+		main: true
 	},
 	{
-		icon: CheckCheck,
+		icon: Todo,
 		name: 'Todos',
 		route: '/todos',
-		main: true,
-		bg: '#e5e7eb',
-		color: '#18181B'
+		main: true
 	},
 	{
-		icon: StickyNote,
+		icon: Note,
 		name: 'Notes',
 		route: '/notes',
-		main: true,
-		bg: '#e5e7eb',
-		color: '#18181B'
+		main: true
 	},
 	{
 		icon: Calendar,
 		name: 'Calendar',
 		route: '/calendar',
-		main: true,
-		bg: '#e5e7eb',
-		color: '#18181B'
+		main: true
 	},
-
-
-	// {
-	// 	icon: User,
-	// 	name: 'Partners',
-	// 	route: '/contacts',
-	// 	main: true,
-	// 	type: 'all',
-	// 	bg: '#e5e7eb',
-	// 	color: '#18181B'
-	// },
-
 	{
 		icon: Grid3X3,
 		name: 'Integrations',
 		route: '/integrations',
-		type: 'all',
-		bg: '#e5e7eb',
-		color: '#18181B'
+		type: 'all'
 	},
 	{
-		icon: Brain,
+		icon: Bot,
 		name: 'Assistant',
 		route: '/assistant',
-		type: 'all',
-		bg: '#e5e7eb',
-		color: '#18181B'
+		type: 'all'
 	},
 	{
 		icon: Settings,
 		name: 'Settings',
 		route: '/settings',
-		type: 'all',
-		bg: '#e5e7eb',
-		color: '#18181B'
+		type: 'all'
 	}
 
 ]

@@ -1,7 +1,7 @@
 <template>
 	<div class="auth-box">
 		<nuxt-link to="/">
-			<img src="/lt2.svg" alt="logo">
+			<img src="/lt.svg" alt="logo">
 		</nuxt-link>
 
 		<h1 class="auth-title">
