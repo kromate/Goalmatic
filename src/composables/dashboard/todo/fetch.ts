@@ -5,16 +5,11 @@ import { useUser } from '@/composables/auth/user'
 
 
 
-
+const userTodos = ref([] as any)
+const loading = ref(false)
 export const useFetchUserTodos = () => {
     const { id: user_id } = useUser()
-
-    const userTodos = ref([] as any)
-
-    const loading = ref(false)
-
     const currentWeekOffset = ref(0)
-
     const fetchedWeeks = ref(new Set<number>())
 
     const fetchUsersTodos = async () => {
@@ -53,6 +48,45 @@ export const useFetchUserTodos = () => {
 
         // Mark this week as fetched
         fetchedWeeks.value.add(currentWeekOffset.value)
+    }
+
+    const fetchTodos = async (paginatedDays:Record<string, any>[], current_month:string, current_year: number) => {
+        loading.value = true
+        const startOfWeek = new Date(`${paginatedDays[0]?.date}/${current_month}/${current_year}`)
+        const endOfWeek = new Date(`${paginatedDays[paginatedDays?.length - 1]?.date}/${current_month}/${current_year}`)
+        console.log(startOfWeek)
+        console.log(endOfWeek)
+        // Get start of current week (Sunday) with offset
+        // const today = new Date()
+        // const startOfWeek = new Date(today)
+        // startOfWeek.setDate(today.getDate() - today.getDay() + (currentWeekOffset.value * 7))
+        // startOfWeek.setHours(0, 0, 0, 0)
+
+        // // Get end of week (Saturday) at end of day
+        // const endOfWeek = new Date(startOfWeek)
+        // endOfWeek.setDate(startOfWeek.getDate() + 6)
+        // endOfWeek.setHours(23, 59, 59, 999)
+
+        await getFirestoreSubCollectionWithWhereQuery(
+            'users',
+            user_id.value!,
+            'todos',
+            userTodos,
+            {
+                name: 'date',
+                operator: '>=',
+                value: startOfWeek.toISOString()
+            },
+            {
+                name: 'date',
+                operator: '<=',
+                value: endOfWeek.toISOString()
+            }
+        )
+        console.log('hello', userTodos.value)
+        loading.value = false
+        // // Mark this week as fetched
+        // fetchedWeeks.value.add(currentWeekOffset.value)
     }
 
     const navigateWeek = (direction: 'prev' | 'next') => {
@@ -108,7 +142,7 @@ export const useFetchUserTodos = () => {
         return Object.values(groupedTasks)
     })
 
-    return { loading, groupTodosByDate, fetchUsersTodos, navigateWeek, weekLabel, currentWeekOffset, fetchedWeeks }
+    return { loading, groupTodosByDate, fetchUsersTodos, navigateWeek, weekLabel, currentWeekOffset, fetchedWeeks, userTodos, fetchTodos }
 }
 
 

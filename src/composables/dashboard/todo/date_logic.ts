@@ -1,9 +1,15 @@
+import { useFetchUserTodos } from './fetch'
+
 const current_week = ref(1)
 const current_month = ref('')
 const current_year = ref(0)
 const days_arr = ref([] as Record<string, any>[])
 
 export const useTodoDate = () => {
+    const getTodos = () => {
+        const { fetchTodos } = useFetchUserTodos()
+        fetchTodos(paginatedDays.value, current_month.value, current_year.value)
+    }
     function getNextMonth(forward:boolean) {
         current_week.value = 1
         const currentDate = new Date(`${current_month.value} 1, ${current_year.value}`)
@@ -15,6 +21,7 @@ export const useTodoDate = () => {
         current_month.value = currentDate.toLocaleString('default', { month: 'long' })
         current_year.value = currentDate.getFullYear()
         getDaysInMonth(current_month.value, current_year.value)
+        getTodos()
     }
 
     function getCurrentMonthAndYear() {
@@ -24,6 +31,7 @@ export const useTodoDate = () => {
         const todays_date = currentDate.getDate()
         current_week.value = Math.ceil(todays_date / 7)
         getDaysInMonth(current_month.value, current_year.value)
+        getTodos()
     }
 
     function getDaysInMonth(month:string, year:number) {
@@ -47,6 +55,7 @@ export const useTodoDate = () => {
         const endIndex = startIndex + 7
         return days_arr.value.slice(startIndex, endIndex)
     })
+
     const totalWeeksInSelectedMonth = computed(() => {
         return Math.ceil(days_arr.value?.length / 7)
     })
@@ -57,6 +66,7 @@ export const useTodoDate = () => {
         } else if (forward === false) {
             if (current_week.value > 1) current_week.value--
         }
+        getTodos()
     }
 
     return { current_month, current_year, current_week, days_arr, getNextMonth, getCurrentMonthAndYear, getDaysInMonth, paginatedDays, totalWeeksInSelectedMonth, displayAnotherWeek }

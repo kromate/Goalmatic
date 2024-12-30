@@ -1,5 +1,5 @@
 <template>
-	<!-- <div
+	<div
 		class="min-w-full h-full p-4 flex flex-col gap-5 items-start justify-start hide-scrollbar overflow-x-auto"
 	>
 		<div class="flex items-center gap-4 ">
@@ -15,7 +15,10 @@
 				:todo="column.tasks"
 			/>
 		</main>
-	</div> -->
+	</div>
+
+	{{ userTodos }}
+
 	<main class="p-4 flex flex-col gap-8">
 		<div class="flex flex-col gap-1">
 			<h3 class="text-textHeadline font-semibold text-2xl md:text-[28px]">
@@ -41,7 +44,7 @@
 				</div>
 
 				<div class="grid grid-cols-9 items-end gap-1">
-					<button class="border border-[#E9E9E9] rounded center h-10 p-2 text-[#798494]" @click="displayAnotherWeek(false)">
+					<button class="week_btn" :disabled="current_week <= 1" @click="displayAnotherWeek(false)">
 						<ChevronLeft :size="14" :stroke-width="2.5" />
 					</button>
 					<div v-for="n,i in paginatedDays" :key="i" class="flex flex-col gap-2 items-center">
@@ -54,7 +57,7 @@
 							</span>
 						</button>
 					</div>
-					<button class="border border-[#E9E9E9] rounded center h-10 p-2 text-[#798494]" @click="displayAnotherWeek(true)">
+					<button class="week_btn" :disabled="current_week >= totalWeeksInSelectedMonth" @click="displayAnotherWeek(true)">
 						<ChevronRight :size="14" :stroke-width="2.5" />
 					</button>
 				</div>
@@ -86,7 +89,9 @@
 				<div class="p-4 bg-[#F2F2F2] flex items-center gap-4 justify-between rounded-lg">
 					<div class="flex items-center gap-3">
 						<IconsCheck />
-						<p class="text-[#4D4D53] text-lg font-semibold">Completed Tasks</p>
+						<p class="text-[#4D4D53] text-lg font-semibold">
+							Completed Tasks
+						</p>
 					</div>
 					<button class="bg-white py-1 px-2 shadow rounded">
 						<ChevronDown :size="14" />
@@ -104,11 +109,11 @@ import { useFetchUserTodos } from '@/composables/dashboard/todo/fetch'
 import { capitalize } from '@/composables/utils/formatter'
 import { useTodoDate } from '@/composables/dashboard/todo/date_logic'
 // import { useUser } from '~/src/composables/auth/user'
-// const { fetchUsersTodos, loading, groupTodosByDate, navigateWeek, weekLabel } = useFetchUserTodos()
+const { fetchUsersTodos, loading, groupTodosByDate, navigateWeek, weekLabel, userTodos, fetchTodos } = useFetchUserTodos()
 
 // await fetchUsersTodos()
 // const { user } = useUser()
-const { current_month, current_year, getCurrentMonthAndYear, getNextMonth, displayAnotherWeek, paginatedDays } = useTodoDate()
+const { current_month, current_year, getCurrentMonthAndYear, getNextMonth, displayAnotherWeek, paginatedDays, current_week, totalWeeksInSelectedMonth } = useTodoDate()
 
 
 
@@ -116,15 +121,15 @@ getCurrentMonthAndYear()
 definePageMeta({
 	layout: 'dashboard',
 	middleware: [
-		'is-authenticated',
-		() => {
-			usePageHeader().setPageHeader({
-				title: 'Todos',
-				description: 'Manage your todos here',
-				shouldShowFab: false,
-				shouldShowTab: false
-			})
-		}
+		'is-authenticated'
+		// () => {
+		// 	usePageHeader().setPageHeader({
+		// 		title: 'Todos',
+		// 		description: 'Manage your todos here',
+		// 		shouldShowFab: false,
+		// 		shouldShowTab: false
+		// 	})
+		// }
 	]
 })
 </script>
@@ -136,5 +141,9 @@ definePageMeta({
 
 .kanban-columns::-webkit-scrollbar {
 	display: none;
+}
+
+.week_btn {
+	@apply border border-[#E9E9E9] rounded center h-10 p-2 text-[#798494] disabled:cursor-not-allowed
 }
 </style>
