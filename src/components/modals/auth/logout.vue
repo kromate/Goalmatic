@@ -12,7 +12,7 @@
 			<button class="modal-btn border-red bg-red text-white hover:bg-red" @click="signOut">
 				Logout
 			</button>
-			<button class="modal-btn text-dark mt-3" @click="useAuthModal().closeLogout()">
+			<button class="modal-btn text-light mt-3" @click="useAuthModal().closeLogout()">
 				Cancel
 			</button>
 		</div>

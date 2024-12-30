@@ -23,8 +23,8 @@
 		</section>
 
 		<transition name="show" appear>
-			<section v-if="steps.length && !loading" class="flex flex-col gap-8 max-w-[var(--mw2)]">
-				<div class="flex flex-col gap-8 w-full border border-line mx-auto p-4 px-4  rounded-lg ">
+			<section v-if="steps.length && !loading" class="flex flex-col gap-8 max-w-[var(--mw2)] w-full">
+				<div class="flex flex-col gap-8 w-full border border-line mx-auto p-4 px-4  rounded-lg w-full">
 					<div class="field">
 						<h4 class="text-base font-semibold text-[#4D4D53]">
 							Your Current Goal
@@ -32,33 +32,9 @@
 						<span class="text-sm text-grey_four">{{ userGoal }}</span>
 						<hr class="w-full mt-3">
 					</div>
-					<div class="flex flex-col ">
-						<div v-if="steps.length && !loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-2 ">
-							<div v-for="(step, idx) in steps" :key="step.title" class="field h-full w-full">
-								<div class="bg-[#F7F7F7] p-4 rounded-lg h-full w-full justify-between flex flex-col gap-3 min-h-[130px]">
-									<h1 class="font-bold text-base">
-										{{ idx + 1 }}. {{ step.title }}
-									</h1>
-
-									<section class="flex   gap-2 font-semibold">
-										<span class="flex items-center gap-1 text-xs truncate">
-											<Clock :size="14" />
-											{{ step.estimated_duration }}
-										</span>
-										<span class="flex items-center gap-1 text-xs truncate">
-											<CalendarCheck :size="14" />
-											{{ transformString(step.frequency) }}
-										</span>
-										<span class="flex items-center gap-1 text-xs truncate">
-											<RadioTower :size="14" />
-											{{ numberToString(step.frequency_count) }}
-										</span>
-									</section>
-									<p class=" text-xs ">
-										{{ step.description }}
-									</p>
-								</div>
-							</div>
+					<div class="flex flex-col w-full">
+						<div v-if="steps.length && !loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-2 w-full">
+							<ModulesGoalsStepCard v-for="(step, idx) in steps" :key="idx" :step="step" :idx="idx" />
 						</div>
 					</div>
 				</div>

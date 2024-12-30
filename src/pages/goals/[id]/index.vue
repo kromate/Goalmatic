@@ -1,20 +1,7 @@
 <template>
 	<main class="p-4 flex flex-col gap-6">
-		<article v-if="!loading" class="flex flex-col gap-3 items-start p-4 border border-line rounded-md">
-			<h2 class="font-medium  text-base md:text-2xl">
-				{{ goalDetails.title }}
-			</h2>
-			<h4 class="!border-dark bg-hover card_ans text-base md:text-xl font-normal">
-				{{ goalDetails.desc }}
-			</h4>
-			<button v-if="!goalDetails.started" class="btn w-full bg-dark text-light" @click="initStartGoal(goalDetails)">
-				Click to start this goal
-			</button>
-		</article>
-
-		<!-- <Skeleton v-else height="150px" /> -->
-		<section class="flex flex-col gap-4 max-w-[840px]">
-			<div class="rounded-lg p-4 px-5 flex flex-col gap-2 bg-[#F5F1FE] text-[#344054]">
+		<section class="flex flex-col gap-4 ">
+			<!-- <div class="rounded-lg p-4 px-5 flex flex-col gap-2 bg-[#F5F1FE] text-[#344054]">
 				<div class="flex flex-col gap-2">
 					<p class="text-2xl font-bold flex items-center gap-2">
 						<span>Your Plan is ready </span>
@@ -33,9 +20,9 @@
 						Dismiss
 					</button>
 				</div>
-			</div>
+			</div> -->
 
-			<div class="border border-[#E4E7EC] p-4 rounded-lg flex flex-col gap-3">
+			<div v-if="!loading && goalDetails" class="border border-[#E4E7EC] p-4 rounded-lg flex flex-col gap-3">
 				<div class="flex flex-col gap-3">
 					<p class="text-[11px] text-textHeadline font-medium bg-[#F2F2F2] rounded-full py-0.5 px-2 w-fit">
 						Week 1
@@ -45,30 +32,32 @@
 					</p>
 				</div>
 				<p class="text-lg font-semibold text-[#4D4D53]">
-					Increase GPA and get Internship
+					{{ goalDetails.title }}
 				</p>
 				<div class="flex flex-col md:flex-row md:items-center gap-3 mt-2 pb-1.5 border-b border-[rgba(143,149,166,0.2)]">
 					<div class="flex items-center gap-1.5 text-sm">
 						<IconsStart />
 						<p class="flex items-center gap-1">
 							<span class="text-[#908F93]">Start</span>
-							<span class="text-[#646368]">Tomorrow, Dec 1st. 2024</span>
+							<span class="text-[#646368]">{{ goalDetails.start_date ? formatDate(goalDetails.start_date) : 'N/A' }}</span>
 						</p>
 					</div>
 					<div class="flex items-center gap-1.5 text-sm">
 						<IconsCalendar />
 						<p class="flex items-center gap-1">
 							<span class="text-[#908F93]">End</span>
-							<span class="text-[#646368]">Tomorrow, Dec 1st. 2024</span>
+							<span class="text-[#646368]">{{ goalDetails.end_date ? formatDate(goalDetails.end_date) : 'N/A' }}</span>
 						</p>
 					</div>
 				</div>
 				<p class="text-sm text-[#37363D] mt-2 mb-1">
-					Increase my GPA by 0.5 points by the end of this semester (May 15th, 2024) to secure a good summer internship <button class="text-[#7A797E]">
-						See more...
-					</button>
+					{{ goalDetails.desc }}
 				</p>
+				<button v-if="!goalDetails.started" class="btn w-full bg-primary text-light" @click="initStartGoal(goalDetails)">
+					Click to start this goal
+				</button>
 			</div>
+			<Skeleton v-else height="150px" />
 		</section>
 
 		<section v-if="true || !loading" class="">
@@ -95,6 +84,7 @@ import todo from '@/pages/goals/[id]/todo.vue'
 import accountability_partner from '@/pages/goals/[id]/partner.vue'
 import { useFetchGoalsById } from '@/composables/dashboard/goals/id'
 import { useStartGoal } from '@/composables/dashboard/goals/start'
+import { formatDate } from '@/composables/utils/formatter'
 
 const { initStartGoal } = useStartGoal()
 const { fetchGoalsById, goalDetails, loading } = useFetchGoalsById()

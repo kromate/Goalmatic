@@ -1,6 +1,7 @@
 import { User } from 'firebase/auth'
 import { unauthorisedGoalSync, syncAfterAuth } from '../genericGoals/timeline'
 import { useUser } from './user'
+import { setFirestoreDocument } from '@/firebase/firestore/create'
 
 
 export const afterAuthCheck = async (user: User | null) => {
@@ -8,11 +9,18 @@ export const afterAuthCheck = async (user: User | null) => {
         const { fetchUserProfile } = useUser()
         const userProfile = await fetchUserProfile(user.uid) as any
         if (!userProfile?.value?.name) {
-            useRouter().push('/auth/profile')
-            return
+            await setFirestoreDocument('users', user.uid, {
+                id: user.uid,
+                name: user.displayName,
+                photo_url: user.photoURL,
+                email: user.email,
+                phone: user.phoneNumber,
+                username: user.displayName,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString()
+            })
         }
-        if (unauthorisedGoalSync.value.step) {
-            useRouter().push('/create')
+        if (unauthorisedGoalSync.value.stepsk) {
             setTimeout(() => {
                 syncAfterAuth()
             }, 100)

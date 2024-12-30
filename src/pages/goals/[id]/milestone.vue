@@ -1,6 +1,6 @@
 <template>
 	<section>
-		<!-- <section v-if="!goalDetails.started" class="center flex-col  gap-4">
+		<section v-if="!goalDetails.started" class="center flex-col  gap-4">
 			<Milestone :size="80" />
 			<h1 class="text-xl font-bold mt-3">
 				Start the goal to generate milestones
@@ -9,31 +9,13 @@
 			<button class="btn-primary" @click="initStartGoal(goalDetails)">
 				Start Goal
 			</button>
-		</section> -->
-
-		<section class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-			<ModulesGoalsMilestoneCard v-for="n in 6" :key="n" />
 		</section>
 
-		<section v-if="milestones.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-x-4 gap-y-6 ">
-			<div v-for="(milestone, idx) in milestones" :key="milestone.title" class="field h-full">
-				<h4 class="pill text-base border-line bg-[#b8e3b8] mb-2.5">
-					Milestone {{ idx + 1 }}:
-				</h4>
-				<div class="card_ans h-full justify-between flex flex-col gap-2">
-					<h1 class="font-semibold  underline">
-						{{ milestone.title }}
-					</h1>
-					<p class="mb-5">
-						{{ milestone.description }}
-					</p>
-					<footer class=" italic mt-auto flex flex-col ">
-						<span><b>Percentage Complete:</b> {{ milestone.percentage_complete }}%</span>
-						<span><b>Estimated Due Date:</b> {{ formatDateString(milestone.estimated_due_date) }}</span>
-					</footer>
-				</div>
-			</div>
+		<section v-if="milestones.length > 0" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+			<ModulesGoalsMilestoneCard v-for="(milestone, idx) in milestones" :key="idx" :milestone="milestone" :idx="idx" />
 		</section>
+
+
 
 		<section v-if="milestones.length === 0 && goalDetails.started" class="center flex-col  gap-4">
 			<Milestone :size="80" />

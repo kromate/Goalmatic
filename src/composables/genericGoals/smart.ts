@@ -41,7 +41,6 @@ export const useSmartGoal = () => {
                 })
             }) as { data: Ref<{ text: string, sessionId: string }>, error: any }
 
-            console.log(data.value)
             sessionId.value = data.value?.sessionId
             ex_userGoal.value = userGoal.value
             gemini_response.value = JSON.parse(data.value.text) as GoalEvaluation
