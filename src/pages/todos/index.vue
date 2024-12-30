@@ -1,5 +1,5 @@
 <template>
-	<div
+	<!-- <div
 		class="min-w-full h-full p-4 flex flex-col gap-5 items-start justify-start hide-scrollbar overflow-x-auto"
 	>
 		<div class="flex items-center gap-4 ">
@@ -15,9 +15,11 @@
 				:todo="column.tasks"
 			/>
 		</main>
-	</div>
+	</div> -->
 
-	{{ userTodos }}
+	<!-- {{ userTodos }} <br><br>
+
+	{{ currentDayTodo }} -->
 
 	<main class="p-4 flex flex-col gap-8">
 		<div class="flex flex-col gap-1">
@@ -36,7 +38,7 @@
 						<ChevronLeft :size="16" :stroke-width="2.5" />
 					</button>
 					<p class="text-lg text-[#1F1F1F] font-semibold">
-						{{ current_month }} {{ current_year }}
+						{{ current_day }} {{ current_month }} {{ current_year }}
 					</p>
 					<button class="h-11 center bg-white border border-[#E9E9E9] px-4 shadow rounded-full" @click="getNextMonth(true)">
 						<ChevronRight :size="16" :stroke-width="2.5" />
@@ -51,8 +53,11 @@
 						<p class="text-[#798494] text-sm font-semibold">
 							{{ capitalize(n?.day).substring(0,2) }}
 						</p>
-						<button class="border border-[#E9E9E9] bg-[#F6F5FF] rounded center h-10 p-2 text-[#798494] w-full">
-							<span class="text-[#1F1F1F] text-sm font-medium">
+						<button class="border border-[#E9E9E9] rounded center h-10 p-2 w-full"
+							:class="n?.date === current_day ? 'bg-[#8F61F2] text-light' : 'bg-[#F6F5FF] text-[#1F1F1F]'"
+							@click="current_day = n?.date"
+						>
+							<span class="text-sm font-medium">
 								{{ n?.date }}
 							</span>
 						</button>
@@ -62,8 +67,8 @@
 					</button>
 				</div>
 			</div>
-
-			<div class="flex flex-col gap-2">
+			<Skeleton v-if="loading" height="200px" />
+			<div v-else class="flex flex-col gap-2">
 				<div class="flex flex-col gap-6 py-5 px-4 bg-[#F9F8FB] rounded-lg">
 					<div class="flex flex-col gap-0.5">
 						<p class="text-[#4D4D53] font-semibold text-lg">
@@ -83,7 +88,7 @@
 					</div>
 
 					<div class="px-2 flex flex-col gap-2">
-						<ModulesTodosTaskCard v-for="n in 4" :key="n" />
+						<ModulesTodosTaskCard v-for="n in currentDayTodo" :key="n?.id" :todo="n" />
 					</div>
 				</div>
 				<div class="p-4 bg-[#F2F2F2] flex items-center gap-4 justify-between rounded-lg">
@@ -104,32 +109,35 @@
 
 <script setup lang="ts">
 import { ArrowRight, ChevronDown, ChevronLeft, ChevronRight, CircleArrowLeft, CircleArrowRight, CirclePlus } from 'lucide-vue-next'
-import { usePageHeader } from '@/composables/utils/header'
 import { useFetchUserTodos } from '@/composables/dashboard/todo/fetch'
 import { capitalize } from '@/composables/utils/formatter'
 import { useTodoDate } from '@/composables/dashboard/todo/date_logic'
-// import { useUser } from '~/src/composables/auth/user'
-const { fetchUsersTodos, loading, groupTodosByDate, navigateWeek, weekLabel, userTodos, fetchTodos } = useFetchUserTodos()
 
-// await fetchUsersTodos()
-// const { user } = useUser()
-const { current_month, current_year, getCurrentMonthAndYear, getNextMonth, displayAnotherWeek, paginatedDays, current_week, totalWeeksInSelectedMonth } = useTodoDate()
+const { loading, groupTodosByDate, navigateWeek, weekLabel, userTodos } = useFetchUserTodos()
+const { current_month, current_year, current_day, getCurrentMonthAndYear, getNextMonth, displayAnotherWeek, paginatedDays, current_week, totalWeeksInSelectedMonth } = useTodoDate()
 
+const currentDayTodo = computed(() => {
+	const x = userTodos.value?.filter((el) => {
+		const current_date = new Date(`${current_day.value}/${current_month.value}/${current_year.value}`)
+		const created_date = new Date(el?.date)
+		return isSameDay(current_date, created_date)
+	})
+	return x
+})
 
+function isSameDay(date1:Date, date2:Date) {
+	return (
+		date1.getFullYear() === date2.getFullYear() &&
+		date1.getMonth() === date2.getMonth() &&
+		date1.getDate() === date2.getDate()
+	)
+}
 
 getCurrentMonthAndYear()
 definePageMeta({
 	layout: 'dashboard',
 	middleware: [
 		'is-authenticated'
-		// () => {
-		// 	usePageHeader().setPageHeader({
-		// 		title: 'Todos',
-		// 		description: 'Manage your todos here',
-		// 		shouldShowFab: false,
-		// 		shouldShowTab: false
-		// 	})
-		// }
 	]
 })
 </script>
