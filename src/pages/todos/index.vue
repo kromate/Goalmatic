@@ -17,9 +17,9 @@
 		</main>
 	</div> -->
 
-	<!-- {{ userTodos }} <br><br>
+	<!-- {{ userTodos }} <br><br> -->
 
-	{{ currentDayTodo }} -->
+	<!-- {{ currentDayTodo }} -->
 
 	<main class="p-4 flex flex-col gap-8">
 		<div class="flex flex-col gap-1">
@@ -67,7 +67,7 @@
 					</button>
 				</div>
 			</div>
-			<Skeleton v-if="loading" height="200px" />
+			<Skeleton v-if="loading" height="200px" radius="10px" class="border-0" />
 			<div v-else class="flex flex-col gap-2">
 				<div class="flex flex-col gap-6 py-5 px-4 bg-[#F9F8FB] rounded-lg">
 					<div class="flex flex-col gap-0.5">
@@ -81,26 +81,36 @@
 
 					<div class="bg-white p-4 shadow rounded-lg flex items-center gap-2 justify-between">
 						<CirclePlus :size="16" class="text-[#4D4D53]" />
-						<input type="text" class="flex-grow focus:outline-none" placeholder="Add a custom to do for the day">
-						<button class="bg-[#F9F8FB] p-1.5 px-2.5 border border-[#E9E9E9] rounded-md">
+						<input v-model.trim="title" type="text" class="flex-grow focus:outline-none" placeholder="Add a custom to do for the day">
+						<button class="bg-[#F9F8FB] p-1.5 px-2.5 border border-[#E9E9E9] rounded-md disabled:cursor-not-allowed" :disabled="!title?.length" @click="createNewTodo">
 							<ArrowRight :size="14" />
 						</button>
 					</div>
 
 					<div class="px-2 flex flex-col gap-2">
-						<ModulesTodosTaskCard v-for="n in currentDayTodo" :key="n?.id" :todo="n" />
+						<template v-for="n in currentDayTodo" :key="n?.id">
+							<ModulesTodosTaskCard v-if="!n?.completed" :todo="n" />
+						</template>
 					</div>
 				</div>
-				<div class="p-4 bg-[#F2F2F2] flex items-center gap-4 justify-between rounded-lg">
-					<div class="flex items-center gap-3">
-						<IconsCheck />
-						<p class="text-[#4D4D53] text-lg font-semibold">
-							Completed Tasks
-						</p>
+				<div class="p-4 bg-[#F2F2F2] flex flex-col gap-4 rounded-lg">
+					<div class="flex items-center gap-4 justify-between">
+						<div class="flex items-center gap-3">
+							<IconsCheck />
+							<p class="text-[#4D4D53] text-lg font-semibold">
+								Completed Tasks
+							</p>
+						</div>
+						<button class="bg-white py-1 px-2 shadow rounded">
+							<ChevronDown :size="14" />
+						</button>
 					</div>
-					<button class="bg-white py-1 px-2 shadow rounded">
-						<ChevronDown :size="14" />
-					</button>
+
+					<div class="px-2 flex flex-col gap-2">
+						<template v-for="n in currentDayTodo" :key="n?.id">
+							<ModulesTodosTaskCard v-if="n?.completed" :todo="n" />
+						</template>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -112,7 +122,10 @@ import { ArrowRight, ChevronDown, ChevronLeft, ChevronRight, CircleArrowLeft, Ci
 import { useFetchUserTodos } from '@/composables/dashboard/todo/fetch'
 import { capitalize } from '@/composables/utils/formatter'
 import { useTodoDate } from '@/composables/dashboard/todo/date_logic'
+import { useCreateTodo } from '@/composables/dashboard/todo/create'
 
+const title = ref('')
+const { createTodo, createBoardForm } = useCreateTodo()
 const { loading, groupTodosByDate, navigateWeek, weekLabel, userTodos } = useFetchUserTodos()
 const { current_month, current_year, current_day, getCurrentMonthAndYear, getNextMonth, displayAnotherWeek, paginatedDays, current_week, totalWeeksInSelectedMonth } = useTodoDate()
 
@@ -131,6 +144,16 @@ function isSameDay(date1:Date, date2:Date) {
 		date1.getMonth() === date2.getMonth() &&
 		date1.getDate() === date2.getDate()
 	)
+}
+
+const createNewTodo = async () => {
+	const current_date = new Date(`${current_day.value}/${current_month.value}/${current_year.value}`)
+	// createBoardForm.date = new Date(props.date).toISOString()
+	createBoardForm.date = current_date.toISOString()
+	createBoardForm.title = title.value
+	await createTodo()
+	createBoardForm.date = ''
+	title.value = ''
 }
 
 getCurrentMonthAndYear()

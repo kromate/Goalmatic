@@ -1,8 +1,15 @@
 <template>
 	<div class="bg-white shadow rounded-md p-4 flex flex-col">
-		<div class="flex items-center gap-4 justify-between">
+		<div class="flex items-center gap-4 justify-between" @click="highlightTodo(props.todo)">
 			<div class="flex items-start gap-3">
-				<input type="checkbox">
+				<input
+					:id="props.todo.id"
+					:checked="props.todo.completed"
+					type="checkbox"
+					class="size-4 shrink-0"
+					@change="toggleComplete"
+					@click.stop
+				>
 				<div class="flex flex-col gap-0.5 -mt-2">
 					<p class="text-[#4D4D53] text-base md:text-lg font-semibold">
 						{{ todo?.title }}
@@ -27,6 +34,15 @@
 
 <script setup lang="ts">
 import { Clock } from 'lucide-vue-next'
+import { useUpdateCompleteStatusOfTodo } from '@/composables/dashboard/todo/completed'
+import { useEditTodo } from '@/composables/dashboard/todo/edit'
+
+const { updateCompleteStatusOfTodo } = useUpdateCompleteStatusOfTodo()
+const { highlightTodo } = useEditTodo()
+
+const toggleComplete = () => {
+  updateCompleteStatusOfTodo(props.todo, !props.todo.completed)
+}
 
 const props = defineProps<{
   todo: Record<string, any>
