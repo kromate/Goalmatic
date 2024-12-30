@@ -118,7 +118,9 @@ export const useFetchUserTodosByGoalId = () => {
     const todos = ref([])
 
     const fetchTodosByGoalId = async (goal_id: string) => {
+        loading.value = true
         await getFirestoreSubCollectionWithWhereQuery('users', user_id.value!, 'todos', todos, { name: 'goal_id', operator: '==', value: goal_id })
+        loading.value = false
     }
 
     return { fetchTodosByGoalId, todos, loading }

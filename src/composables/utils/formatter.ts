@@ -118,7 +118,7 @@ export const numberToString = (number: number): string => {
     case 3:
       return 'Thrice'
     default:
-      return 'Unknown'
+      return `${number} times`
   }
 }
 interface TimeDuration {

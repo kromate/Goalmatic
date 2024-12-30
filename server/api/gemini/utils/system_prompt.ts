@@ -1,4 +1,5 @@
 import { z } from 'genkit'
+import { gemini15Flash, gemini15Pro } from '@genkit-ai/googleai'
 
 const smartCheckerPrompt = `
 You are a goal-setting system designed to help users set S.M.A.R.T goals. Your primary users are Africans, mainly Nigerians.
@@ -89,7 +90,10 @@ steps: Array of Object with the following properties: {
     frequency: string (frequency of the step) - 'HOURLY', 'DAILY', 'WEEKLY', 'MONTHLY', 'YEARLY'
     frequency_count: number (number of times the step should be done in the frequency) - e.g. 3 times a week, frequency_count = 3
     estimated_duration: string (duration of the step) 
-} 
+}
+
+Note:
+1. Keep it short and concise.
 `
 
 const smartActionableStepPromptSchema = z.object({
@@ -214,12 +218,8 @@ Guidelines:
 4. Prioritize todos based on the urgency and importance of each step or milestone.
 5. Ensure that todos are clear and concise, with a focus on the desired outcome.
 6. Assign due dates to each todo to create a sense of urgency and accountability.
-7. Include a variety of tasks to maintain motivation and momentum towards the goal.
-8. Provide a mix of short-term and long-term todos to balance immediate progress with sustained effort.
-9. Adjust the number and complexity of todos based on the goal's timeframe and difficulty.
-10. Review and update todos regularly to reflect changes in priorities or progress towards milestones.
-11. The max number of todos generated should not exceed double of the number of actionable steps.
-12. the max number of todos generated should not exceed 25.
+7. The max number of todos generated should not exceed 25.
+8. Ensure to check if the todo is recurring and if it is, make sure to add the proper frequency and frequency_count to the todo.
 `
 
 const smartTodoGeneratorPromptSchema = z.object({
@@ -238,22 +238,27 @@ const smartTodoGeneratorPromptSchema = z.object({
 export const systemPrompts = {
     SMART_CHECKER: {
         info: smartCheckerPrompt,
-        schema: smartCheckerPromptSchema
+        schema: smartCheckerPromptSchema,
+        model: gemini15Flash
     },
     SMART_TIMELINE: {
         info: smartActionableStepPrompt,
-        schema: smartActionableStepPromptSchema
+        schema: smartActionableStepPromptSchema,
+        model: gemini15Flash
     },
     SMART_TITLE: {
         info: smartTitleCreator,
-        schema: smartTitleCreatorSchema
+        schema: smartTitleCreatorSchema,
+        model: gemini15Flash
     },
     SMART_MILESTONE: {
         info: smartMilestoneGenetatorPrompt,
-        schema: smartMilestoneGenetatorPromptSchema
+        schema: smartMilestoneGenetatorPromptSchema,
+        model: gemini15Flash
     },
     SMART_TODO: {
         info: smartTodoGeneratorPrompt,
-        schema: smartTodoGeneratorPromptSchema
+        schema: smartTodoGeneratorPromptSchema,
+        model: gemini15Pro
     }
-} as Record<string, { info: string; schema: z.ZodObject<any, any, any, any> }>
+} as Record<string, { info: string; schema: z.ZodObject<any, any, any, any>; model: any }>

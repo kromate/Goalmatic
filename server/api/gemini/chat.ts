@@ -31,8 +31,7 @@ export default defineEventHandler(async (event) => {
     // Initialize Genkit with Google AI plugin
     const ai = genkit({
       plugins: [googleAI({ apiKey: GEMINI_API_KEY })],
-      model: gemini15Flash
-
+      model: systemPrompts[promptType].model
     })
 
     const systemInst = systemPrompts[promptType].info

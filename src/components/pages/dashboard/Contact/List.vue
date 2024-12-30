@@ -30,8 +30,6 @@
 import { useUser } from '@/composables/auth/user'
 import { formatDateString } from '@/composables/utils/formatter'
 
-import { convertToCurrency } from '@/composables/utils/currency'
-
 const { userProfile } = useUser()
 
 

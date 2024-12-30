@@ -2,6 +2,7 @@ import { z, genkit } from 'genkit'
 import { OAuth2Client } from 'google-auth-library'
 import { google } from 'googleapis'
 import { gemini15Flash, googleAI } from '@genkit-ai/googleai'
+import { v4 as uuidv4 } from 'uuid'
 
 const GEMINI_API_KEY = import.meta.env.GEMINI_API_KEY
 let globalEvent: any
@@ -96,38 +97,42 @@ const mainAgent = ai.definePrompt(
 	},
 	`{{role "system"}} You are an AI calendar assistant. Direct calendar viewing 
 	 requests to the Calendar View Agent and modification requests to the Calendar 
-	 Modify Agent. If the calendar is not linked, suggest linking it.`
+	 Modify Agent.`
 )
+
+// Add sessions map at the top with other globals
+const sessions = new Map<string, any>()
 
 export default defineEventHandler(async (event) => {
 	try {
 		globalEvent = event
 
-
-
-
 		if (!GEMINI_API_KEY) {
 			throw new Error('Missing required API keys')
 		}
 
-		const { prompt, history } = await readBody(event)
+		const { prompt, history, sessionId } = await readBody(event)
 		if (!prompt) {
 			throw new Error('Missing required parameter: prompt')
 		}
 
+		let chat
+		let newSessionId
+		if (sessionId && sessions.has(sessionId)) {
+			// Load existing session
+			chat = sessions.get(sessionId)
+		} else {
+			// Create new chat session
+			chat = ai.chat(mainAgent)
+			newSessionId = uuidv4()
+			sessions.set(newSessionId, chat)
+		}
 
-		// Start chat with main agent
-		const chat = ai.chat(mainAgent)
-
-		// Add context about calendar status
-		const contextPrompt = calendarLinked
-			? `${prompt} (Calendar is linked)`
-			: `${prompt} (Calendar is not linked yet)`
-
-		const result = await chat.send(contextPrompt)
+		const result = await chat.send(prompt)
 
 		return {
-			response: result.text
+			response: result.text,
+			sessionId: sessionId || newSessionId
 		}
 	} catch (error) {
 		console.error('Error in Calendar Assistant:', error)

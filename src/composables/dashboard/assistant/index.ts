@@ -2,6 +2,7 @@ import { useAlert } from '@/composables/core/notification'
 
 const conversationHistory = ref([] as any)
 const ai_loading = ref(false)
+const sessionId = ref<string | null>(null)
 
 export const useChatAssistant = () => {
   const userInput = ref<string>('')
@@ -26,7 +27,8 @@ export const useChatAssistant = () => {
         },
         body: JSON.stringify({
           prompt: sentUserInput,
-          history: conversationHistory.value
+          history: conversationHistory.value,
+          sessionId: sessionId.value
         })
       })
 
@@ -36,6 +38,10 @@ export const useChatAssistant = () => {
       }
 
       const data = await response.json()
+
+      if (data.sessionId) {
+        sessionId.value = data.sessionId
+      }
 
       conversationHistory.value.push({
         role: 'model',

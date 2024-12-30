@@ -16,6 +16,7 @@ export const syncAfterAuth = () => {
     userGoal.value = unauthorisedGoalSync.value.goal
     steps.value = unauthorisedGoalSync.value.steps
     unauthorisedGoalSync.value = {}
+    useRouter().push('/goals/create')
 }
 
 export const useGenerateGoalActionableStep = () => {
