@@ -1,4 +1,5 @@
 import { useAlert } from '@/composables/core/notification'
+import { callFirebaseFunction } from '~~/src/firebase/functions'
 
 const conversationHistory = ref([] as any)
 const ai_loading = ref(false)
@@ -20,24 +21,12 @@ export const useChatAssistant = () => {
     })
 
     try {
-      const response = await fetch('/api/gemini/assistant', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          prompt: sentUserInput,
-          history: conversationHistory.value,
-          sessionId: sessionId.value
-        })
-      })
-
-      if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.message || 'Failed to get response')
-      }
-
-      const data = await response.json()
+      const data = await callFirebaseFunction('handleCalendarAssistant', {
+        prompt: sentUserInput,
+        history: conversationHistory.value,
+        sessionId: sessionId.value,
+        username: 'YOUR_USERNAME' // You'll need to pass the actual username here
+      }) as any
 
       if (data.sessionId) {
         sessionId.value = data.sessionId

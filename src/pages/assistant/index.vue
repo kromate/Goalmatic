@@ -1,37 +1,73 @@
 <template>
-	<section class="flex flex-col items-center gap-4 relative h-[calc(100vh-140px)] w-full mt-12">
-		<section class="p-4 w-full md:max-w-[800px] h-[72vh] overflow-auto flex flex-col gap-6 items-start overflow-x-hidden ">
-			<div v-for="(message, index) in conversationHistory" :key="index" class="flex gap-2 text-[#374151]">
-				<div v-if="message.role === 'user' && index !== 0" class="bg-background flex size-[25px] shrink-0 select-none items-center justify-center rounded-lg border shadow-sm ">
-					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" class="size-4"><path d="M230.92 212c-15.23-26.33-38.7-45.21-66.09-54.16a72 72 0 1 0-73.66 0c-27.39 8.94-50.86 27.82-66.09 54.16a8 8 0 1 0 13.85 8c18.84-32.56 52.14-52 89.07-52s70.23 19.44 89.07 52a8 8 0 1 0 13.85-8ZM72 96a56 56 0 1 1 56 56 56.06 56.06 0 0 1-56-56Z" /></svg>
+	<section class="flex flex-col items-center gap-4 relative h-[calc(100vh-0px)] w-full  px-4 md:pt-8 pt-4 overflow-auto pb-20">
+		<section class=" w-full md:max-w-[var(--mw)]  flex flex-col gap-6 items-start  ">
+			<div class="message-container">
+				<div class="header-container">
+					<div class="assistant-avatar">
+						<img class="size-5" src="/og.png" alt="goalmatic logo">
+					</div>
+					<p class="name-label">
+						Goalmatic
+					</p>
 				</div>
-				<div v-else class="bg-background flex size-[25px] shrink-0 select-none items-center justify-center rounded-lg border shadow-sm">
-					<img class="size-6" src="/gemini.png" alt="gemini logo">
+				<article class="message-bubble">
+					<p class="message-text">
+						How can I help you today?
+					</p>
+				</article>
+			</div>
+			<div v-for="(message, index) in conversationHistory" :key="index"
+				class="message-container"
+				:class="{ '!items-end': message.role === 'user' }">
+				<div class="header-container" :class="{ 'flex-row-reverse': message.role === 'user' }">
+					<div v-if="message.role === 'user'" class="user-avatar">
+						<UserAvatar :size="30" />
+					</div>
+					<div v-else class="assistant-avatar">
+						<img class="size-5" src="/og.png" alt="goalmatic logo">
+					</div>
+					<p class="name-label" :class="{ 'text-right': message.role === 'user' }">
+						{{ message.role === 'user' ? 'You' : 'Goalmatic' }}
+					</p>
 				</div>
-				<p class="md:w-full overflow-x-hidden w-[100%]">
-					{{ message.parts[0].text }}
-				</p>
+				<article class="message-bubble" :class="{ 'ml-0 mr-7 !bg-light !border-[#9A6BFF]': message.role === 'user' }">
+					<p class="message-text">
+						{{ message.parts[0].text }}
+					</p>
+				</article>
 			</div>
 
-			<div v-if="typewriterText" class="flex gap-2 text-[#374151] w-full">
-				<div class="bg-background flex size-[25px] shrink-0 select-none items-center justify-center rounded-lg border shadow-sm">
-					<img class="size-6" src="/gemini.png" alt="gemini logo">
+			<div v-if="typewriterText" class="message-container">
+				<div class="header-container">
+					<div class="assistant-avatar">
+						<img class="size-5" src="/og.png" alt="goalmatic logo">
+					</div>
+					<p class="name-label">
+						Goalmatic
+					</p>
 				</div>
-				<p class="w-full">
-					{{ typewriterText }}
-				</p>
+				<article class="message-bubble">
+					<p class="message-text">
+						{{ typewriterText }}
+					</p>
+				</article>
 			</div>
 		</section>
 
 
-		<div class="fixed  max-w-full w-[800px] bottom-20 md:bottom-5  bg-transparent pt-2.5 center px-4">
-			<form class="relative w-full md:max-w-[840px] flex flex-wrap mt-auto bg-light" @submit.prevent="sendMessage">
-				<textarea ref="textarea" v-model="userInput" class="input-field  !pb-4 !pt-4 pr-36 w-full resize-none overflow-hidden h-auto  transition-all duration-300 ease-in-out" placeholder="Enter your goal (e.g., Learn a new language)" rows="1" @input="adjustTextareaHeight"
-					@keydown="handleKeyDown" />
 
-				<button class="btn-sm bg-dark text-light rounded-full absolute bottom-2.5 right-4" type="submit" :disabled="!userInput || ai_loading">
-					<span v-if="!ai_loading">Generate</span>
-					<Spinner v-else />
+
+		<div class="fixed  bg-white pt-2.5 px-3 center z-20 md:w-[800px] w-full mx-auto bottom-20  md:bottom-2.5 ">
+			<form class="relative w-full md:max-w-[var(--mw)] flex flex-wrap mt-auto" @submit.prevent="sendMessage">
+				<textarea ref="textarea" v-model="userInput" class="input-field  !pb-4 !pt-4 !pr-16 w-full resize-none overflow-hidden h-auto  transition-all duration-300 ease-in-out" placeholder="Enter a goal" rows="1" @input="adjustTextareaHeight"
+					@keydown="handleKeyDown" />
+				<button
+					:disabled="!userInput"
+					class="absolute bottom-2.5 right-4 disabled:opacity-50 disabled:cursor-not-allowed px-4 py-2 md:py-2.5 rounded-lg bg-primary text-white text-sm center gap-2 border border-white font-semibold button_shadow"
+					type="submit"
+				>
+					<MoveRight v-if="!ai_loading" :stroke-width="2.5" :size="14" class="-rotate-90" />
+					<Spinner v-else size="14px" />
 				</button>
 			</form>
 		</div>
@@ -39,6 +75,7 @@
 </template>
 
 <script setup lang="ts">
+import { MoveRight, Info } from 'lucide-vue-next'
 import { useChatAssistant } from '@/composables/dashboard/assistant'
 import { usePageHeader } from '@/composables/utils/header'
 
@@ -69,7 +106,7 @@ const handleKeyDown = (event: KeyboardEvent) => {
 
 watch(userInput, () => {
   adjustTextareaHeight()
-}, { deep: true })
+}, { deep: true, immediate: true })
 
 definePageMeta({
     layout: 'dashboard',
@@ -89,5 +126,31 @@ definePageMeta({
 </script>
 
 <style scoped>
+.message-container {
+  @apply flex flex-col gap-2 w-full items-start;
+}
 
+.header-container {
+  @apply flex gap-2 text-[#374151];
+}
+
+.user-avatar {
+  @apply  flex size-[30px] shrink-0 select-none items-center justify-center rounded-full border shadow-sm;
+}
+
+.assistant-avatar {
+  @apply bg-[#eaeaef] flex size-[30px] shrink-0 items-center justify-center rounded-full p-0.5;
+}
+
+.name-label {
+  @apply w-full overflow-x-hidden font-semibold mt-0.5;
+}
+
+.message-bubble {
+  @apply bg-[#F4F3FF] px-4 py-2 rounded-lg ml-9 w-auto border border-[#E4E7EC];
+}
+
+.message-text {
+  @apply text-sm text-[#344054];
+}
 </style>

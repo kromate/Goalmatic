@@ -95,7 +95,7 @@ defineProps({
 }
 
 .link {
-	@apply flex items-center gap-2.5 text-textHeadline py-3 !px-4 rounded-lg hover:text-primary hover:font-medium hover:border hover:bg-[#F5F1FE] border-primary
+	@apply flex items-center gap-2.5 text-textHeadline py-3 !px-4 rounded-lg hover:bg-[#F5F1FE]
 }
 
 .link_active {

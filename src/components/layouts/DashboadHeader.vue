@@ -1,17 +1,17 @@
 <template>
-	<header class=" flex items-center justify-between py-2 md:px-5 px-4 bg-transparent border-b border-[#E9E9E9]">
+	<header class=" flex items-center justify-between py-4 md:px-5 px-4 bg-transparent border-b border-[#E9E9E9]">
 		<span class="hidden md:flex" />
 		<img src="/lt.svg" alt="" class="w-[130px] md:hidden">
 
 		<div class="flex items-center gap-4">
-			<button class="bg-[#FCFAFF] rounded-lg p-2 border border-[#F5F1FE] ">
+			<button class="bg-[#FCFAFF] rounded-lg p-2 border border-[#F5F1FE] pc">
 				<IconsBell />
 			</button>
-			<button class="bg-[#F5F1FE] text-[#2D00BA] rounded-lg p-2 px-4 border border-[#F5F1FE] center gap-2 md:flex hidden">
+			<button class="bg-[#F5F1FE] text-[#2D00BA] rounded-lg p-2 px-4 border border-[#F5F1FE] center gap-2 pc">
 				<IconsSpeaker />
 				<span class="text-sm">Refer a friend</span>
 			</button>
-			<button class=" text-[#7A797E] rounded-lg p-2n center gap-2 md:flex hidden">
+			<button class=" text-[#7A797E] rounded-lg p-2 center gap-2 pc">
 				<IconsHeadset />
 				<span class="text-sm">Support</span>
 			</button>

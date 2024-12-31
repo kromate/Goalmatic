@@ -24,9 +24,6 @@
 
 			<div v-if="!loading && goalDetails" class="border border-[#E4E7EC] p-4 rounded-lg flex flex-col gap-3">
 				<div class="flex flex-col gap-3">
-					<p class="text-[11px] text-textHeadline font-medium bg-[#F2F2F2] rounded-full py-0.5 px-2 w-fit">
-						Week 1
-					</p>
 					<p class="text-sm text-[#908F93] font-semibold">
 						Goal Overview
 					</p>

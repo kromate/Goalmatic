@@ -125,12 +125,10 @@
 		</div>
 
 
-		<div class="fixed bottom-2.5  bg-white pt-2.5 px-3 center z-20" :class="isHomePage ? 'w-[800px] mx-auto' : 'inset-x-0'">
+		<div class="fixed  bg-white pt-2.5 px-3 center z-20" :class="isHomePage ? 'md:w-[800px] w-full mx-auto bottom-20  md:bottom-4 ' : 'inset-x-0 bottom-4'">
 			<form class="relative w-full md:max-w-[var(--mw)] flex flex-wrap mt-auto" @submit.prevent="checkIfGoalIsSmart">
-				<textarea ref="textarea" v-model="userGoal" class="input-field  !pb-4 !pt-4 pr-36 w-full resize-none overflow-hidden h-auto  transition-all duration-300 ease-in-out" placeholder="Enter your goal (e.g., Learn a new language)" rows="1" @input="adjustTextareaHeight"
+				<textarea ref="textarea" v-model="userGoal" class="input-field  !pb-4 !pt-4 !pr-16 w-full resize-none overflow-hidden h-auto  transition-all duration-300 ease-in-out" placeholder="Enter a goal" rows="1" @input="adjustTextareaHeight"
 					@keydown="handleKeyDown" />
-
-
 				<button
 					:disabled="!userGoal"
 					class="absolute bottom-2.5 right-4 disabled:opacity-50 disabled:cursor-not-allowed px-4 py-2 md:py-2.5 rounded-lg bg-primary text-white text-sm center gap-2 border border-white font-semibold button_shadow"
@@ -205,9 +203,8 @@ watch([userGoal, gemini_response], () => {
 		margin-right: 0;
 	}
 }
-:root {
-	--mw: 720px;
-}
+
+
 .badge{
 	@apply  bg-[#F2F2F2] font-medium py-0.5 px-2 rounded-full
 }

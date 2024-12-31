@@ -1,8 +1,14 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
 :root {
     --border: 1.5px;
 }
 
-@layer components {
+@layer utilities {
     .transite {
         @apply transition-all duration-75 md:duration-150 ease-linear;
     }

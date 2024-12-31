@@ -25,6 +25,8 @@
 
     --text-headline: #212028;
     --text-secondary: #646368;
+    --mw: 720px;
+    --mw2: 920px;
 }
 
 /* [theme='light'] {

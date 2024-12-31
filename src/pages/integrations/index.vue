@@ -1,11 +1,11 @@
 <template>
 	<main v-if="!IntegrationListLoading" class="w-full">
 		<section class="flex flex-col p-4 gap-4">
-			<header class="flex  justify-between items-center">
-				<h1 class="text-lg font-medium ">
+			<header class="flex   justify-between items-center">
+				<h1 class="md:text-lg font-semibold ">
 					Calendar Integrations
 				</h1>
-				<button class="btn-sm btn-primary text-sm px-3 py-2" @click="link">
+				<button class=" btn-primary !text-xs md:px-3 !px-3 py-2" @click="link">
 					Add Integration
 				</button>
 			</header>

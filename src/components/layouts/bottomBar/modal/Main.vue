@@ -11,7 +11,7 @@
 					<nuxt-link
 
 						:to="menu.route"
-						class="flex items-center black mbtn"
+						active-class="link_active" class="link"
 					>
 						<component :is="menu.icon" class="mr-4 w-5" />
 						<p class="text-base">
@@ -52,14 +52,19 @@ a.mbtn, .mbtn {
 /* exact link will show the dark color for only the exact matching link */
 :deep(a.router-link-exact-active.black) {
 
-	color: var(--light);
-	background-color: var(--dark);
-	font-weight: 500;
-	& > svg {
-		color: var(--light);
-	}
+		@apply text-dark font-semibold;
+	// color: var(--primary);
+	border-color: var(--primary);
+	background-color: #F4F3FF;
+	// & > svg {
+	// 	color: var(--light);
+	// }
 }
-.functional_btn{
-	@apply text-dark border-dark border
+.link {
+	@apply flex items-center gap-2.5 text-textHeadline py-3 !px-4 rounded-lg hover:text-primary hover:font-medium hover:border hover:bg-[#F5F1FE] border-primary
+}
+
+.link_active {
+	@apply text-primary font-medium border bg-[#F5F1FE] border-primary
 }
 </style>

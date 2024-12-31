@@ -48,7 +48,8 @@ export const dashboardRoutes = () => [
 		icon: Bot,
 		name: 'Assistant',
 		route: '/assistant',
-		type: 'all'
+		type: 'all',
+		main: true
 	},
 	{
 		icon: Settings,

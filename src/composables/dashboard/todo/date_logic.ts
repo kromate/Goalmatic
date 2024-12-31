@@ -1,76 +1,97 @@
 import { useFetchUserTodos } from './fetch'
 
-const current_day = ref(1)
-const current_week = ref(1)
-const current_month = ref('')
-const current_year = ref(0)
-const days_arr = ref([] as Record<string, any>[])
+interface DayInfo {
+    day: string
+    date: number
+}
+
+const dateState = reactive({
+    day: 1,
+    date: new Date(),
+    week: 1,
+    month: '',
+    year: 0,
+    days: [] as DayInfo[]
+})
 
 export const useTodoDate = () => {
+    const updateCurrentDay = () => {
+        dateState.day = paginatedDays.value?.[0]?.date
+    }
+
+    const setMonthAndYear = (date: Date) => {
+        dateState.month = date.toLocaleString('default', { month: 'long' })
+        dateState.year = date.getFullYear()
+    }
+
     const getTodos = () => {
         const { fetchTodos } = useFetchUserTodos()
-        fetchTodos(paginatedDays.value, current_month.value, current_year.value)
+        fetchTodos(paginatedDays.value, dateState.month, dateState.year)
     }
-    function getNextMonth(forward:boolean) {
-        current_week.value = 1
-        const currentDate = new Date(`${current_month.value} 1, ${current_year.value}`)
-        if (forward) {
-            currentDate.setMonth(currentDate.getMonth() + 1)
-        } else {
-            currentDate.setMonth(currentDate.getMonth() - 1)
-        }
-        current_month.value = currentDate.toLocaleString('default', { month: 'long' })
-        current_year.value = currentDate.getFullYear()
-        current_day.value = paginatedDays.value?.[0]?.date
-        getDaysInMonth(current_month.value, current_year.value)
+
+    const getNextMonth = (forward: boolean) => {
+        dateState.week = 1
+        const newDate = new Date(`${dateState.month} 1, ${dateState.year}`)
+        newDate.setMonth(newDate.getMonth() + (forward ? 1 : -1))
+
+        setMonthAndYear(newDate)
+        dateState.date = newDate
+        updateCurrentDay()
+
+        getDaysInMonth(dateState.month, dateState.year)
         getTodos()
     }
 
-    function getCurrentMonthAndYear() {
+    const getCurrentMonthAndYear = () => {
         const currentDate = new Date()
-        current_month.value = currentDate.toLocaleString('default', { month: 'long' })
-        current_year.value = currentDate.getFullYear()
-        current_day.value = currentDate.getDate()
-        current_week.value = Math.ceil(current_day.value / 7)
-        getDaysInMonth(current_month.value, current_year.value)
+        setMonthAndYear(currentDate)
+
+        dateState.day = currentDate.getDate()
+        dateState.week = Math.ceil(dateState.day / 7)
+
+        getDaysInMonth(dateState.month, dateState.year)
         getTodos()
     }
 
-    function getDaysInMonth(month:string, year:number) {
-        days_arr.value = []
+    const getDaysInMonth = (month: string, year: number) => {
         const date = new Date(`${month} 1, ${year}`)
-        const daysInMonth = new Date(year, date.getMonth() + 1, 0).getDate() // Get number of days in the month
-        const daysArray:Record<string, any>[] = []
+        const daysInMonth = new Date(year, date.getMonth() + 1, 0).getDate()
 
-        for (let day = 1; day <= daysInMonth; day++) {
-            const currentDate = new Date(year, date.getMonth(), day)
-            const dayName = currentDate.toLocaleString('default', { weekday: 'long' })
-            daysArray.push({ day: dayName.toLowerCase(), date: day })
-        }
-
-        // return daysArray
-        days_arr.value = daysArray
+        dateState.days = Array.from({ length: daysInMonth }, (_, i) => {
+            const currentDate = new Date(year, date.getMonth(), i + 1)
+            return {
+                day: currentDate.toLocaleString('default', { weekday: 'long' }).toLowerCase(),
+                date: i + 1
+            }
+        })
     }
 
     const paginatedDays = computed(() => {
-        const startIndex = (current_week.value - 1) * 7
-        const endIndex = startIndex + 7
-        return days_arr.value.slice(startIndex, endIndex)
+        const startIndex = (dateState.week - 1) * 7
+        return dateState.days.slice(startIndex, startIndex + 7)
     })
 
-    const totalWeeksInSelectedMonth = computed(() => {
-        return Math.ceil(days_arr.value?.length / 7)
-    })
+    const totalWeeksInSelectedMonth = computed(() =>
+        Math.ceil(dateState.days.length / 7)
+    )
 
-    const displayAnotherWeek = (forward:boolean) => {
-        if (forward === true) {
-            if (current_week.value < totalWeeksInSelectedMonth.value) current_week.value++
-        } else if (forward === false) {
-            if (current_week.value > 1) current_week.value--
+    const displayAnotherWeek = (forward: boolean) => {
+        if (forward && dateState.week < totalWeeksInSelectedMonth.value) {
+            dateState.week++
+        } else if (!forward && dateState.week > 1) {
+            dateState.week--
         }
-        current_day.value = paginatedDays.value?.[0]?.date
+        updateCurrentDay()
         getTodos()
     }
 
-    return { current_month, current_year, current_day, current_week, days_arr, getNextMonth, getCurrentMonthAndYear, getDaysInMonth, paginatedDays, totalWeeksInSelectedMonth, displayAnotherWeek }
+    return {
+        ...toRefs(dateState),
+        getNextMonth,
+        getCurrentMonthAndYear,
+        getDaysInMonth,
+        paginatedDays,
+        totalWeeksInSelectedMonth,
+        displayAnotherWeek
+    }
 }

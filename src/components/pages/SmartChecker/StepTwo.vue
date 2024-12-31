@@ -24,13 +24,13 @@
 
 		<transition name="show" appear>
 			<section v-if="steps.length && !loading" class="flex flex-col gap-8 max-w-[var(--mw2)] w-full">
-				<div class="flex flex-col gap-8 w-full border border-line mx-auto p-4 px-4  rounded-lg w-full">
+				<div class="flex flex-col gap-4 border border-line mx-auto p-4 px-4  rounded-lg w-full">
 					<div class="field">
 						<h4 class="text-base font-semibold text-[#4D4D53]">
 							Your Current Goal
 						</h4>
 						<span class="text-sm text-grey_four">{{ userGoal }}</span>
-						<hr class="w-full mt-3">
+						<hr class="w-full mt-4">
 					</div>
 					<div class="flex flex-col w-full">
 						<div v-if="steps.length && !loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-2 w-full">
@@ -116,16 +116,12 @@ const { createGoals, loading: createLoading } = useCreateGoals()
 </script>
 
 <style>
-:root {
-	--mw2: 920px;
-}
+
 .heading {
 	@apply text-xl font-medium underline mb-4
 }
 
-textarea::placeholder {
-	@apply text-[#252525ea] font-semibold text-lg text-nowrap truncate
-}
+
 
 .outline {
 	line-height: 1.2;
