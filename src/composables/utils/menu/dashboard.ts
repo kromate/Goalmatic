@@ -8,12 +8,12 @@ import Calendar from '@/assets/icons/Calendar2.vue'
 
 export const dashboardRoutes = () => [
 
-	{
-		icon: Home,
-		name: 'Home',
-		route: '/dashboard',
-		main: true
-	},
+	// {
+	// 	icon: Home,
+	// 	name: 'Home',
+	// 	route: '/dashboard',
+	// 	main: true
+	// },
 	{
 		icon: Goal,
 		name: 'Goals',
@@ -26,18 +26,18 @@ export const dashboardRoutes = () => [
 		route: '/todos',
 		main: true
 	},
-	{
-		icon: Note,
-		name: 'Notes',
-		route: '/notes',
-		main: true
-	},
-	{
-		icon: Calendar,
-		name: 'Calendar',
-		route: '/calendar',
-		main: true
-	},
+	// {
+	// 	icon: Note,
+	// 	name: 'Notes',
+	// 	route: '/notes',
+	// 	main: true
+	// },
+	// {
+	// 	icon: Calendar,
+	// 	name: 'Calendar',
+	// 	route: '/calendar',
+	// 	main: true
+	// },
 	{
 		icon: Grid3X3,
 		name: 'Integrations',

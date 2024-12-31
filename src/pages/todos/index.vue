@@ -31,7 +31,7 @@
 			</p>
 		</div>
 
-		<div class="w-full max-w-[720px] flex flex-col gap-8">
+		<div class="w-full  flex flex-col gap-8">
 			<div class="flex flex-col gap-4">
 				<div class="flex items-center gap-4 justify-between bg-[#F9F8FB] rounded-full p-[3px]">
 					<button class="h-11 center bg-white border border-[#E9E9E9] px-4 shadow rounded-full" @click="getNextMonth(false)">

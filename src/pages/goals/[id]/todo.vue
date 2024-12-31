@@ -44,7 +44,7 @@ watch(goalDetails, async (value) => {
 	if (value.id) {
 		await fetchTodosByGoalId(value.id)
 	}
-})
+}, { immediate: true })
 
 </script>
 
