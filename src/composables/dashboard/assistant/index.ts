@@ -20,18 +20,19 @@ export const useChatAssistant = () => {
       parts: [{ text: sentUserInput }]
     })
 
+    console.log(sessionId.value, 'Start_ sessionId')
     try {
       const data = await callFirebaseFunction('handleCalendarAssistant', {
         prompt: sentUserInput,
         history: conversationHistory.value,
-        sessionId: sessionId.value,
-        username: 'YOUR_USERNAME' // You'll need to pass the actual username here
+        sessionId: sessionId.value
       }) as any
 
       if (data.sessionId) {
         sessionId.value = data.sessionId
       }
 
+      console.log(sessionId.value, 'End_ sessionId')
       conversationHistory.value.push({
         role: 'model',
         parts: [{ text: data.response }]

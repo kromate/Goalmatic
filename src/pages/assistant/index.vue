@@ -1,6 +1,6 @@
 <template>
-	<section class="flex flex-col items-center gap-4 relative h-[calc(100vh-0px)] w-full  px-4 md:pt-8 pt-4 overflow-auto pb-20">
-		<section class=" w-full md:max-w-[var(--mw)]  flex flex-col gap-6 items-start  ">
+	<section id="main1" class="flex flex-col items-center gap-4 relative h-[calc(100vh-0px)] w-full  px-4 md:pt-8 pt-4 overflow-auto pb-20">
+		<section id="main2" class=" w-full md:max-w-[var(--mw)]  flex flex-col gap-6 items-start ">
 			<div class="message-container">
 				<div class="header-container">
 					<div class="assistant-avatar">
@@ -57,7 +57,7 @@
 
 
 
-		<div class="fixed  bg-white pt-2.5 px-3 center z-20 md:w-[800px] w-full mx-auto bottom-20  md:bottom-2.5 ">
+		<div class="fixed  bg-white pt-2.5 px-3 center z-20 md:w-[800px] w-full mx-auto bottom-20  md:bottom-4 ">
 			<form class="relative w-full md:max-w-[var(--mw)] flex flex-wrap mt-auto" @submit.prevent="sendMessage">
 				<textarea ref="textarea" v-model="userInput" class="input-field  !pb-4 !pt-4 !pr-16 w-full resize-none overflow-hidden h-auto  transition-all duration-300 ease-in-out" placeholder="Enter a goal" rows="1" @input="adjustTextareaHeight"
 					@keydown="handleKeyDown" />
@@ -108,6 +108,22 @@ watch(userInput, () => {
   adjustTextareaHeight()
 }, { deep: true, immediate: true })
 
+watch(conversationHistory, () => {
+	nextTick(() => {
+		const main1 = document.getElementById('main1')!
+		const main2 = document.getElementById('main2')!
+
+    main1.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth'
+	})
+	main2.scrollTo({
+		top: document.documentElement.scrollHeight,
+		behavior: 'smooth'
+	})
+  })
+}, { deep: true })
+
 definePageMeta({
     layout: 'dashboard',
     middleware: ['is-authenticated', () => {
@@ -126,6 +142,9 @@ definePageMeta({
 </script>
 
 <style scoped>
+#main1, #main2 {
+	scroll-padding: 10rem;
+}
 .message-container {
   @apply flex flex-col gap-2 w-full items-start;
 }
