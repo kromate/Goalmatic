@@ -62,7 +62,7 @@
 				<textarea ref="textarea" v-model="userInput" class="input-field  !pb-4 !pt-4 !pr-16 w-full resize-none overflow-hidden h-auto  transition-all duration-300 ease-in-out" placeholder="Enter a goal" rows="1" @input="adjustTextareaHeight"
 					@keydown="handleKeyDown" />
 				<button
-					:disabled="!userInput"
+					:disabled="!userInput || ai_loading"
 					class="absolute bottom-2.5 right-4 disabled:opacity-50 disabled:cursor-not-allowed px-4 py-2 md:py-2.5 rounded-lg bg-primary text-white text-sm center gap-2 border border-white font-semibold button_shadow"
 					type="submit"
 				>

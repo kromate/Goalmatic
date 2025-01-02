@@ -20,7 +20,7 @@ export const useChatAssistant = () => {
       parts: [{ text: sentUserInput }]
     })
 
-    console.log(sessionId.value, 'Start_ sessionId')
+
     try {
       const data = await callFirebaseFunction('handleCalendarAssistant', {
         prompt: sentUserInput,
@@ -32,7 +32,7 @@ export const useChatAssistant = () => {
         sessionId.value = data.sessionId
       }
 
-      console.log(sessionId.value, 'End_ sessionId')
+
       conversationHistory.value.push({
         role: 'model',
         parts: [{ text: data.response }]
