@@ -61,10 +61,10 @@ a.mbtn, .mbtn {
 	// }
 }
 .link {
-	@apply flex items-center gap-2.5 text-textHeadline py-3 !px-4 rounded-lg hover:text-primary hover:font-medium hover:border hover:bg-[#F5F1FE] border-primary
+	@apply flex items-center gap-2.5 text-textHeadline py-3 !px-4 rounded-lg hover:text-primary hover:font-medium hover:border hover:bg-tertiary border-primary
 }
 
 .link_active {
-	@apply text-primary font-medium border bg-[#F5F1FE] border-primary
+	@apply text-primary font-medium border bg-tertiary border-primary
 }
 </style>

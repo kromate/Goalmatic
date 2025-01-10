@@ -45,6 +45,6 @@ const onClick = (selected) => {
 }
 
 .active {
-    @apply text-[#00003B] bg-[#F5F1FE];
+    @apply text-[#00003B] bg-tertiary;
 }
 </style>

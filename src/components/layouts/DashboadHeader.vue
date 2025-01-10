@@ -4,10 +4,10 @@
 		<img src="/lt.svg" alt="" class="w-[130px] md:hidden">
 
 		<div class="flex items-center gap-4">
-			<button class="bg-[#FCFAFF] rounded-lg p-2 border border-[#F5F1FE] pc">
+			<button class="bg-[#FCFAFF] rounded-lg p-2 border border-tertiary pc">
 				<IconsBell />
 			</button>
-			<button class="bg-[#F5F1FE] text-[#2D00BA] rounded-lg p-2 px-4 border border-[#F5F1FE] center gap-2 pc">
+			<button class="bg-tertiary text-[#2D00BA] rounded-lg p-2 px-4 border border-tertiary center gap-2 pc">
 				<IconsSpeaker />
 				<span class="text-sm">Refer a friend</span>
 			</button>

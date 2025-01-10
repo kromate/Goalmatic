@@ -28,7 +28,7 @@
 
     .input {
         border-width: var(--border);
-        @apply w-full text-dark h-12 px-4 rounded-md outline-none  border focus:border-[#7F4AF1] bg-light transition-all duration-200 ease-in;
+        @apply w-full text-dark h-12 px-4 rounded-md outline-none  border border-grey_nine focus:border-[#7F4AF1] bg-light transition-all duration-200 ease-in;
     }
 
     .input-field {

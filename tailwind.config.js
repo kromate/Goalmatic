@@ -19,6 +19,7 @@ module.exports = {
 			colors: {
 				primary: 'var(--primary)',
 				secondary: 'var(--secondary)',
+				tertiary: 'var(--tertiary)',
 				secondaryLight: 'var(--secondaryLight)',
 				light_primary: 'var(--light_primary)',
 				faded_primary: 'var(--faded_primary)',

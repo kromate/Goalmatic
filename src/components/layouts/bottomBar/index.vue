@@ -54,7 +54,7 @@ const props = defineProps({
 
 <style scoped lang="scss">
 .icon{
-	@apply border border-[#F5F1FE] bg-[#FCFAFF] rounded-lg p-1.5 size-9;
+	@apply border border-tertiary bg-[#FCFAFF] rounded-lg p-1.5 size-9;
 }
 a {
 	@apply text-light_grey ;

@@ -59,8 +59,10 @@
 
 		<div class="fixed  bg-white pt-2.5 px-3 center z-20 md:w-[800px] w-full mx-auto bottom-20  md:bottom-4 ">
 			<form class="relative w-full md:max-w-[var(--mw)] flex flex-wrap mt-auto" @submit.prevent="sendMessage">
-				<textarea ref="textarea" v-model="userInput" class="input-field  !pb-4 !pt-4 !pr-16 w-full resize-none overflow-hidden h-auto  transition-all duration-300 ease-in-out" placeholder="Enter a goal" rows="1" @input="adjustTextareaHeight"
+				<AssistantDropDown class="-top-1.5 absolute" />
+				<textarea ref="textarea" v-model="userInput" class="input-field  shadow !pb-4 !pt-4 !pr-16 w-full resize-none overflow-hidden h-auto  transition-all duration-300 ease-in-out" placeholder="Enter a goal" rows="1" @input="adjustTextareaHeight"
 					@keydown="handleKeyDown" />
+
 				<button
 					:disabled="!userInput || ai_loading"
 					class="absolute bottom-2.5 right-4 disabled:opacity-50 disabled:cursor-not-allowed px-4 py-2 md:py-2.5 rounded-lg bg-primary text-white text-sm center gap-2 border border-white font-semibold button_shadow"
@@ -75,7 +77,7 @@
 </template>
 
 <script setup lang="ts">
-import { MoveRight, Info } from 'lucide-vue-next'
+import { MoveRight } from 'lucide-vue-next'
 import { useChatAssistant } from '@/composables/dashboard/assistant'
 import { usePageHeader } from '@/composables/utils/header'
 
@@ -142,6 +144,9 @@ definePageMeta({
 </script>
 
 <style scoped>
+.shadow{
+	box-shadow: 0px 8px 24px 0px #959DA533;
+}
 #main1, #main2 {
 	scroll-padding: 10rem;
 }
