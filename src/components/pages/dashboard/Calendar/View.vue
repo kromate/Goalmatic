@@ -26,6 +26,7 @@
 				</button>
 			</div>
 		</div>
+
 		<!-- <div class="flex flex-wrap items-center justify-between mb-6 gap-4">
 			<div class="flex items-center gap-2">
 				<button
@@ -105,16 +106,32 @@
 			</div>
 		</div>
 
+		<div class="flex flex-col md:flex-row">
+			<div class="flex items-center gap-2 w-fit">
+				<button class="p-3 rounded-md bg-white border border-[#E9E9E9] text-[#798494]" @click="handlePrev">
+					<ChevronLeft :size="15" :stroke-width="2.5" />
+				</button>
+				<button class="p-3 rounded-md bg-white border border-[#E9E9E9] text-[#798494]" @click="handleNext">
+					<ChevronRight :size="15" :stroke-width="2.5" />
+				</button>
+			</div>
+		</div>
+
 		<!-- FullCalendar Component -->
+		<Skeleton v-if="loading" height="200px" radius="10px" class="border-0" />
 		<FullCalendar
+			v-else
 			ref="fullCalendar"
 			:options="calendarOptions"
 			class="calendar-container"
 		>
 			<template #eventContent="arg">
 				<!-- <b>{{ arg.event.title }}</b> -->
-				<div class="flex flex-col gap-6 px-2 w-full">
+				<div v-if="currentView === 'dayGridMonth'" class="flex flex-col gap-6 px-2 w-full" :title="arg?.event?.title">
 					<div class="flex items-center gap-1.5 text-xs text-[#7A797E] font-medium">
+						<div class="bg-[#F5F1FE] rounded py-0.5 px-0.5">
+							<task class="w-4 h-4" />
+						</div>
 						<p class="shrink-0">
 							{{ moment(arg.event.start).format('LT') }}
 						</p>
@@ -122,6 +139,15 @@
 							{{ arg?.event?.title }}
 						</p>
 					</div>
+				</div>
+
+				<div v-if="currentView === 'timeGridDay'" class="flex flex-col gap-2 px-2 min-w-[100px] border border-[#DFD2FB] !bg-[#FCFAFF] w-fit rounded-lg">
+					<p class="text-[#37363D] text-sm font-semibold">
+						{{ arg?.event?.title }}
+					</p>
+					<p class="text-[#212028] text-xs">
+						{{ moment(arg.event.start).format('LT') }} - {{ moment(arg.event.end).format('LT') }}
+					</p>
 				</div>
 			</template>
 		</FullCalendar>
@@ -134,7 +160,8 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import moment from 'moment'
-import { ChevronDown } from 'lucide-vue-next'
+import { ChevronDown, ChevronLeft, ChevronRight } from 'lucide-vue-next'
+import task from '@/assets/icons/task.vue'
 
 
 
@@ -162,7 +189,8 @@ const currentTitle = ref('')
 
 const calendar_filter = [
   { text: 'Monthly', value: 'dayGridMonth' },
-  { text: 'Weekly', value: 'timeGridWeek' },
+//   { text: 'Weekly', value: 'timeGridWeek' },
+  { text: 'Weekly', value: 'timeGridDay' },
   { text: 'Daily', value: 'timeGridDay' }
 ]
 // Track the last fetched year to avoid duplicate fetches
@@ -346,5 +374,20 @@ watch(currentTitle, (newTitle) => {
 :deep(.fc-scrollgrid) {
   border-radius: 8px;
   border: 1px solid #f3f4f6;
+}
+.fc-daygrid-day-top {
+	@apply flex !flex-row items-center px-2 text-[20px] text-[#4D4D53] font-semibold
+}
+
+.fc-scrollgrid-sync-inner {
+	@apply text-[#212028] text-sm font-medium
+}
+
+a.fc-event {
+	@apply !bg-transparent
+}
+
+div.fc-timegrid-event-harness {
+	@apply !h-[100px]
 }
 </style>

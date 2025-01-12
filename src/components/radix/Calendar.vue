@@ -91,5 +91,6 @@ const emit = defineEmits(['prevMonth', 'nextMonth'])
 .nxt_prv_btn {
     @apply inline-flex items-center cursor-pointer text-black justify-center rounded-[9px] bg-transparent w-8 h-8 hover:bg-gray-300 active:transition-all focus:shadow-[0_0_0_2px] focus:shadow-black;
 }
+
 </style>
 
