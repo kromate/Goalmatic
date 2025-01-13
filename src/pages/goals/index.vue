@@ -27,7 +27,7 @@
 		</section> -->
 
 		<section class="p-4 flex flex-col gap-10">
-			<div class="flex justify-between items-center">
+			<div class="flex justify-between items-center flex-wrap gap-4">
 				<div class="flex flex-col gap-1">
 					<h3 class="text-textHeadline font-semibold text-2xl md:text-[28px]">
 						Welcome to your goals
@@ -36,7 +36,7 @@
 						View your goal and details of the actionable steps you need to take to achieve it.
 					</p>
 				</div>
-				<nuxt-link to="/goals/create" class="custom-btn gap-2">
+				<nuxt-link to="/goals/create" class="custom-btn gap-2 w-full lg:w-auto">
 					<span>Create a new goal</span>
 					<ArrowRight :size="15" />
 				</nuxt-link>

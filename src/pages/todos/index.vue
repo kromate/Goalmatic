@@ -38,7 +38,7 @@
 						<ChevronLeft :size="16" :stroke-width="2.5" />
 					</button>
 					<p class="text-lg text-[#1F1F1F] font-semibold">
-						{{ current_day }} {{ current_month }} {{ current_year }}
+						{{ day }} {{ month }} {{ year }}
 					</p>
 					<button class="h-11 center bg-white border border-[#E9E9E9] px-4 shadow rounded-full" @click="getNextMonth(true)">
 						<ChevronRight :size="16" :stroke-width="2.5" />
@@ -46,23 +46,23 @@
 				</div>
 
 				<div class="grid grid-cols-9 items-end gap-1">
-					<button class="week_btn" :disabled="current_week <= 1" @click="displayAnotherWeek(false)">
+					<button class="week_btn" :disabled="week <= 1" @click="displayAnotherWeek(false)">
 						<ChevronLeft :size="14" :stroke-width="2.5" />
 					</button>
-					<div v-for="n,i in paginatedDays" :key="i" class="flex flex-col gap-2 items-center">
+					<div v-for="(dayInfo, i) in paginatedDays" :key="i" class="flex flex-col gap-2 items-center">
 						<p class="text-[#798494] text-sm font-semibold">
-							{{ capitalize(n?.day).substring(0,2) }}
+							{{ capitalize(dayInfo?.day).substring(0,2) }}
 						</p>
 						<button class="border border-[#E9E9E9] rounded center h-10 p-2 w-full"
-							:class="n?.date === current_day ? 'bg-[#8F61F2] text-light' : 'bg-[#F6F5FF] text-[#1F1F1F]'"
-							@click="current_day = n?.date"
+							:class="dayInfo?.date === day ? 'bg-[#8F61F2] text-light' : 'bg-[#F6F5FF] text-[#1F1F1F]'"
+							@click="day = dayInfo?.date"
 						>
 							<span class="text-sm font-medium">
-								{{ n?.date }}
+								{{ dayInfo?.date }}
 							</span>
 						</button>
 					</div>
-					<button class="week_btn" :disabled="current_week >= totalWeeksInSelectedMonth" @click="displayAnotherWeek(true)">
+					<button class="week_btn" :disabled="week >= totalWeeksInSelectedMonth" @click="displayAnotherWeek(true)">
 						<ChevronRight :size="14" :stroke-width="2.5" />
 					</button>
 				</div>
@@ -72,10 +72,10 @@
 				<div class="flex flex-col gap-6 py-5 px-4 bg-[#F9F8FB] rounded-lg">
 					<div class="flex flex-col gap-0.5">
 						<p class="text-[#4D4D53] font-semibold text-lg">
-							Today's task
+							{{ isToday ? "Today's task" : `${day} ${month}'s task` }}
 						</p>
 						<p class="text-sm font-medium text-[#908F93]">
-							Here are your tasks for today
+							{{ isToday ? 'Here are your tasks for today' : `Here are your tasks for ${day} ${month}` }}
 						</p>
 					</div>
 
@@ -126,29 +126,39 @@ import { useCreateTodo } from '@/composables/dashboard/todo/create'
 
 const title = ref('')
 const { createTodo, createBoardForm } = useCreateTodo()
-const { loading, groupTodosByDate, navigateWeek, weekLabel, userTodos } = useFetchUserTodos()
-const { current_month, current_year, current_day, getCurrentMonthAndYear, getNextMonth, displayAnotherWeek, paginatedDays, current_week, totalWeeksInSelectedMonth } = useTodoDate()
+const { loading, groupTodosByDate, userTodos } = useFetchUserTodos()
+
+// Destructure the date logic composable
+const {
+	day,
+	month,
+	year,
+	week,
+	getNextMonth,
+	getCurrentMonthAndYear,
+	displayAnotherWeek,
+	paginatedDays,
+	totalWeeksInSelectedMonth
+} = useTodoDate()
 
 const currentDayTodo = computed(() => {
-	const x = userTodos.value?.filter((el) => {
-		const current_date = new Date(`${current_day.value}/${current_month.value}/${current_year.value}`)
+	return userTodos.value?.filter((el) => {
+		const current_date = new Date(`${day.value}/${month.value}/${year.value}`)
 		const created_date = new Date(el?.date)
 		return isSameDay(current_date, created_date)
 	})
-	return x
 })
 
-function isSameDay(date1:Date, date2:Date) {
+function isSameDay(date1: Date, date2: Date) {
 	return (
 		date1.getFullYear() === date2.getFullYear() &&
 		date1.getMonth() === date2.getMonth() &&
-		date1.getDate() === date2.getDate()
+			date1.getDate() === date2.getDate()
 	)
 }
 
 const createNewTodo = async () => {
-	const current_date = new Date(`${current_day.value}/${current_month.value}/${current_year.value}`)
-	// createBoardForm.date = new Date(props.date).toISOString()
+	const current_date = new Date(`${day.value}/${month.value}/${year.value}`)
 	createBoardForm.date = current_date.toISOString()
 	createBoardForm.title = title.value
 	await createTodo()
@@ -156,12 +166,17 @@ const createNewTodo = async () => {
 	title.value = ''
 }
 
+const isToday = computed(() => {
+	const today = new Date()
+	return isSameDay(today, new Date(`${day.value}/${month.value}/${year.value}`))
+})
+
+// Initialize
 getCurrentMonthAndYear()
+
 definePageMeta({
 	layout: 'dashboard',
-	middleware: [
-		'is-authenticated'
-	]
+	middleware: ['is-authenticated']
 })
 </script>
 

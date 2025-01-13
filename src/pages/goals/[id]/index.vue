@@ -1,7 +1,7 @@
 <template>
 	<main class="p-4 flex flex-col gap-6">
 		<section class="flex flex-col gap-4 ">
-			<!-- <div class="rounded-lg p-4 px-5 flex flex-col gap-2 bg-[#F5F1FE] text-[#344054]">
+			<!-- <div class="rounded-lg p-4 px-5 flex flex-col gap-2 bg-tertiary text-[#344054]">
 				<div class="flex flex-col gap-2">
 					<p class="text-2xl font-bold flex items-center gap-2">
 						<span>Your Plan is ready </span>
@@ -24,9 +24,6 @@
 
 			<div v-if="!loading && goalDetails" class="border border-[#E4E7EC] p-4 rounded-lg flex flex-col gap-3">
 				<div class="flex flex-col gap-3">
-					<p class="text-[11px] text-textHeadline font-medium bg-[#F2F2F2] rounded-full py-0.5 px-2 w-fit">
-						Week 1
-					</p>
 					<p class="text-sm text-[#908F93] font-semibold">
 						Goal Overview
 					</p>

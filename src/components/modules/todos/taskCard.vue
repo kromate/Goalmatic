@@ -6,15 +6,15 @@
 					:id="props.todo.id"
 					:checked="props.todo.completed"
 					type="checkbox"
-					class="size-4 shrink-0"
+					class="size-4 mt-0 rounded border-gray-300 text-indigo-600 !ring-0 !outline-none border-line form-checkbox cursor-pointer hover:shadow hover:border-indigo-600 border-[2px]"
 					@change="toggleComplete"
 					@click.stop
 				>
 				<div class="flex flex-col gap-0.5 -mt-2">
-					<p class="text-[#4D4D53] text-base md:text-lg font-semibold">
+					<p class="text-[#4D4D53] text-base md:text-lg font-semibold" :class="{ 'line-through': todo?.completed }">
 						{{ todo?.title }}
 					</p>
-					<p class="text-[#89898B] text-sm font-medium">
+					<p class="text-[#89898B] text-sm font-medium" :class="{ 'line-through': todo?.completed }">
 						{{ todo?.description || '' }}
 					</p>
 					<!-- <p class="text-[#89898B] text-sm font-medium">

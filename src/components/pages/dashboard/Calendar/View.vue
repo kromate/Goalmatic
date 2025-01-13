@@ -1,7 +1,33 @@
 <template>
-	<div class="min-h-screen bg-white p-6">
+	<div class="min-h-screen bg-white p-6 flex flex-col gap-6">
 		<!-- Calendar Header Controls -->
-		<div class="flex flex-wrap items-center justify-between mb-6 gap-4">
+		<div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+			<div class="flex items-center gap-3">
+				<h3 class="text-2xl text-[#212028] font-bold">
+					{{ moment().format('LL') }}
+				</h3>
+				<select class="!py-2 px-3 rounded-lg text-sm text-[#646368] font-medium border border-[#E9E9E9] w-fit min-w-[80px]">
+					<option value="">
+						Today
+					</option>
+				</select>
+			</div>
+			<div class="flex items-center gap-8">
+				<div class="flex items-center bg-[#F9F8FB] rounded-xl p-1">
+					<button v-for="n,i in calendar_filter" :key="i" class="px-3 py-2.5 text-sm font-semibold rounded-lg"
+						:class="[n?.value === currentView ? 'text-[#37363D] bg-white border border-[#E9E9E9]' : 'text-[#908F93]']"
+						@click="currentView = n?.value"
+					>
+						{{ n?.text }}
+					</button>
+				</div>
+				<button class="custom-btn">
+					New event
+				</button>
+			</div>
+		</div>
+
+		<!-- <div class="flex flex-wrap items-center justify-between mb-6 gap-4">
 			<div class="flex items-center gap-2">
 				<button
 					class="px-4 py-2 bg-white hover:bg-gray-50 rounded-lg transition-colors border"
@@ -45,14 +71,86 @@
 					Year
 				</option>
 			</select>
+		</div> -->
+
+		<div class="flex flex-col gap-4">
+			<div class="flex items-center gap-4 justify-between">
+				<p class="text-base font-semibold text-[#37363D]">
+					What’s Next on Your Schedule?
+				</p>
+				<button class="p-2.5 py-1.5 border border-[#E9E9E9] rounded-lg text-[#798494]">
+					<ChevronDown :size="18" />
+				</button>
+			</div>
+			<div class="p-4 rounded-lg bg-[#FCFAFF] border border-[#AF8EF6] flex flex-col gap-6">
+				<div class="flex items-center justify-between gap-4">
+					<div class="flex flex-col gap-0.5 text-[#00006E]">
+						<p class="text-base font-semibold">
+							Review Thermodynamics Notes
+						</p>
+						<p class="text-sm">
+							This item is linked to a goal
+						</p>
+					</div>
+					<button class="custom-btn bg-white text-primary">
+						Mark complete
+					</button>
+				</div>
+				<div class="flex flex-col gap-1.5">
+					<div class="flex items-center gap-4 justify-between text-[#00006E] text-sm font-semibold">
+						<p>11:00 AM</p>
+						<p>11:45 AM</p>
+					</div>
+					<div class="border border-[#00006E]" />
+				</div>
+			</div>
+		</div>
+
+		<div class="flex flex-col md:flex-row">
+			<div class="flex items-center gap-2 w-fit">
+				<button class="p-3 rounded-md bg-white border border-[#E9E9E9] text-[#798494]" @click="handlePrev">
+					<ChevronLeft :size="15" :stroke-width="2.5" />
+				</button>
+				<button class="p-3 rounded-md bg-white border border-[#E9E9E9] text-[#798494]" @click="handleNext">
+					<ChevronRight :size="15" :stroke-width="2.5" />
+				</button>
+			</div>
 		</div>
 
 		<!-- FullCalendar Component -->
+		<Skeleton v-if="loading" height="200px" radius="10px" class="border-0" />
 		<FullCalendar
+			v-else
 			ref="fullCalendar"
 			:options="calendarOptions"
 			class="calendar-container"
-		/>
+		>
+			<template #eventContent="arg">
+				<!-- <b>{{ arg.event.title }}</b> -->
+				<div v-if="currentView === 'dayGridMonth'" class="flex flex-col gap-6 px-2 w-full" :title="arg?.event?.title">
+					<div class="flex items-center gap-1.5 text-xs text-[#7A797E] font-medium">
+						<div class="bg-[#F5F1FE] rounded py-0.5 px-0.5">
+							<task class="w-4 h-4" />
+						</div>
+						<p class="shrink-0">
+							{{ moment(arg.event.start).format('LT') }}
+						</p>
+						<p class="text-ellipsis overflow-hidden flex-grow">
+							{{ arg?.event?.title }}
+						</p>
+					</div>
+				</div>
+
+				<div v-if="currentView === 'timeGridDay'" class="flex flex-col gap-2 px-2 min-w-[100px] border border-[#DFD2FB] !bg-[#FCFAFF] w-fit rounded-lg">
+					<p class="text-[#37363D] text-sm font-semibold">
+						{{ arg?.event?.title }}
+					</p>
+					<p class="text-[#212028] text-xs">
+						{{ moment(arg.event.start).format('LT') }} - {{ moment(arg.event.end).format('LT') }}
+					</p>
+				</div>
+			</template>
+		</FullCalendar>
 	</div>
 </template>
 
@@ -61,6 +159,9 @@ import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import timeGridPlugin from '@fullcalendar/timegrid'
+import moment from 'moment'
+import { ChevronDown, ChevronLeft, ChevronRight } from 'lucide-vue-next'
+import task from '@/assets/icons/task.vue'
 
 
 
@@ -86,6 +187,12 @@ const props = defineProps({
 
 const currentTitle = ref('')
 
+const calendar_filter = [
+  { text: 'Monthly', value: 'dayGridMonth' },
+//   { text: 'Weekly', value: 'timeGridWeek' },
+  { text: 'Weekly', value: 'timeGridDay' },
+  { text: 'Daily', value: 'timeGridDay' }
+]
 // Track the last fetched year to avoid duplicate fetches
 const lastFetchedYear = ref(new Date().getFullYear())
 
@@ -267,5 +374,20 @@ watch(currentTitle, (newTitle) => {
 :deep(.fc-scrollgrid) {
   border-radius: 8px;
   border: 1px solid #f3f4f6;
+}
+.fc-daygrid-day-top {
+	@apply flex !flex-row items-center px-2 text-[20px] text-[#4D4D53] font-semibold
+}
+
+.fc-scrollgrid-sync-inner {
+	@apply text-[#212028] text-sm font-medium
+}
+
+a.fc-event {
+	@apply !bg-transparent
+}
+
+div.fc-timegrid-event-harness {
+	@apply !h-[100px]
 }
 </style>

@@ -4,13 +4,13 @@
 		:src="src"
 		:alt="name || 'avatar'"
 		:style="`width: ${size}px; height: ${size}px; min-width: ${size}px; min-height: ${size}px; object-fit: cover;`"
-		class="!max-w-[1920px] rounded-full border border-dark"
+		class="!max-w-[1920px] rounded-full border border-line p-0.5"
 		@click="link ? $router.push(link) : null"
 	>
 	<span
 		v-else
 		:style="`width: ${size}px; height: ${size}px; min-width: ${size}px; min-height: ${size}px; object-fit: cover; background-color:${bg}; color:${color}; border-color: ${color}`"
-		class="flex items-center justify-center uppercase   border-[1.5px] border-dark text-dark bg-light font-bold rounded-full"
+		class="flex items-center justify-center uppercase   border-[1.5px] border-line text-dark bg-light font-bold rounded-full"
 		@click="link ? $router.push(link) : null"
 	>
 		<span :style="`font-size: ${size/2}px;line-height: 1em`">{{ name[0] }}</span>

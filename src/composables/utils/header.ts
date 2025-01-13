@@ -39,7 +39,7 @@ export const usePageHeader = () => {
 
 
         setCustomHead({
-            title: `${title} | Taaskly`,
+            title: `${title} | Goalmatic`,
             desc: description
         })
     }

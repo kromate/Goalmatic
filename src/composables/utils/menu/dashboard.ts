@@ -32,12 +32,12 @@ export const dashboardRoutes = () => [
 	// 	route: '/notes',
 	// 	main: true
 	// },
-	// {
-	// 	icon: Calendar,
-	// 	name: 'Calendar',
-	// 	route: '/calendar',
-	// 	main: true
-	// },
+	{
+		icon: Calendar,
+		name: 'Calendar',
+		route: '/calendar',
+		main: true
+	},
 	{
 		icon: Grid3X3,
 		name: 'Integrations',
@@ -48,7 +48,8 @@ export const dashboardRoutes = () => [
 		icon: Bot,
 		name: 'Assistant',
 		route: '/assistant',
-		type: 'all'
+		type: 'all',
+		main: true
 	},
 	{
 		icon: Settings,

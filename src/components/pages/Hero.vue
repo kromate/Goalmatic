@@ -36,7 +36,7 @@
 					<MoveRight :stroke-width="2.5" :size="14" />
 				</button>
 			</div>
-			<button class="text-sm font-semibold text-[#F5F1FE] center gap-0.5 mt-4 py-2 px-3 hover:bg-[rgba(212,212,212,0.1)] transition-all duration-500 rounded-md custom_shadow" @click="generateSampleGoal">
+			<button class="text-sm font-semibold text-tertiary center gap-0.5 mt-4 py-2 px-3 hover:bg-[rgba(212,212,212,0.1)] transition-all duration-500 rounded-md custom_shadow" @click="generateSampleGoal">
 				<IconsMagicwand />
 				No Goal in Mind? Try a Sample Goal!
 			</button>

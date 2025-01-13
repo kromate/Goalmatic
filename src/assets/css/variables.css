@@ -1,6 +1,7 @@
 :root {
     --primary: #601DED;
     --secondary: #000000;
+    --tertiary: #F5F1FE;
     --secondaryLight: #ccc2ef;
     --light_primary: #c4c4d0;
     --faded_primary: #03030321;
@@ -25,6 +26,8 @@
 
     --text-headline: #212028;
     --text-secondary: #646368;
+    --mw: 720px;
+    --mw2: 920px;
 }
 
 /* [theme='light'] {

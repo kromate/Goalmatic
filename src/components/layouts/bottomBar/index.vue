@@ -1,14 +1,14 @@
 <template>
-	<footer class="md:hidden fixed h-14 bottom-0 border-t  bg-light  inset-x-0 flex items-center justify-between px-5 z-[90] text-dark">
+	<footer class="md:hidden fixed h-20 bottom-0   bg-light  inset-x-0 flex items-center justify-between px-5 z-[90] text-dark">
 		<nuxt-link v-for="n in routes" :key="n.name" :to="n.route" class="flex flex-col justify-center items-center">
-			<component :is="n.icon" class="w-5" />
-			<p class="text-xs  block truncate w-auto">
+			<component :is="n.icon" class="w-5 icon" />
+			<p class="text-xs  block truncate w-auto mt-1">
 				{{ truncateString(n.name, 10) }}
 			</p>
 		</nuxt-link>
 		<div class="flex flex-col items-center text-light_grey " @click="drawerFunction()">
-			<component :is="Menu" class="w-5" />
-			<p class="text-xs ">
+			<component :is="Menu" class="w-5 icon" />
+			<p class="text-xs mt-1">
 				more
 			</p>
 		</div>
@@ -53,7 +53,9 @@ const props = defineProps({
 
 
 <style scoped lang="scss">
-
+.icon{
+	@apply border border-tertiary bg-[#FCFAFF] rounded-lg p-1.5 size-9;
+}
 a {
 	@apply text-light_grey ;
 &:hover.use-hover{
@@ -64,7 +66,7 @@ a {
 
 /* exact link will show the primary color for only the exact matching link */
 a.router-link-exact-active {
-	@apply text-dark font-semibold  ;
+	@apply text-dark font-medium  ;
 
 }
 
