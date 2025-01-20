@@ -22,7 +22,7 @@
 					ref="textarea"
 					v-model="userGoal"
 					placeholder="What's your goal today?"
-					class="h-full flex-grow focus:outline-none text-[#344054] resize-none overflow-hidden"
+					class="h-full flex-grow focus:outline-none text-subText resize-none overflow-hidden"
 					rows="1"
 					@input="adjustTextareaHeight"
 					@keydown="handleKeyDown"

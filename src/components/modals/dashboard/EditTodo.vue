@@ -17,7 +17,7 @@
 			</div>
 
 			<div class="grid grid-cols-1 gap-4 mt-6 w-full">
-				<button class="modal-btn text-light " :disabled="loading">
+				<button class="btn-primary text-light " :disabled="loading">
 					<span v-if="!loading"> Update </span>
 					<Spinner v-else />
 				</button>

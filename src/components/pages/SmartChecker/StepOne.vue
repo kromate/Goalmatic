@@ -14,7 +14,7 @@
 					<h4 class="text-lg font-semibold flex items-center gap-2">
 						Hi! Welcome to Goalmatic! <IconsSmiley2 :size="14" />
 					</h4>
-					<p class="text-sm text-[#344054]">
+					<p class="text-sm text-subText">
 						Goalmatic is a tool that helps you achieve your goals, by making them S.M.A.R.T. and actionable.
 					</p>
 				</article>
@@ -75,7 +75,7 @@
 					</div>
 					<div class="flex flex-col gap-2 justify-end items-end pt-0 p-2">
 						<article class="bg-[#F4F3FF] p-4 rounded-lg ml-8">
-							<p class="text-sm text-[#344054]">
+							<p class="text-sm text-subText">
 								{{ gemini_response?.adjusted_goal }}
 							</p>
 						</article>
@@ -102,7 +102,7 @@
 					</div>
 					<div class="flex flex-col gap-2 justify-end items-end p-2">
 						<article class="bg-[#F4F3FF] p-4 rounded-lg ml-8 w-full">
-							<p class="text-sm text-[#344054]">
+							<p class="text-sm text-subText">
 								You can now generate actionable steps to achieve your goal
 							</p>
 						</article>

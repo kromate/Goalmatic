@@ -41,7 +41,7 @@ module.exports = {
 				dark: 'var(--dark)',
 				line: 'var(--line)',
 				hover: 'var(--hover)',
-
+				subText: 'var(--subText)',
 				textHeadline: 'var(--text-headline)',
 				textSecondary: 'var(--text-secondary)'
 			},

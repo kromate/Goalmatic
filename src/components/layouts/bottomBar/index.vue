@@ -13,9 +13,6 @@
 			</p>
 		</div>
 	</footer>
-	<button v-if="headstate.shouldShowFab.value && headstate.btnText" class="fixed bottom-20 p-2 rounded-full right-4 bg-dark min-h-12 min-w-12 center md:hidden" @click="headstate.btnCall.value">
-		<Plus class="w-5 text-light" />
-	</button>
 </template>
 
 <script setup lang="ts">

@@ -7,7 +7,13 @@
 
 			<div class="flex flex-col gap-3 px-3">
 				<div class="flex flex-col gap-2">
-					<NuxtLink v-for="n,i in routes" :key="i" :to="n?.route" active-class="link_active" class="link">
+					<NuxtLink
+						v-for="n,i in routes"
+						:key="i"
+						:to="n?.route"
+						:class="['link', {
+							'link_active': isRouteActive(n)
+						}]">
 						<component :is="n.icon" class="w-5 h-5" />
 						<span class="text-sm">
 							{{ n.name }}
@@ -19,9 +25,9 @@
 			<div class="border-t mx-2 mt-auto p-4">
 				<div class="flex items-center gap-4 justify-between">
 					<div class="flex items-center gap-3">
-						<Avatar :src="user!.photoURL" :name="user!.displayName ?? userProfile!.name" :size="30" />
+						<Avatar :src="user?.photoURL" :name="user?.displayName ?? userProfile?.name" :size="30" />
 						<p class="text-[#101928] text-sm font-medium">
-							{{ user!.displayName ?? userProfile!.name }}
+							{{ user?.displayName ?? userProfile?.name }}
 						</p>
 					</div>
 					<button @click="useAuthModal().openLogout()">
@@ -34,9 +40,6 @@
 </template>
 
 <script lang="ts" setup>
-import { Link, Brain, Settings, Grid3X3, CheckCheck, StickyNote, Calendar } from 'lucide-vue-next'
-import AvatarDropdown from '@/components/core/AvatarDropdown.vue'
-import { useSignin } from '@/composables/auth/auth'
 import { useUser } from '@/composables/auth/user'
 import { useAuthModal } from '@/composables/core/modals'
 
@@ -48,6 +51,7 @@ type RouteType = {
 	icon: string | any;
 	bg?: string;
 	color?: string;
+	subRoutes?: Array<{ url: string; propagate?: boolean }>;
 }
 
 defineProps({
@@ -58,7 +62,22 @@ defineProps({
 	}
 })
 
+const route = useRoute()
 
+const isRouteActive = (menuItem: RouteType) => {
+	if (route.path === menuItem.route) return true
+	if (menuItem.subRoutes) {
+		return menuItem.subRoutes.some((subRoute) => {
+			const fullSubRoute = menuItem.route + subRoute.url
+			if (subRoute.propagate) {
+				return route.path.startsWith(fullSubRoute)
+			}
+			return route.path === fullSubRoute
+		})
+	}
+
+	return false
+}
 
 </script>
 

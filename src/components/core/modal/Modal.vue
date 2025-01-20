@@ -15,11 +15,11 @@
 			<transition name="modal" appear @after-leave="closeModal">
 				<div v-if="modalType == 'popup'" :class="[isFullHeight? `isFullHeight ${computedWidth}`:'isNotFullHeight','modal']">
 					<header class="modal-title flex justify-between w-full items-center">
-						<span :class="[noClose?'text-center w-full':'text-start', 'text-xl md:text-2xl']">{{ title }}</span>
+						<span :class="[noClose?'text-center w-full':'text-start']">{{ title }}</span>
 						<X
 							v-if="!noClose"
 							name="close"
-							class="text-dark w-7 cursor-pointer  rounded-md"
+							class="text-dark w-5 cursor-pointer  rounded-md"
 							@click="closeBtnPressed()"
 						/>
 					</header>
@@ -46,9 +46,8 @@
 
 import { PropType } from 'vue'
 import { X } from 'lucide-vue-next'
-import { modal } from '@/composables/core/modals'
+import { modal, modalType, closeModalType, closeAllExtremes } from '@/composables/core/modal'
 
-import { modalType, closeModalType, closeAllExtremes } from '@/composables/core/modal'
 
 watch(() => useRoute().path, (from, to) => {
 	modal.close('BottombarMainBottomMenu')
@@ -140,6 +139,7 @@ const closeBtnPressed = () => {
 </script>
 
 <style scoped lang="scss">
+
     .bottombar {
         @apply bg-light rounded-t-xl flex flex-col gap-2 sm:hidden fixed inset-x-0 bottom-[54px] w-full border border-dark p-4 pb-0 pt-6;
     }

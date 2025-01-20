@@ -21,7 +21,7 @@
 						</DropdownMenuItem>
 
 						<hr class="border-t border-[#601DED24] my-2">
-						<DropdownMenuItem class="flex items-center gap-2 p-2  rounded-lg cursor-pointer hover:bg-[#601DED1A]">
+						<DropdownMenuItem class="flex items-center gap-2 p-2  rounded-lg cursor-pointer hover:bg-[#601DED1A]" @click="$router.push('/assistant/agents')">
 							<IconsCompass />
 							<div class="flex flex-col">
 								<span class="text-xs font-semibold text-primary">Discover More Agent</span>

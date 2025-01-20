@@ -175,6 +175,6 @@ definePageMeta({
 }
 
 .message-text {
-  @apply text-sm text-[#344054];
+  @apply text-sm text-subText;
 }
 </style>

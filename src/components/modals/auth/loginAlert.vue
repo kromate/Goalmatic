@@ -9,7 +9,7 @@
 		</p>
 
 		<div class="flex flex-col mt-5">
-			<button class="modal-btn " :disabled="loading" @click="googleSignin(true)">
+			<button class="btn-primary " :disabled="loading" @click="googleSignin(true)">
 				<span v-if="!loading"> sign in</span>
 				<Spinner v-else />
 			</button>

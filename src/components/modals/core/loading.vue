@@ -11,7 +11,7 @@
 		</p>
 
 		<div class="flex items-center gap-10  w-full mt-6">
-			<button class="modal-btn hover:bg-transparent" :disabled="true">
+			<button class="btn-primary hover:bg-transparent" :disabled="true">
 				<Spinner class="!border-t-dark !border-[#0c030366]" />
 			</button>
 		</div>

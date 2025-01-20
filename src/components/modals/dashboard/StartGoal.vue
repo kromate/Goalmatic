@@ -17,7 +17,7 @@
 		</transition>
 
 		<div class="grid grid-cols-1 gap-4 mt-6">
-			<button class="modal-btn text-light " :disabled="loading || !start_date" @click="startGoal()">
+			<button class="btn-primary text-light " :disabled="loading || !start_date" @click="startGoal()">
 				<span v-if="!loading"> Start </span>
 				<Spinner v-else />
 			</button>

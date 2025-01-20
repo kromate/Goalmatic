@@ -51,7 +51,7 @@
 				<button type="button" :disabled="loading" class="btn border bg-light gap-3" @click="googleSignin()">
 					<template v-if="!loading">
 						<IconsGoogle class="w-5 h-5" />
-						<span class="text-base font-semibold text-[#344054]">Continue with Google</span>
+						<span class="text-base font-semibold text-subText">Continue with Google</span>
 					</template>
 					<Spinner v-else />
 				</button>

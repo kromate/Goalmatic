@@ -15,7 +15,7 @@
 						Hi! {{ loading ? 'Generating actionable steps...' : 'Actionable steps ready!' }}
 						<IconsSmiley2 :size="14" />
 					</h4>
-					<p class="text-sm text-[#344054]">
+					<p class="text-sm text-subText">
 						If you would like to make suggestions about the steps, please let us know.
 					</p>
 				</article>
@@ -54,7 +54,7 @@
 					</div>
 					<div class="flex flex-col gap-2 justify-end items-end p-2">
 						<article v-if="isLoggedIn" class="bg-[#F4F3FF] p-4 rounded-lg  w-full">
-							<p class="text-sm text-[#344054]">
+							<p class="text-sm text-subText">
 								If you are happy with the steps, you can save and proceed to the next step.
 							</p>
 						</article>
@@ -63,7 +63,7 @@
 								Looks like you’re not signed in
 								<IconsSadface :size="14" />
 							</h4>
-							<p class="text-sm text-[#344054] mt-2">
+							<p class="text-sm text-subText mt-2">
 								To continue setting your goals, please sign in or create an account so we can save your progress and remind you of your tasks.
 							</p>
 							<button

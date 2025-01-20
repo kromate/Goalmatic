@@ -1,41 +1,41 @@
 <template>
 	<div class="calendar-container">
-		<FullCalendar :options="calendarOptions" />
+		<!-- <FullCalendar :options="calendarOptions" /> -->
 	</div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import FullCalendar from '@fullcalendar/vue3'
-import timeGridPlugin from '@fullcalendar/timegrid'
-import interactionPlugin from '@fullcalendar/interaction'
-import { CalendarOptions } from '@fullcalendar/core'
+// import FullCalendar from '@fullcalendar/vue3'
+// import timeGridPlugin from '@fullcalendar/timegrid'
+// import interactionPlugin from '@fullcalendar/interaction'
+// import { CalendarOptions } from '@fullcalendar/core'
 
-const calendarOptions = ref<CalendarOptions>({
-  plugins: [timeGridPlugin, interactionPlugin],
-  initialView: 'timeGridDay',
-  headerToolbar: false,
-  slotDuration: '01:00:00',
-  slotLabelInterval: '01:00:00',
-  allDaySlot: false,
-  scrollTime: '00:00:00',
-  height: '100%',
-  dayHeaderFormat: {
-    weekday: 'short',
-    month: 'numeric',
-    day: 'numeric',
-    omitCommas: true
-  },
-  slotLabelFormat: {
-    hour: 'numeric',
-    minute: '2-digit',
-    omitZeroMinute: true,
-    meridiem: 'short'
-  },
-  nowIndicator: true,
-//   now: '2023-08-24T00:00:00', // Set to match the image date
-  themeSystem: 'standard'
-})
+// const calendarOptions = ref<CalendarOptions>({
+//   plugins: [timeGridPlugin, interactionPlugin],
+//   initialView: 'timeGridDay',
+//   headerToolbar: false,
+//   slotDuration: '01:00:00',
+//   slotLabelInterval: '01:00:00',
+//   allDaySlot: false,
+//   scrollTime: '00:00:00',
+//   height: '100%',
+//   dayHeaderFormat: {
+//     weekday: 'short',
+//     month: 'numeric',
+//     day: 'numeric',
+//     omitCommas: true
+//   },
+//   slotLabelFormat: {
+//     hour: 'numeric',
+//     minute: '2-digit',
+//     omitZeroMinute: true,
+//     meridiem: 'short'
+//   },
+//   nowIndicator: true,
+// //   now: '2023-08-24T00:00:00', // Set to match the image date
+//   themeSystem: 'standard'
+// })
 </script>
 
 <style>

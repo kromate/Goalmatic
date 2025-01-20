@@ -18,7 +18,10 @@ export const dashboardRoutes = () => [
 		icon: Goal,
 		name: 'Goals',
 		route: '/goals',
-		main: true
+		main: true,
+		subRoutes: [
+			{ url: '/', propagate: true }
+		]
 	},
 	{
 		icon: Todo,
@@ -49,7 +52,10 @@ export const dashboardRoutes = () => [
 		name: 'Assistant',
 		route: '/assistant',
 		type: 'all',
-		main: true
+		main: true,
+		subRoutes: [
+			{ url: '/', propagate: true }
+		]
 	},
 	{
 		icon: Settings,

@@ -1,7 +1,6 @@
 <template>
 	<div>
 		<PagesDashboardCalendarView :events="fetchedEvents" :loading="loading" :fetch-all-calendar-events="fetchAllCalendarEvents" />
-		{{ fetchedEvents[0] }}
 	</div>
 </template>
 

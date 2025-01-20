@@ -11,10 +11,10 @@
 		</p>
 
 		<div class="grid grid-cols-2 gap-4 mt-6">
-			<button class="modal-btn bg-dark" @click="closeAlert">
+			<button class="btn-primary bg-dark" @click="closeAlert">
 				No
 			</button>
-			<button class="modal-btn border-red bg-red text-light hover:bg-red" :disabled="loading" @click="call_function()">
+			<button class="btn-primary border-red bg-red text-light hover:bg-red" :disabled="loading" @click="call_function()">
 				<span v-if="!loading"> Yes</span>
 				<Spinner v-else />
 			</button>

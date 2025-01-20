@@ -4,7 +4,7 @@
 
 <script setup lang="ts">
 
-import { modal } from '@/composables/core/modals'
+import { modal } from '@/composables/core/modal'
 
 const { stack, modals } = modal
 

@@ -52,3 +52,6 @@ export const useModal = () => {
 
     return { stack, modals, open, close, register, closeAllExtremes }
 }
+
+
+export const modal = useModal()
