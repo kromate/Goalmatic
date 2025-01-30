@@ -63,5 +63,12 @@ export const dashboardRoutes = () => [
 		route: '/settings',
 		type: 'all'
 	}
+	// {
+	// 	icon: Settings,
+	// 	name: 'Admin',
+	// 	route: '/admin',
+	// 	type: 'all',
+	// 	privilege: 'admin'
+	// }
 
 ]

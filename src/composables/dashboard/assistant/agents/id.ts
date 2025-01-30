@@ -1,3 +1,4 @@
+import { defaultGoalmaticAgent } from './fetch'
 import { getSingleFirestoreDocument } from '@/firebase/firestore/fetch'
 import { useAlert } from '@/composables/core/notification'
 
@@ -20,5 +21,5 @@ export const useFetchAgentsById = () => {
     }
 
 
-        return { fetchAgentsById, agentDetails, loading }
+        return { fetchAgentsById, agentDetails, loading, defaultGoalmaticAgent }
  }

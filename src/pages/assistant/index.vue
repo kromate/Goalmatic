@@ -7,7 +7,7 @@
 						<img class="size-5" src="/og.png" alt="goalmatic logo">
 					</div>
 					<p class="name-label">
-						Goalmatic
+						Goalmatic {{ selectedAgent.id != 0 ? `(${selectedAgent.name})` : '(Default)' }}
 					</p>
 				</div>
 				<article class="message-bubble">
@@ -27,28 +27,12 @@
 						<img class="size-5" src="/og.png" alt="goalmatic logo">
 					</div>
 					<p class="name-label" :class="{ 'text-right': message.role === 'user' }">
-						{{ message.role === 'user' ? 'You' : 'Goalmatic' }}
+						{{ message.role === 'user' ? 'You' : `Goalmatic  ${selectedAgent.id != 0 ? `(${selectedAgent.name})` : '(Default)'}` }}
 					</p>
 				</div>
 				<article class="message-bubble" :class="{ 'ml-0 mr-7 !bg-light !border-[#9A6BFF]': message.role === 'user' }">
 					<p class="message-text">
 						{{ message.parts[0].text }}
-					</p>
-				</article>
-			</div>
-
-			<div v-if="typewriterText" class="message-container">
-				<div class="header-container">
-					<div class="assistant-avatar">
-						<img class="size-5" src="/og.png" alt="goalmatic logo">
-					</div>
-					<p class="name-label">
-						Goalmatic
-					</p>
-				</div>
-				<article class="message-bubble">
-					<p class="message-text">
-						{{ typewriterText }}
 					</p>
 				</article>
 			</div>
@@ -59,7 +43,7 @@
 
 		<div class="fixed  bg-white pt-2.5 px-3 center z-20 md:w-[800px] w-full mx-auto bottom-20  md:bottom-4 ">
 			<form class="relative w-full md:max-w-[var(--mw)] flex flex-wrap mt-auto" @submit.prevent="sendMessage">
-				<AssistantDropDown class="-top-1.5 absolute" />
+				<AssistantDropDown class="-top-1.5 absolute" :selected-agent="selectedAgent" />
 				<textarea ref="textarea" v-model="userInput" class="input-field  shadow !pb-4 !pt-4 !pr-16 w-full resize-none overflow-hidden h-auto  transition-all duration-300 ease-in-out" placeholder="Enter a goal" rows="1" @input="adjustTextareaHeight"
 					@keydown="handleKeyDown" />
 
@@ -80,11 +64,15 @@
 import { MoveRight } from 'lucide-vue-next'
 import { useChatAssistant } from '@/composables/dashboard/assistant'
 import { usePageHeader } from '@/composables/utils/header'
+import { useOnAssistantLoad } from '@/composables/dashboard/assistant/agents/select'
 
+
+const { fetchSelectedAgent, selectedAgent } = useOnAssistantLoad()
+fetchSelectedAgent()
 
 const { conversationHistory, userInput, sendMessage, ai_loading } = useChatAssistant()
 const textarea = ref()
-const typewriterText = ref('')
+
 
 
 

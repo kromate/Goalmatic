@@ -10,7 +10,11 @@ const createAgentForm = reactive({
     name: '',
     description: '',
     published: false,
-    status: 'DRAFT' as AgentStatus
+    status: 'DRAFT' as AgentStatus,
+    spec: {
+        systemInfo: 'You are a helpful assistant',
+        tools: []
+    }
 })
 
 
@@ -50,6 +54,7 @@ export const useCreateAgent = () => {
         loading.value = false
         useAssistantModal().closeCreateAgent()
         resetForm()
+        useRouter().push(`/assistant/agents/${id}`)
     }
 
     return { createAgent, createAgentForm, loading, isDisabled }

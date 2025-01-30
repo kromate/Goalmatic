@@ -2400,15 +2400,40 @@
   resolved "https://registry.yarnpkg.com/@schedule-x/calendar/-/calendar-2.14.3.tgz#4c6fac436d5d0e98694a974c7dbdfd1c0eb8d0d2"
   integrity sha512-JR2HxAOzaz+6DguGhT7gYp8ydJmIgbPeTd4hTDd05zyF6OoUcbEgFmiZDC5VvDTbThzjkS1a9v/OM2n0WAHcPA==
 
+"@schedule-x/current-time@^2.14.3":
+  version "2.14.3"
+  resolved "https://registry.yarnpkg.com/@schedule-x/current-time/-/current-time-2.14.3.tgz#6c28a68e280fd39f15eab96d3697242a89073106"
+  integrity sha512-/NGdze4RjQEgkR/15rRyzEcWSChGRd9HCzkS9BZTOd/29fL7TilPahbgnXdNWdEUbhhKJKaHBVW2xcZslCI6aA==
+
 "@schedule-x/date-picker@^2.14.3":
   version "2.14.3"
   resolved "https://registry.yarnpkg.com/@schedule-x/date-picker/-/date-picker-2.14.3.tgz#ab003bdaa083f75ea4e794cd3216b0950f9d4731"
   integrity sha512-rqyz0cvaccC93l8Fk6k8HYb/+H/T27xXObjdXEymdAoXJ2FizBbAOlLT0O3VZk9LAzrngNI8EjfZHEhCNnK+oA==
 
+"@schedule-x/drag-and-drop@^2.14.3":
+  version "2.14.3"
+  resolved "https://registry.yarnpkg.com/@schedule-x/drag-and-drop/-/drag-and-drop-2.14.3.tgz#fed7b3b05bbd2d02d5d8f89b036bdc94edd2d052"
+  integrity sha512-YoQEDDM5trlab5pNIKTlMhKWRp9UjEcs7xim3ptFgGLH7YjnDhQxf2YdWcnYyod2YlWfolsKyQoKmywMXMbGpA==
+
+"@schedule-x/event-modal@^2.14.3":
+  version "2.14.3"
+  resolved "https://registry.yarnpkg.com/@schedule-x/event-modal/-/event-modal-2.14.3.tgz#4236f3c1ccbf485d6e718db157fc79bd36cd8248"
+  integrity sha512-NHRfwND9Zev6fFsflf4nF7YcQCIlFj1CvgI5JNUD9NWmyNewNLO0ptIAxCH8KPZtfroViutweQ9pqr/Hs1nJGg==
+
 "@schedule-x/events-service@^2.14.3":
   version "2.14.3"
   resolved "https://registry.yarnpkg.com/@schedule-x/events-service/-/events-service-2.14.3.tgz#30a1d041a408dc546d0ab6517066e4a0d5d61ddf"
   integrity sha512-BY6kcxrOlxWr0M1QRg7H4bbM+N/1sdoOdO1gXuAc/PAFkddKIiDP/ozz1EZ2UreW1jCtyczRzhimEF0Tjlmzjw==
+
+"@schedule-x/resize@^2.14.3":
+  version "2.14.3"
+  resolved "https://registry.yarnpkg.com/@schedule-x/resize/-/resize-2.14.3.tgz#366adda28f2db72c04a75a957fd895897a1351a1"
+  integrity sha512-Sv9s5Q2HfKA81hjL1ekvZlSuaxeIV9b4tQVYFXCNJz4IH0ekdqxTwlC28A+bQvb6Z8aDBo0ZTe6DDL+qUCMOKA==
+
+"@schedule-x/scroll-controller@^2.14.3":
+  version "2.14.3"
+  resolved "https://registry.yarnpkg.com/@schedule-x/scroll-controller/-/scroll-controller-2.14.3.tgz#65e0f1853759fc77428db92675f24be9b0531a93"
+  integrity sha512-1U6oR5uop07fF/eY22s4QdvAOLL4NGWcnXUsBsgAe85uQTUlw1Bh1XJPU7V6wp+6mg1MCy/IVXw+DbyQXNUDvg==
 
 "@schedule-x/theme-default@^2.14.3":
   version "2.14.3"

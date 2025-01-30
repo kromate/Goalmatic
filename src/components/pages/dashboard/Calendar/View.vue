@@ -122,6 +122,11 @@ import {
 } from '@schedule-x/calendar'
 import { createCalendarControlsPlugin } from '@schedule-x/calendar-controls'
 import { createEventsServicePlugin } from '@schedule-x/events-service'
+import { createDragAndDropPlugin } from '@schedule-x/drag-and-drop'
+import { createResizePlugin } from '@schedule-x/resize'
+import { createEventModalPlugin } from '@schedule-x/event-modal'
+import { createScrollControllerPlugin } from '@schedule-x/scroll-controller'
+import { createCurrentTimePlugin } from '@schedule-x/current-time'
 import '@schedule-x/theme-default/dist/index.css'
 import moment from 'moment'
 import { ChevronDown, ChevronLeft, ChevronRight } from 'lucide-vue-next'
@@ -132,6 +137,8 @@ const currentView = ref('month-grid')
 const calendarApp = shallowRef(null)
 const calendarControls = shallowRef(null)
 const eventsService = shallowRef(null)
+const eventModal = shallowRef(null)
+const scrollController = shallowRef(null)
 
 const props = defineProps({
 	events: {
@@ -195,11 +202,23 @@ onMounted(async () => {
 	// Create plugins
 	const controls = createCalendarControlsPlugin()
 	const events = createEventsServicePlugin()
+	const dragAndDrop = createDragAndDropPlugin(15) // 15-minute intervals for dragging
+	const resize = createResizePlugin(15) // 15-minute intervals for resizing
+	const modal = createEventModalPlugin()
+	const scroll = createScrollControllerPlugin({
+		initialScroll: '07:00' // Match dayBoundaries.start
+	})
+	const currentTime = createCurrentTimePlugin({
+		fullWeekWidth: true // Show time indicator across full week width
+	})
 
+	// Store plugin references
 	calendarControls.value = controls
 	eventsService.value = events
+	eventModal.value = modal
+	scrollController.value = scroll
 
-	// Create the calendar instance with both plugins
+	// Create the calendar instance with all plugins
 	const calendar = createCalendar(
 		{
 			selectedDate: moment().format('YYYY-MM-DD'),
@@ -218,7 +237,7 @@ onMounted(async () => {
 			selectable: true,
 			weekends: true
 		},
-		[controls, events] // Add both plugins
+		[controls, events, dragAndDrop, resize, modal, scroll, currentTime]
 	)
 
 	// Store the calendar instance
@@ -307,8 +326,11 @@ const handleNewEvent = () => {
 // Event click handler
 const handleEventClick = (info) => {
 	console.log('Event clicked:', info)
-	if (info.event?.extendedProps?.htmlLink) {
-		window.open(info.event.extendedProps.htmlLink, '_blank')
+	// Open event in modal instead of new tab
+	if (info.event?.extendedProps?.originalEvent) {
+		// You can customize what's shown in the modal by setting properties
+		// on the event when formatting it
+		eventModal.value?.open(info.event)
 	}
 }
 
@@ -318,11 +340,12 @@ const handleDateClick = (info) => {
 }
 
 // Event drag handler
-const handleEventDrag = (info) => {
+const handleEventDrag = async (info) => {
 	console.log('Event dragged:', info)
 	if (eventsService.value) {
 		try {
-			eventsService.value.update(info.event)
+			await eventsService.value.update(info.event)
+			// Additional logic for updating the backend can go here
 		} catch (error) {
 			console.warn('Could not update dragged event:', error)
 		}
@@ -330,14 +353,22 @@ const handleEventDrag = (info) => {
 }
 
 // Event resize handler
-const handleEventResize = (info) => {
+const handleEventResize = async (info) => {
 	console.log('Event resized:', info)
 	if (eventsService.value) {
 		try {
-			eventsService.value.update(info.event)
+			await eventsService.value.update(info.event)
+			// Additional logic for updating the backend can go here
 		} catch (error) {
 			console.warn('Could not update resized event:', error)
 		}
+	}
+}
+
+// Add scroll to time method
+const scrollToTime = (time) => {
+	if (scrollController.value) {
+		scrollController.value.scrollTo(time)
 	}
 }
 

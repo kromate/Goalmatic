@@ -2,14 +2,19 @@ import { getFirestoreCollectionWithWhereQuery } from '@/firebase/firestore/query
 import { useAlert } from '@/composables/core/notification'
 import { useUser } from '@/composables/auth/user'
 
-const defaultAgent = {
+export const defaultGoalmaticAgent = {
     id: 0,
     name: 'Goalmatic 1.0',
     description: 'The Default plain agent for Goalmatic',
+    published: true,
+    user: {
+        name: 'goalmatic'
+    },
     spec: {
         systemInfo: 'You are a helpful assistant',
         tools: []
-    }
+    },
+    created_at: new Date('2025-01-01').toISOString()
 }
 
 
@@ -31,7 +36,7 @@ export const useFetchAgents = () => {
             useAlert().openAlert({ type: 'ERROR', msg: `Error: ${e.message}` })
         }
     }
-    return { loading, fetchedAllAgents, fetchedUserAgents, fetchAllAgents, defaultAgent }
+    return { loading, fetchedAllAgents, fetchedUserAgents, fetchAllAgents, defaultGoalmaticAgent }
 }
 
 

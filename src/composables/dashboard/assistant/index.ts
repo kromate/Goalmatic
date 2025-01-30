@@ -1,9 +1,11 @@
+import { selectedAgent } from './agents/select'
 import { useAlert } from '@/composables/core/notification'
 import { callFirebaseFunction } from '~~/src/firebase/functions'
 
 const conversationHistory = ref([] as any)
 const ai_loading = ref(false)
 const sessionId = ref<string | null>(null)
+
 
 export const useChatAssistant = () => {
   const userInput = ref<string>('')
@@ -22,10 +24,11 @@ export const useChatAssistant = () => {
 
 
     try {
-      const data = await callFirebaseFunction('handleCalendarAssistant', {
+      const data = await callFirebaseFunction('messageAgent', {
         prompt: sentUserInput,
         history: conversationHistory.value,
-        sessionId: sessionId.value
+        sessionId: sessionId.value,
+        agent: selectedAgent.value
       }) as any
 
       if (data.sessionId) {

@@ -4,7 +4,7 @@
 			<DropdownMenuRoot>
 				<DropdownMenuTrigger class="border border-[#BFA5F8] bg-tertiary rounded-3xl px-3.5 py-2 flex items-center gap-2">
 					<IconsStick />
-					<span class="text-xs font-semibold text-primary">Goalmatic 1.0</span>
+					<span class="text-xs font-semibold text-primary">{{ selectedAgent.name }}</span>
 					<ChevronDown class="size-3" />
 				</DropdownMenuTrigger>
 				<DropdownMenuPortal>
@@ -12,8 +12,8 @@
 						<DropdownMenuItem class="flex items-center gap-2 p-2  rounded-lg cursor-pointer hover:bg-[#601DED1A]">
 							<IconsStick />
 							<div class="flex flex-col">
-								<span class="text-xs font-semibold text-primary">Goalmatic 1.0</span>
-								<span class="text-[10px] font-medium text-primary">Default Agent</span>
+								<span class="text-xs font-semibold text-primary">{{ selectedAgent.name }}</span>
+								<span class="text-[10px] font-medium text-primary truncate w-40 flex-wrap">{{ selectedAgent.description }}</span>
 							</div>
 							<div class="ml-auto">
 								<Eye class="size-4 text-[#1300A0]" />
@@ -41,6 +41,13 @@
 <script setup>
 import { ChevronDown, Eye, Compass, ArrowRight } from 'lucide-vue-next'
 import { DropdownMenuContent, DropdownMenuItem, DropdownMenuPortal, DropdownMenuRoot, DropdownMenuTrigger } from 'radix-vue'
+
+const props = defineProps({
+	selectedAgent: {
+		type: Object,
+		required: true
+	}
+})
 </script>
 
 <style scoped>
