@@ -21,27 +21,16 @@ export const useFetchIntegrations = () => {
 
         try {
             await getFirestoreSubCollection('users', user_id.value!, 'integrations', fetchedIntegrations)
-            setIntergrationCookie(fetchedIntegrations.value)
             loading.value = false
         } catch (e: any) {
             loading.value = false
             useAlert().openAlert({ type: 'ERROR', msg: `Error: ${e.message}` })
         }
     }
-
-    const hasIntegration = (key: string) => {
-        return computed(() => fetchedIntegrations.value.some((integration) => integration.id === key))
-    }
-
-    return { loading, fetchedIntegrations, fetchUserIntegrations, hasIntegration }
+    return { loading, fetchedIntegrations, fetchUserIntegrations }
 }
 
-const setIntergrationCookie = (data: Record<string, any>[]) => {
-    if (!data.length) return
 
-    const googleCalIntegration = data.find((integration) => integration.id === 'google_calendar')
-    useUser().currentGoogleCalToken.value = googleCalIntegration as any
-}
 
 
 export const useFetchCalendarIntegrations = () => {

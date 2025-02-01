@@ -15,24 +15,30 @@ export const useSelectAgent = () => {
 
     const selectAgent = async (agentDetails: Record<string, any>) => {
         loading.value = true
-        console.log(agentDetails)
-        await updateFirestoreDocument('users', user_id.value!, { selected_agent: agentDetails })
+        await updateFirestoreDocument('users', user_id.value!, { selected_agent_id: agentDetails.id })
         selectedAgent.value = agentDetails
         loading.value = false
         useRouter().push('/assistant')
     }
+
     return { loading, selectAgent, selectedAgent }
 }
 
+export const updateSelectedAgent = (agentDetails: Record<string, any>) => {
+    console.log(agentDetails)
+    selectedAgent.value = agentDetails
+}
 
 export const useOnAssistantLoad = () => {
     const { id: user_id } = useUser()
     const selectedUser = ref()
+    const selectedAgentRef = ref()
     const fetchSelectedAgent = async () => {
         await getSingleFirestoreDocument('users', user_id.value!, selectedUser)
-        if (selectedUser.value?.selected_agent) {
-            console.log(selectedUser.value?.selected_agent)
-            selectedAgent.value = selectedUser.value.selected_agent
+        if (selectedUser.value?.selected_agent_id) {
+        await getSingleFirestoreDocument('agents', selectedUser.value?.selected_agent_id, selectedAgentRef)
+            selectedAgent.value = selectedAgentRef.value
+            console.log(selectedAgent.value)
         }
     }
 

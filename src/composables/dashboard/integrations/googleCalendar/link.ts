@@ -8,7 +8,7 @@ import { useUser } from '@/composables/auth/user'
 
 
 const integrationKeys = {
-    google_calendar: 'google_calendar'
+    GOOGLECALENDAR: 'GOOGLECALENDAR'
 
 }
 
@@ -42,11 +42,13 @@ export const useLinkGoogleCalendar = () => {
                                 expiry_date: oauthResult.expiry_date,
                                 created_at: new Date().toISOString(),
                                 updated_at: new Date().toISOString(),
-                                is_default: isDefaultCalendar
+                                is_default: isDefaultCalendar,
+                                integration_id: integrationKeys.GOOGLECALENDAR,
+                                user_id: user_id.value!
                             })
                             localStorage.setItem('oauth_result', '')
                         } else {
-                            useAlert().openAlert({ type: 'ERROR', msg: 'Error during token exchange' })
+                            // useAlert().openAlert({ type: 'ERROR', msg: 'Error during token exchange' })
                         }
                         loading.value = false
                     }
@@ -60,7 +62,7 @@ export const useLinkGoogleCalendar = () => {
         }
     }
 
-    return { loading, link, integrationKeys }
+    return { loading, link }
 }
 
 const shouldCalendarBeSetAsDefault = async () => {

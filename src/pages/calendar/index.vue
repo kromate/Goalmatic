@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 import { usePageHeader } from '@/composables/utils/header'
-import { useFetchAllCalendarEvents } from '@/composables/dashboard/integrations/calendar/fetch'
+import { useFetchAllCalendarEvents } from '~/src/composables/dashboard/integrations/googleCalendar/fetch'
 
 const { fetchedEvents, fetchAllCalendarEvents, loading } = useFetchAllCalendarEvents()
 

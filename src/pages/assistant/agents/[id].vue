@@ -88,7 +88,7 @@
 			</div>
 			<div
 				v-if="!isEditingSystemInfo"
-				class="text-subText md:text-[15px] text-xs"
+				class="text-subText md:text-[15px] text-xs whitespace-pre-wrap"
 			>
 				{{ agentDetails?.spec?.systemInfo || 'No system information provided' }}
 			</div>
@@ -200,7 +200,10 @@
 											{{ tool.name }}
 										</h3>
 										<div class="flex items-center gap-1 text-xs">
-											<span class="btn-status">{{ tool.status }}</span>
+											<span class="btn-status" :class="{ 'bg-[#EFE8FD] text-primary': tool.status, 'bg-line text-secondary': !tool.status }">{{ tool.status ? 'Connected' : 'Not Connected' }}</span>
+											<button v-if="!tool.status" class="btn-text btn !bg-primary text-light" @click="connectIntegration(tool.id)">
+												Connect
+											</button>
 										</div>
 									</div>
 									<p class="text-xs text-subText">
@@ -212,11 +215,13 @@
 											v-for="ability in tool.abilities"
 											:key="ability.name"
 											class="flex items-center gap-2 bg-[#EFE8FD] border border-[#CFBBFA] text-[#601DED] px-2 py-1 rounded-lg text-xs"
+											:class="{ 'opacity-50': !tool.status }"
 										>
 											<input
 												v-model="toolsModel"
 												type="checkbox"
 												:value="ability"
+												:disabled="!tool.status"
 												class="form-checkbox h-3 w-3 text-primary rounded border-primary focus:ring-primary"
 											>
 											<div class="flex items-center gap-1.5">
@@ -241,6 +246,9 @@ import { useEditAgent } from '@/composables/dashboard/assistant/agents/edit'
 import { formatDateString } from '@/composables/utils/formatter'
 import { useSelectAgent } from '@/composables/dashboard/assistant/agents/select'
 import { useDeleteAgent } from '@/composables/dashboard/assistant/agents/delete'
+import { useConnectIntegration } from '~/src/composables/dashboard/integrations/connect'
+
+const { connectIntegration, loading: connectLoading } = useConnectIntegration()
 
 const { setDeleteAgentData, loading: deleteLoading } = useDeleteAgent()
 const { selectAgent, loading: selectLoading } = useSelectAgent()
@@ -256,6 +264,9 @@ const { id } = useRoute().params
 
 id === '0' ? (agentDetails.value = defaultGoalmaticAgent) : await fetchAgentsById(id as string)
 
+const connectTool = (tool) => {
+	console.log(tool)
+}
 const removeTool = (toolToRemove) => {
     toolsModel.value = toolsModel.value.filter((tool) => tool.id !== toolToRemove.id)
 }
@@ -291,7 +302,7 @@ definePageMeta({
 	}
 }
 .card2 {
-	@apply bg-[#EFE8FD] border border-[#CFBBFA] text-[#601DED] flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium;
+	@apply bg-[#EFE8FD] border border-[#CFBBFA] text-primary flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium;
 }
 .btn-text {
 	@apply border rounded gap-2 bg-light !py-1 !px-3 text-xs font-semibold;
@@ -300,7 +311,7 @@ definePageMeta({
 	@apply border rounded-lg py-2 px-3 text-sm focus:outline-none focus:border-primary;
 }
 .btn-status {
-	@apply bg-[#EFE8FD] border border-[#CFBBFA] text-[#601DED] px-2 py-1 rounded-lg text-xs font-medium;
+	@apply  border border-[#CFBBFA]  px-2 py-1 rounded-lg text-xs font-medium;
 }
 .form-checkbox {
 	@apply rounded border-primary text-primary focus:ring-primary;

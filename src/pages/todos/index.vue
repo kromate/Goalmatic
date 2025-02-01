@@ -1,27 +1,5 @@
 <template>
-	<!-- <div
-		class="min-w-full h-full p-4 flex flex-col gap-5 items-start justify-start hide-scrollbar overflow-x-auto"
-	>
-		<div class="flex items-center gap-4 ">
-			<CircleArrowLeft class="cursor-pointer" @click="() => navigateWeek('prev')" />
-			<ColorBadge :name="weekLabel" class="text-lg flex-grow text-center" />
-			<CircleArrowRight class="cursor-pointer" @click="() => navigateWeek('next')" />
-		</div>
-		<main v-if="!loading" class="kanban-columns gap-4">
-			<PagesDashboardTodosColumn
-				v-for="column in groupTodosByDate"
-				:key="column.date"
-				:date="column.date"
-				:todo="column.tasks"
-			/>
-		</main>
-	</div> -->
-
-	<!-- {{ userTodos }} <br><br> -->
-
-	<!-- {{ currentDayTodo }} -->
-
-	<main class="p-4 flex flex-col gap-8">
+	<main class="p-6 flex flex-col gap-8">
 		<div class="flex flex-col gap-1">
 			<h3 class="text-textHeadline font-semibold text-2xl md:text-[28px]">
 				Your To-do's
