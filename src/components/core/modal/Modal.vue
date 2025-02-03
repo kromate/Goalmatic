@@ -15,7 +15,7 @@
 			<transition name="modal" appear @after-leave="closeModal">
 				<div v-if="modalType == 'popup'" :class="[isFullHeight? `isFullHeight ${computedWidth}`:'isNotFullHeight','modal']">
 					<header class="modal-title flex justify-between w-full items-center">
-						<span :class="[noClose?'text-center w-full':'text-start']">{{ title }}</span>
+						<span :class="[noClose?'text-center w-full':'text-start font-semibold']">{{ title }}</span>
 						<X
 							v-if="!noClose"
 							name="close"

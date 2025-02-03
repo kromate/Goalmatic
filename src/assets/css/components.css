@@ -66,7 +66,9 @@
     .btn {
         @apply center px-4 py-2.5 rounded-lg text-sm border border-white font-semibold button_shadow disabled:bg-gray-500 disabled:text-dark disabled:cursor-not-allowed transite;
     }
-
+.btn-text {
+	@apply border rounded gap-2 bg-light !py-1 !px-3 text-xs font-semibold;
+}
     .btn-icon{
 	@apply btn !shadow-none  border !border-[#CFBBFA];
 }
@@ -140,7 +142,7 @@
 
         .modal-title {
 		background: linear-gradient(90deg, #F5F0FF 0%, #E2D3FF 100%);
-        @apply font-medium border md:text-xl text-start w-full text-dark px-3 py-2 rounded-lg;
+        @apply font-medium border md:text-lg text-start w-full text-dark px-3 py-2 rounded-lg;
     }
     
     .modal {

@@ -19,7 +19,7 @@
 						</button>
 					</div>
 					<input v-if="isEmail" v-model.trim="authCredentienalsForm.email.value" required type="email" class="input-field" placeholder="Enter email">
-					<NewPhoneInput v-else />
+					<PhoneInput v-else />
 				</div>
 
 				<div class="flex flex-col gap-0.5">

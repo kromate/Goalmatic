@@ -1,45 +1,46 @@
 <template>
-	<div class="field relative">
-		<label for="phone">{{ label }}</label>
+	<div class="field relative h-fit w-full">
 		<input
 			id="phone"
 			v-model="phone_number"
 			name="phone"
-			:placeholder="placeholder"
+			placeholder="Enter your phone number"
 			min="10"
 			minlength="10"
 			type="number"
-			class="input-field pl-[132px] !outline-none"
+			class="input-field !pl-[105px] !outline-none"
 			:disabled="disabled"
 			required
 			@input="handleInput"
 		>
-		<XCircle v-if="phone_number && !disabled" name="close-fill" class="w-4 absolute top-[54%] right-4 cursor-pointer" @click="clearInput" />
+		<!-- <XCircle v-if="phone_number && !disabled" name="close-fill" class="w-4 absolute top-[54%] right-4 cursor-pointer" @click="clearInput" /> -->
 
-		<div ref="target" class="flex flex-col absolute top-[50%]">
+		<div ref="target" class="flex flex-col absolute top-[9px]">
 			<ClientOnly>
 				<DropdownMenuRoot v-slot="{ open }">
-					<DropdownMenuTrigger as="button" :disabled="disabled" class="cursor-pointer flex items-center gap-2.5 p-1.5 px-2 pl-4 py-0 bg-transparent border-r border-neut3">
-						<span class="text-xl">{{ selectedCountry.flag }}</span>
-						<span class="truncate">{{ selectedCountry.dial_code }}</span>
-						<ChevronDown name="down" :class="['ml-1 w-4 duration-300', open ? 'rotate-180' : '']" />
+					<DropdownMenuTrigger as="button" :disabled="disabled" class="cursor-pointer flex items-center gap-1.5 p-1.5 pl-4 py-0 bg-transparent focus:outline-none">
+						<span class="text-xl rounded-full">{{ selectedCountry.flag }}</span>
+						<span class="truncate text-textHeadline text-[13px]">{{ selectedCountry.dial_code }}</span>
+						<ChevronDown name="down" :class="['ml-0 w-4 duration-300', open ? 'rotate-180' : '']" />
 					</DropdownMenuTrigger>
 
-					<DropdownMenuContent class="bg-white  border border-dark z-20 px-8 py-6  absolute top-[2rem] -left-[60px] w-[325px] rounded overflow-hidden max-h-96 min-h-28">
+					<DropdownMenuContent class="bg-white  border border-[#E4E7EC] z-20 absolute top-[17px] -left-[50px] min-w-[400px] max-w-[400px] rounded-lg overflow-hidden max-h-96 min-h-28">
 						<section class="relative w-full flex flex-col gap-6 text-sm ">
 							<input
 								v-model="searchQuery"
 								type="text"
 								placeholder="Search country"
-								class="p-2 border-b border-gray-300 !outline-none absolute top-0 w-full"
+								class="p-4 py-3 border-b border-[#F9F8FB] !outline-none absolute top-0 w-full"
 							>
-							<div class="flex flex-col gap-6 text-sm mt-14 overflow-y-auto md:max-h-96 max-h-40 hide-scrollbar">
-								<DropdownMenuItem v-for="country in filteredCountries" :key="country.code" class="flex items-center gap-3 !outline-none" @select="onDropdownClick(country)">
-									<span class="text-xl">{{ country.flag }}</span>
-									<p class="cursor-pointer flex items-center text-base">
+							<div class="flex flex-col gap-0 text-sm mt-12 overflow-y-auto md:max-h-96 max-h-40 hide-scrollbar px-4">
+								<DropdownMenuItem v-for="country in filteredCountries" :key="country.code" class="flex items-center gap-3 !outline-none py-2 cursor-pointer" @select="onDropdownClick(country)">
+									<div class="flex items-center gap-2 min-w-[80px]">
+										<span class="text-xl">{{ country.flag }}</span>
+										<span class="text-textSecondary">{{ country.dial_code }}</span>
+									</div>
+									<p class="flex items-center text-sm text-textHeadline">
 										{{ country.name }}
 									</p>
-									<span class="ml-auto text-neut5">{{ country.dial_code }}</span>
 								</DropdownMenuItem>
 							</div>
 						</section>
@@ -75,14 +76,6 @@ const props = defineProps({
   modelValue: {
     type: String,
     default: ''
-  },
-  placeholder: {
-    type: String,
-    default: 'Enter Phone number'
-  },
-  label: {
-    type: String,
-    default: 'Phone number'
   },
   disabled: {
     type: Boolean,

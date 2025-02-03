@@ -2,7 +2,7 @@
 	<div class="field relative">
 		<label for="otp mb-3">Enter your OTP</label>
 
-		<PinInputRoot v-model="modelValue" type="number" :otp="true" :length="length" class="flex gap-2 items-center mt-1" placeholder="○" @completed="$emit('completed')">
+		<PinInputRoot v-model="modelValue" type="number" :otp="true" :length="length" class="flex gap-2 items-center mt-1" :class="containerClass" placeholder="○" @completed="$emit('completed')">
 			<PinInputInput v-for="(id, index) in length" :key="id" :index="index" class="box" />
 		</PinInputRoot>
 	</div>
@@ -18,6 +18,10 @@ const props = defineProps({
   length: {
     type: Number,
     default: 6
+	},
+  containerClass: {
+    type: String,
+    default: ''
   }
 
 })

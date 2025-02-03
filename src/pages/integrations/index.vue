@@ -11,13 +11,12 @@
 
 		<div class="flex flex-wrap gap-6">
 			<IntegrationsCard
-				v-for="integration in formattedAvailableIntegrations(
-					fetchedIntegrations
-				)"
+				v-for="integration in formattedAvailableIntegrations(fetchedIntegrations)"
 				:key="integration.name"
 				v-bind="integration"
 				class="w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]"
 				@update="updateIntegration($event)"
+				@editConfig="editConfig($event)"
 			/>
 		</div>
 	</main>
@@ -27,12 +26,15 @@
 import { useFetchIntegrations } from '@/composables/dashboard/integrations/fetch'
 import { usePageHeader } from '@/composables/utils/header'
 import { formattedAvailableIntegrations } from '@/composables/dashboard/integrations/list'
-import { useConnectIntegration } from '~/src/composables/dashboard/integrations/connect'
+import { useConnectIntegration } from '@/composables/dashboard/integrations/connect'
+import { useEditIntegrationsConfig } from '@/composables/dashboard/integrations/editConfig'
 
 const { connectIntegration, loading: connectIntegrationLoading } = useConnectIntegration()
 const { fetchUserIntegrations, loading: IntegrationListLoading, fetchedIntegrations } = useFetchIntegrations()
+const { editConfig } = useEditIntegrationsConfig()
 
 fetchUserIntegrations()
+
 
 const updateIntegration = (data: any) => {
 	if (data.status) {

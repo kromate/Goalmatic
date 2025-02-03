@@ -304,9 +304,7 @@ definePageMeta({
 .card2 {
 	@apply bg-[#EFE8FD] border border-[#CFBBFA] text-primary flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium;
 }
-.btn-text {
-	@apply border rounded gap-2 bg-light !py-1 !px-3 text-xs font-semibold;
-}
+
 .input-text {
 	@apply border rounded-lg py-2 px-3 text-sm focus:outline-none focus:border-primary;
 }
