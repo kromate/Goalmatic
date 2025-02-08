@@ -19,7 +19,7 @@ export const useChatAssistant = () => {
 
     conversationHistory.value.push({
       role: 'user',
-      parts: [{ text: sentUserInput }]
+      parts: sentUserInput
     })
 
 
@@ -30,7 +30,7 @@ export const useChatAssistant = () => {
         sessionId: sessionId.value,
         agent: selectedAgent.value
       }
-      console.log(sent_data)
+
       const data = await callFirebaseFunction('messageAgent', sent_data) as any
 
       if (data.sessionId) {
@@ -39,8 +39,8 @@ export const useChatAssistant = () => {
 
 
       conversationHistory.value.push({
-        role: 'model',
-        parts: [{ text: data.response }]
+        role: 'assistant',
+        parts: data.response
       })
 
       ai_loading.value = false

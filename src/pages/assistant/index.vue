@@ -30,11 +30,7 @@
 						{{ message.role === 'user' ? 'You' : `Goalmatic  ${selectedAgent.id != 0 ? `(${selectedAgent.name})` : '(Default)'}` }}
 					</p>
 				</div>
-				<article class="message-bubble" :class="{ 'ml-0 mr-7 !bg-light !border-[#9A6BFF]': message.role === 'user' }">
-					<p class="message-text">
-						{{ message.parts[0].text }}
-					</p>
-				</article>
+				<article class="message-bubble" :class="{ 'ml-0 mr-7 !bg-light !border-[#9A6BFF]': message.role === 'user' }" v-html="markdownProcessor(message.parts)" />
 			</div>
 		</section>
 
@@ -65,6 +61,8 @@ import { MoveRight } from 'lucide-vue-next'
 import { useChatAssistant } from '@/composables/dashboard/assistant'
 import { usePageHeader } from '@/composables/utils/header'
 import { useOnAssistantLoad } from '@/composables/dashboard/assistant/agents/select'
+import { markdownProcessor } from '~/src/composables/utils/markdown'
+
 
 
 const { fetchSelectedAgent, selectedAgent } = useOnAssistantLoad()
@@ -159,10 +157,11 @@ definePageMeta({
 }
 
 .message-bubble {
-  @apply bg-[#F4F3FF] px-4 py-2 rounded-lg ml-9 w-auto border border-[#E4E7EC];
+  @apply bg-[#F4F3FF] px-4 py-2 rounded-lg ml-9 w-auto border border-[#E4E7EC] md:leading-8 leading-7;
+  p {
+    @apply text-sm text-subText ;
+  }
 }
 
-.message-text {
-  @apply text-sm text-subText;
-}
+
 </style>

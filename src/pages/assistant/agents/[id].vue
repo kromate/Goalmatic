@@ -264,9 +264,7 @@ const { id } = useRoute().params
 
 id === '0' ? (agentDetails.value = defaultGoalmaticAgent) : await fetchAgentsById(id as string)
 
-const connectTool = (tool) => {
-	console.log(tool)
-}
+
 const removeTool = (toolToRemove) => {
     toolsModel.value = toolsModel.value.filter((tool) => tool.id !== toolToRemove.id)
 }

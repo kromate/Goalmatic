@@ -17,7 +17,8 @@ export const afterAuthCheck = async (user: User | null) => {
                 phone: user.phoneNumber,
                 username: user.displayName,
                 created_at: new Date().toISOString(),
-                updated_at: new Date().toISOString()
+                updated_at: new Date().toISOString(),
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
             })
         }
         if (unauthorisedGoalSync.value.stepsk) {

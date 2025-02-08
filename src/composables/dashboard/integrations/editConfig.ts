@@ -1,5 +1,7 @@
 import { availableIntegrations } from '@/composables/dashboard/integrations/list'
-
+import { updateFirestoreSubDocument } from '@/firebase/firestore/edit'
+import { useUser } from '@/composables/auth/user'
+import { useAlert } from '@/composables/core/notification'
 
 
 
@@ -22,14 +24,18 @@ const modalData = ref({
 })
 
 
-
+const selectedIntegrationId = ref('')
 
 
 export const useEditIntegrationsConfig = () => {
     const loading = ref(false)
+    const { id: user_id } = useUser()
 
-    const editConfig = async (data: { id: string }) => {
-        const integration = availableIntegrations().find((integration) => integration.id === data.id)
+    const editConfig = async (data: { id: string, integration_id: string, config?: Record<string, any> }) => {
+        selectedIntegrationId.value = data.id
+        modalData.value.config = data.config ?? {}
+
+        const integration = availableIntegrations().find((integration) => integration.id === data.integration_id)
         if (integration) {
             modalData.value.title = `Edit ${integration.name} Config`
             modalData.value.fields = integration.globalConfig ?? []
@@ -44,7 +50,23 @@ export const useEditIntegrationsConfig = () => {
         loading.value = true
     }
 
-    return { loading, editConfig, modalData }
+    const updateConfig = async () => {
+        try {
+            loading.value = true
+            updateFirestoreSubDocument('users', user_id.value!, 'integrations', selectedIntegrationId.value, {
+                config: modalData.value.config
+            })
+            loading.value = false
+            useAlert().openAlert({ type: 'SUCCESS', msg: 'Config updated successfully' })
+        } catch (error) {
+            loading.value = false
+            useAlert().openAlert({ type: 'ERROR', msg: `Error: ${error}` })
+        } finally {
+            const { useIntegrationsModal } = await import('@/composables/core/modals')
+            useIntegrationsModal().closeEditConfig()
+        }
+    }
+    return { loading, editConfig, modalData, updateConfig }
 }
 
 

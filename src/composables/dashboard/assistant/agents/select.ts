@@ -25,7 +25,6 @@ export const useSelectAgent = () => {
 }
 
 export const updateSelectedAgent = (agentDetails: Record<string, any>) => {
-    console.log(agentDetails)
     selectedAgent.value = agentDetails
 }
 
@@ -38,7 +37,6 @@ export const useOnAssistantLoad = () => {
         if (selectedUser.value?.selected_agent_id) {
         await getSingleFirestoreDocument('agents', selectedUser.value?.selected_agent_id, selectedAgentRef)
             selectedAgent.value = selectedAgentRef.value
-            console.log(selectedAgent.value)
         }
     }
 

@@ -34,11 +34,20 @@ export const availableIntegrations = () => {
 
 export const formattedAvailableIntegrations = (UserIntegrations: Record<string, any>[]) => {
     return availableIntegrations().map((integration) => {
+        const matchingIntegration = UserIntegrations.find(
+            (userIntegration: Record<string, any>) =>
+                userIntegration.provider === integration.provider &&
+                userIntegration.type === integration.type
+        )
+
         return {
             ...integration,
-            status: UserIntegrations.some((userIntegration: Record<string, any>) => (userIntegration.provider === integration.provider) && (userIntegration.type === integration.type)),
-            phone: UserIntegrations.find((userIntegration: Record<string, any>) => (userIntegration.provider === integration.provider) && (userIntegration.type === integration.type))?.phone,
-            email: UserIntegrations.find((userIntegration: Record<string, any>) => (userIntegration.provider === integration.provider) && (userIntegration.type === integration.type))?.email
+            integration_id: integration?.id,
+            id: matchingIntegration?.id,
+            status: !!matchingIntegration,
+            phone: matchingIntegration?.phone,
+            email: matchingIntegration?.email,
+            config: matchingIntegration?.config ?? {}
         }
     })
 }

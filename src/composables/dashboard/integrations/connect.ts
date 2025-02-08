@@ -35,7 +35,7 @@ export const useConnectIntegration = () => {
                 await integration.link()
             } catch (error) {
                 loading.value = false
-                console.error(error)
+                // console.error(error)
             }
         }
     }

@@ -10,14 +10,21 @@
 		</div>
 
 		<div class="flex flex-wrap gap-6">
-			<IntegrationsCard
-				v-for="integration in formattedAvailableIntegrations(fetchedIntegrations)"
-				:key="integration.name"
-				v-bind="integration"
-				class="w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]"
-				@update="updateIntegration($event)"
-				@editConfig="editConfig($event)"
-			/>
+			<template v-if="IntegrationListLoading">
+				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+					<Skeleton v-for="i in 2" :key="i" width="100%" height="200px" radius="8px" />
+				</div>
+			</template>
+			<template v-else>
+				<IntegrationsCard
+					v-for="integration in formattedAvailableIntegrations(fetchedIntegrations)"
+					:key="integration.name"
+					v-bind="integration"
+					class="w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]"
+					@update="updateIntegration($event)"
+					@editConfig="editConfig($event)"
+				/>
+			</template>
 		</div>
 	</main>
 </template>
@@ -29,16 +36,16 @@ import { formattedAvailableIntegrations } from '@/composables/dashboard/integrat
 import { useConnectIntegration } from '@/composables/dashboard/integrations/connect'
 import { useEditIntegrationsConfig } from '@/composables/dashboard/integrations/editConfig'
 
+
 const { connectIntegration, loading: connectIntegrationLoading } = useConnectIntegration()
 const { fetchUserIntegrations, loading: IntegrationListLoading, fetchedIntegrations } = useFetchIntegrations()
 const { editConfig } = useEditIntegrationsConfig()
 
 fetchUserIntegrations()
 
-
 const updateIntegration = (data: any) => {
 	if (data.status) {
-		connectIntegration(data.id)
+		connectIntegration(data.integration_id)
 	} else {
 		// disconnectIntegration(data.id)
 	}

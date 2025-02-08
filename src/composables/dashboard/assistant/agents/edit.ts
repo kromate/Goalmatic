@@ -27,8 +27,6 @@ export const useEditAgent = () => {
             const { fetchedIntegrations, fetchUserIntegrations } = useFetchIntegrations()
             await fetchUserIntegrations()
             UserIntegrations.value = fetchedIntegrations.value
-            console.log('called')
-            console.log(UserIntegrations.value)
         }
     })
 

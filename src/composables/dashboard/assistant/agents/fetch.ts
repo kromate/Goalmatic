@@ -62,6 +62,7 @@ export const useFetchUserAgents = () => {
 
 export const fetchUserAgentsForIntegration = async () => {
     try {
+        fetchedUserAgents.value = []
         await getFirestoreCollectionWithWhereQuery('agents', fetchedUserAgents, { name: 'user_id', operator: '==', value: useUser().id.value! })
         return fetchedUserAgents.value
     } catch (e: any) {

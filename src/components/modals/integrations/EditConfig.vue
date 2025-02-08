@@ -15,10 +15,8 @@
 				/>
 			</div>
 
-			<!-- {{ modalData.config }} -->
-
 			<div class="grid grid-cols-1 gap-4 mt-6 w-full ">
-				<button class="btn-primary text-light" :disabled="loading">
+				<button class="btn-primary text-light" :disabled="loading" @click="updateConfig">
 					<span v-if="!loading"> Update </span>
 					<Spinner v-else />
 				</button>
@@ -31,7 +29,7 @@
 
 import { useEditIntegrationsConfig } from '@/composables/dashboard/integrations/editConfig'
 
-const { modalData, loading } = useEditIntegrationsConfig()
+const { modalData, loading, updateConfig } = useEditIntegrationsConfig()
 
 
 
