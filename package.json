@@ -53,6 +53,7 @@
     "nuxt": "3.6.5",
     "nuxt-gtag": "1.1.2",
     "nuxt-security": "^2.0.0-rc.6",
+    "preact": "^10.25.4",
     "radix-vue": "^1.9.13",
     "sass": "^1.81.0",
     "sortablejs": "^1",

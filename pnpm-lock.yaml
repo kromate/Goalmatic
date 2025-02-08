@@ -116,6 +116,9 @@ dependencies:
   nuxt-security:
     specifier: ^2.0.0-rc.6
     version: 2.1.5
+  preact:
+    specifier: ^10.25.4
+    version: 10.25.4
   radix-vue:
     specifier: ^1.9.13
     version: 1.9.13(vue@3.5.13)
