@@ -54,5 +54,12 @@ export default {
       }
     }
   },
-  app
+  app,
+    runtimeConfig: {
+                  public: {
+                    posthogPublicKey: 'phc_s0Gj5tIZ1GCyijS70SXXJ6jjrTJKMka6sot9eFDhfdw',
+                    posthogHost: 'https://us.i.posthog.com'
+                  }
+                }
 }
+

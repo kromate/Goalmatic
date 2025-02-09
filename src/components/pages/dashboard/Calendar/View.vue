@@ -325,7 +325,6 @@ const handleNewEvent = () => {
 
 // Event click handler
 const handleEventClick = (info) => {
-	console.log('Event clicked:', info)
 	// Open event in modal instead of new tab
 	if (info.event?.extendedProps?.originalEvent) {
 		// You can customize what's shown in the modal by setting properties
@@ -335,32 +334,29 @@ const handleEventClick = (info) => {
 }
 
 const handleDateClick = (info) => {
-	console.log('Date clicked:', info)
 	// Implement date click logic if needed
 }
 
 // Event drag handler
 const handleEventDrag = async (info) => {
-	console.log('Event dragged:', info)
 	if (eventsService.value) {
 		try {
 			await eventsService.value.update(info.event)
 			// Additional logic for updating the backend can go here
 		} catch (error) {
-			console.warn('Could not update dragged event:', error)
+			// console.warn('Could not update dragged event:', error)
 		}
 	}
 }
 
 // Event resize handler
 const handleEventResize = async (info) => {
-	console.log('Event resized:', info)
 	if (eventsService.value) {
 		try {
 			await eventsService.value.update(info.event)
 			// Additional logic for updating the backend can go here
 		} catch (error) {
-			console.warn('Could not update resized event:', error)
+			// console.warn('Could not update resized event:', error)
 		}
 	}
 }
