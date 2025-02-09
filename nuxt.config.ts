@@ -57,7 +57,7 @@ export default {
   app,
     runtimeConfig: {
                   public: {
-                    posthogPublicKey: 'phc_s0Gj5tIZ1GCyijS70SXXJ6jjrTJKMka6sot9eFDhfdw',
+                  posthogPublicKey: 'phc_7yPmlIpEIie6711T938CfhafEXX8v0KUyu54MycxNnO',
                     posthogHost: 'https://us.i.posthog.com'
                   }
                 }
