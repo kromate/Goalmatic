@@ -24,7 +24,7 @@
 				</div>
 
 				<div class="grid grid-cols-9 items-end gap-1">
-					<button class="week_btn" :disabled="week <= 1" @click="displayAnotherWeek(false)">
+					<button class="week_btn center" :disabled="week <= 1" @click="displayAnotherWeek(false)">
 						<ChevronLeft :size="14" :stroke-width="2.5" />
 					</button>
 					<div v-for="(dayInfo, i) in paginatedDays" :key="i" class="flex flex-col gap-2 items-center">
@@ -40,7 +40,7 @@
 							</span>
 						</button>
 					</div>
-					<button class="week_btn" :disabled="week >= totalWeeksInSelectedMonth" @click="displayAnotherWeek(true)">
+					<button class="week_btn center" :disabled="week >= totalWeeksInSelectedMonth" @click="displayAnotherWeek(true)">
 						<ChevronRight :size="14" :stroke-width="2.5" />
 					</button>
 				</div>
@@ -168,6 +168,6 @@ definePageMeta({
 }
 
 .week_btn {
-	@apply border border-[#E9E9E9] rounded center h-10 p-2 text-[#798494] disabled:cursor-not-allowed
+	@apply border border-[#E9E9E9] rounded  h-10 p-2 text-[#798494] disabled:cursor-not-allowed
 }
 </style>
