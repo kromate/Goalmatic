@@ -16,6 +16,7 @@ import BottomMenu from '@/components/layouts/bottomBar/modal/Main.vue'
 
 // ==================== ASSISTANT ===============================
 import CreateAgent from '@/components/modals/assistant/CreateAgent.vue'
+import EditToolConfig from '@/components/modals/assistant/EditToolConfig.vue'
 
 // ==================== INTEGRATIONS ===============================
 import ConnectWhatsapp from '@/components/modals/integrations/ConnectWhatsapp.vue'
@@ -28,14 +29,14 @@ type AuthTypes = 'Logout'
 type DashboardTypes = 'StartGoal' | 'EditTodo'
 type CoreTypes = 'Confirmation' | 'LoadingVerification'
 type BottombarTypes = 'BottomMenu'
-type AssistantTypes = 'CreateAgent'
+type AssistantTypes = 'CreateAgent' | 'EditToolConfig'
 type IntegrationsTypes = 'ConnectWhatsapp' | 'EditConfig'
 
 const AuthModals = { Logout } as Record<AuthTypes, any>
 const DashboardModals = { StartGoal, EditTodo } as Record<DashboardTypes, any>
 const CoreModals = { Confirmation, LoadingVerification } as Record<CoreTypes, any>
 const BottombarModals = { BottomMenu } as Record<BottombarTypes, any>
-const AssistantModals = { CreateAgent } as Record<AssistantTypes, any>
+const AssistantModals = { CreateAgent, EditToolConfig } as Record<AssistantTypes, any>
 const IntegrationsModals = { ConnectWhatsapp, EditConfig } as Record<IntegrationsTypes, any>
 
 

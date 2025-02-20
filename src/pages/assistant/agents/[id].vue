@@ -200,6 +200,13 @@
 											{{ tool.name }}
 										</h3>
 										<div class="flex items-center gap-1 text-xs">
+											<button
+												v-if="tool.config && tool.status"
+												class="btn-text"
+												@click="editToolConfig(tool)"
+											>
+												Edit config
+											</button>
 											<span class="btn-status" :class="{ 'bg-[#EFE8FD] text-primary': tool.status, 'bg-line text-secondary': !tool.status }">{{ tool.status ? 'Connected' : 'Not Connected' }}</span>
 											<button v-if="!tool.status" class="btn-text btn !bg-primary text-light" @click="connectIntegration(tool.id)">
 												Connect
@@ -211,17 +218,22 @@
 									</p>
 
 									<div class="flex flex-wrap gap-2 mt-1">
+										<div v-if="tool.config && !isConfigSet(tool)" class="w-full mb-2">
+											<p class="text-red text-xs">
+												Please set required configuration before using this tool
+											</p>
+										</div>
 										<label
 											v-for="ability in tool.abilities"
 											:key="ability.name"
 											class="flex items-center gap-2 bg-[#EFE8FD] border border-[#CFBBFA] text-[#601DED] px-2 py-1 rounded-lg text-xs"
-											:class="{ 'opacity-50': !tool.status }"
+											:class="{ 'opacity-50': !tool.status || (tool.config && !isConfigSet(tool)) }"
 										>
 											<input
 												v-model="toolsModel"
 												type="checkbox"
 												:value="ability"
-												:disabled="!tool.status"
+												:disabled="!tool.status || (tool.config && !isConfigSet(tool))"
 												class="form-checkbox h-3 w-3 text-primary rounded border-primary focus:ring-primary"
 											>
 											<div class="flex items-center gap-1.5">
@@ -241,32 +253,43 @@
 
 <script setup lang="ts">
 import { EyeClosed, MoveUpRight, Trash, CircleArrowLeft, Eye, PencilRuler, Search, CheckCircle2, XCircle } from 'lucide-vue-next'
+import { watch } from 'vue'
 import { useFetchAgentsById } from '@/composables/dashboard/assistant/agents/id'
 import { useEditAgent } from '@/composables/dashboard/assistant/agents/edit'
 import { formatDateString } from '@/composables/utils/formatter'
 import { useSelectAgent } from '@/composables/dashboard/assistant/agents/select'
 import { useDeleteAgent } from '@/composables/dashboard/assistant/agents/delete'
 import { useConnectIntegration } from '~/src/composables/dashboard/integrations/connect'
+import { isConfigSet } from '@/composables/dashboard/assistant/agents/tools/fetch'
+import { useEditToolConfig, agentToolConfigs } from '@/composables/dashboard/assistant/agents/tools/config'
 
-const { connectIntegration, loading: connectLoading } = useConnectIntegration()
 
-const { setDeleteAgentData, loading: deleteLoading } = useDeleteAgent()
-const { selectAgent, loading: selectLoading } = useSelectAgent()
-const { fetchAgentsById, agentDetails, loading: fetchLoading, defaultGoalmaticAgent } = useFetchAgentsById()
+const { connectIntegration } = useConnectIntegration()
+
+const { setDeleteAgentData } = useDeleteAgent()
+const { selectAgent } = useSelectAgent()
+const { fetchAgentsById, agentDetails, defaultGoalmaticAgent } = useFetchAgentsById()
 const {
  updateSystemInfoLoading, isEditingSystemInfo, systemInfoModel, updateSystemInfo,
 	isEditingTools, updateToolsLoading, toolsModel, updateTools, filteredTools, toolSearch
 } = useEditAgent()
 
+const { editToolConfig } = useEditToolConfig()
 
 const { id } = useRoute().params
 
 
 id === '0' ? (agentDetails.value = defaultGoalmaticAgent) : await fetchAgentsById(id as string)
 
+// Prefill agentToolConfigs from agentDetails.spec.tools on load
+watch(agentDetails, (newVal) => {
+	if (newVal && newVal.spec && newVal.spec.tools) {
+		agentToolConfigs.value = newVal.spec?.toolsConfig || {}
+	}
+}, { immediate: true })
 
 const removeTool = (toolToRemove) => {
-    toolsModel.value = toolsModel.value.filter((tool) => tool.id !== toolToRemove.id)
+	toolsModel.value = toolsModel.value.filter((tool) => tool.id !== toolToRemove.id)
 }
 
 const editSystemInfo = () => {

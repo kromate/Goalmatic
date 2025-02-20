@@ -1,5 +1,6 @@
 import { useLinkGoogleCalendar } from './googleCalendar/link'
 import { useLinkWhatsapp } from './whatsapp/link'
+import { useLinkGoogleSheets } from './googleSheets/link'
 
 
 
@@ -7,6 +8,7 @@ import { useLinkWhatsapp } from './whatsapp/link'
 const formattedIntegrationsObjectMap = () => {
     const { link: GClink, loading: GClinkLoading } = useLinkGoogleCalendar()
     const { link: whatsappLink, loading: whatsappLinkLoading } = useLinkWhatsapp()
+    const { link: GSheetsLink, loading: GSheetsLinkLoading } = useLinkGoogleSheets()
     return [
     {
         id: 'GOOGLECALENDAR',
@@ -17,6 +19,11 @@ const formattedIntegrationsObjectMap = () => {
         id: 'WHATSAPP',
         link: whatsappLink,
         loading: whatsappLinkLoading
+    },
+    {
+        id: 'GOOGLESHEETS',
+        link: GSheetsLink,
+        loading: GSheetsLinkLoading
     }
 ]
 }

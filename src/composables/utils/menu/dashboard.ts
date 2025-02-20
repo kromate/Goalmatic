@@ -15,16 +15,7 @@ export const dashboardRoutes = () => [
 	// 	main: true
 	// },
 
-		{
-		icon: Bot,
-		name: 'Assistant',
-		route: '/assistant',
-		type: 'all',
-		main: true,
-		subRoutes: [
-			{ url: '/', propagate: true }
-		]
-	},
+
 	{
 		icon: Goal,
 		name: 'Goals',
@@ -52,6 +43,16 @@ export const dashboardRoutes = () => [
 	// 	route: '/calendar',
 	// 	main: true
 	// },
+		{
+		icon: Bot,
+		name: 'Assistant',
+		route: '/assistant',
+		type: 'all',
+		main: true,
+		subRoutes: [
+			{ url: '/', propagate: true }
+		]
+	},
 	{
 		icon: Grid3X3,
 		name: 'Integrations',

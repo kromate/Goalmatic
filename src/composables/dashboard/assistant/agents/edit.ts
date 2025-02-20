@@ -1,3 +1,4 @@
+import { useEditToolConfig } from './tools/config'
 import { updateFirestoreDocument } from '@/firebase/firestore/edit'
 import { useAlert } from '@/composables/core/notification'
 import { formattedAvailableTools } from '@/composables/dashboard/assistant/agents/tools/fetch'
@@ -21,6 +22,7 @@ export const useEditAgent = () => {
     const updateSystemInfoLoading = ref(false)
     const updateToolsLoading = ref(false)
     const { selectedAgent } = useSelectAgent()
+    const { getConfiguredTools } = useEditToolConfig()
 
     watch(isEditingTools, async () => {
         if (isEditingTools.value) {
@@ -60,33 +62,29 @@ export const useEditAgent = () => {
         }
     }
 
-    const updateTools = async (id: string, spec: Record<string, any>) => {
-        if (id === '0') return
-
-        updateToolsLoading.value = true
+    const updateTools = async (id: string, spec: any) => {
         try {
-            const updatedSpec = {
-                ...spec,
-                tools: toolsModel.value
-            }
+            updateToolsLoading.value = true
+
+            // Get configured tools
+            const configuredTools = getConfiguredTools()
+
+
 
             await updateFirestoreDocument('agents', id, {
-                spec: updatedSpec,
-                updated_at: new Date().toISOString()
+                spec: {
+                    ...spec,
+                    tools: toolsModel.value,
+                    toolsConfig: configuredTools
+                }
             })
+
             isEditingTools.value = false
-            useAlert().openAlert({ type: 'SUCCESS', msg: 'Tools updated successfully' })
-
-            if (selectedAgent.value?.id === id) {
-                selectedAgent.value.spec = updatedSpec
-            }
-
-            return updatedSpec
-        } catch (error: any) {
-            useAlert().openAlert({ type: 'ERROR', msg: `Error updating tools: ${error.message}` })
-            throw error
-        } finally {
             updateToolsLoading.value = false
+            useAlert().openAlert({ type: 'SUCCESS', msg: 'Tools updated successfully' })
+        } catch (error) {
+            updateToolsLoading.value = false
+            useAlert().openAlert({ type: 'ERROR', msg: `Error: ${error}` })
         }
     }
 

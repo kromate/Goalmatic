@@ -198,9 +198,18 @@
 					<p>You are advised to review this Privacy Policy periodically for any changes. Changes to this Privacy Policy are effective when they are posted on this page.</p>
 
 					<h2 class="text-3xl text-gray-900">
-						Google API Services User Data Policy and Limited Use Requirements
+						Google API Data Access and Limited Use
 					</h2>
-					<p>Taaskly.site's use and transfer of information received from Google APIs to any other app will adhere to the <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank">Google API Services User Data Policy</a>, including the Limited Use requirements.</p>
+					<p>Our platform integrates with Google APIs to enhance your experience. Specifically, we access the following data from your Google account:</p>
+					<ul>
+						<li>
+							<strong>Google Drive/Spreadsheets:</strong> We access files and spreadsheets that you explicitly select to share with our application using the <em>drive.file</em> scope. This allows our AI agents to read and write to your selected files for tasks such as data management and processing.
+						</li>
+						<li>
+							<strong>Google Calendar:</strong> We access your Google Calendar data to create, read, and modify events, enabling scheduling and appointment management within our service.
+						</li>
+					</ul>
+					<p>We access this data solely for providing and improving our service and only with your explicit consent. Our practices adhere strictly to the <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank">Google API Services User Data Policy</a> and its Limited Use requirements. We do not use your Google user data for any other purpose.</p>
 
 					<h2 class="text-3xl text-gray-900">
 						Contact Us
@@ -217,10 +226,15 @@
 </script>
 
 <style scoped>
-a{
-	@apply underline
+a {
+	@apply underline;
 }
-h2{
-	@apply mb-2.5 mt-3.5
+h2 {
+	@apply mb-2.5 mt-3.5;
 }
 </style>
+
+
+// Act as a day tracker that logs and tracks my activities. Use the datetime tool to determine the current date and time. Based on my instructions, either log new activities to the spreadsheet or retrieve past activities from it.
+
+// Use the datetime tool to check the current date and time. Depending on the user's prompt, interact with the spreadsheet: if the user asks to log activities, write the details to the spreadsheet; if the user asks for past activities, retrieve the relevant data based on the specified date or time frame.

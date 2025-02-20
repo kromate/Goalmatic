@@ -28,6 +28,14 @@ export const availableIntegrations = () => {
                     options: fetchUserAgentsForIntegration
                 }
             ] as EditConfigField[]
+        },
+        {
+            name: 'Google Sheets',
+            icon: '/icons/googleSheets.svg',
+            description: 'Access and manage your spreadsheets directly from the app.',
+            type: 'SPREADSHEET',
+            provider: 'GOOGLE',
+            id: 'GOOGLESHEETS'
         }
     ]
 }

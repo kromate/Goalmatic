@@ -31,6 +31,7 @@ export const useChatAssistant = () => {
         agent: selectedAgent.value
       }
 
+      console.log(sent_data)
       const data = await callFirebaseFunction('messageAgent', sent_data) as any
 
       if (data.sessionId) {

@@ -12,10 +12,10 @@
 		</div>
 		<div class="flex flex-col items-center gap-10">
 			<h1 class="text-white font-bold text-[49px] md:text-[80px] text-center leading-[60px] md:leading-[80px]">
-				Your Goals Redefined
+				Your AI Personal Assistant
 			</h1>
-			<p class="text-sm md:text-[18px] text-white text-center max-w-[300px] md:max-w-[570px]">
-				Take control of your life with GoalMatic. Build SMART goals, track progress, and achieve more effortlessly.
+			<p class="text-sm md:text-[18px] text-white text-center max-w-[300px] md:max-w-[640px]">
+				Goalmatic doesn't just help you set goals and to-dos, it also provides you with an assistant to make achieving them easier.
 			</p>
 			<div class="bg-white rounded-lg px-4 py-2 md:py-3 flex items-center gap-4 justify-between w-full max-w-[600px]">
 				<textarea

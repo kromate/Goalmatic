@@ -1,4 +1,3 @@
-
 import axios from 'axios'
 import { v4 as uuidv4 } from 'uuid'
 import { setFirestoreSubDocument } from '@/firebase/firestore/create'
@@ -6,15 +5,11 @@ import { getFirestoreSubCollection } from '@/firebase/firestore/fetch'
 import { useAlert } from '@/composables/core/notification'
 import { useUser } from '@/composables/auth/user'
 
-
 const integrationKeys = {
-    GOOGLECALENDAR: 'GOOGLECALENDAR'
-
+    GOOGLESHEETS: 'GOOGLESHEETS'
 }
 
-
-
-export const useLinkGoogleCalendar = () => {
+export const useLinkGoogleSheets = () => {
     const { id: user_id } = useUser()
     const loading = ref(false)
 
@@ -22,7 +17,8 @@ export const useLinkGoogleCalendar = () => {
         loading.value = true
 
         try {
-            const { data } = await axios.get('/api/getAuthUrl?integration=calendar')
+            const { data } = await axios.get('/api/getAuthUrl?integration=spreadsheet')
+            console.log(data)
             if (data.authUrl) {
                 const authWindow = window.open(data.authUrl, '_blank')
                 const id = uuidv4()
@@ -31,24 +27,25 @@ export const useLinkGoogleCalendar = () => {
                     if (event.origin === window.location.origin) {
                         const oauthResult = JSON.parse(localStorage.getItem('oauth_result') as string)
                         if (oauthResult && oauthResult.success) {
-                            const isDefaultCalendar = await shouldCalendarBeSetAsDefault()
+                            const isDefaultSheets = await shouldSheetsBeSetAsDefault()
                             setFirestoreSubDocument('users', user_id.value!, 'integrations', id, {
                                 id,
                                 access_token: oauthResult.access_token,
                                 refresh_token: oauthResult.refresh_token,
-                                type: 'CALENDAR',
+                                type: 'SPREADSHEET',
                                 provider: 'GOOGLE',
                                 email: oauthResult.email,
                                 expiry_date: oauthResult.expiry_date,
                                 created_at: new Date().toISOString(),
                                 updated_at: new Date().toISOString(),
-                                is_default: isDefaultCalendar,
-                                integration_id: integrationKeys.GOOGLECALENDAR,
+                                is_default: isDefaultSheets,
+                                integration_id: integrationKeys.GOOGLESHEETS,
                                 user_id: user_id.value!
                             })
                             localStorage.setItem('oauth_result', '')
                         } else {
-                            // useAlert().openAlert({ type: 'ERROR', msg: 'Error during token exchange' })
+                            console.log('error')
+                            // Optionally handle error with useAlert()
                         }
                         loading.value = false
                     }
@@ -57,7 +54,7 @@ export const useLinkGoogleCalendar = () => {
                 throw new Error('Authorization URL not received')
             }
         } catch (error) {
-            useAlert().openAlert({ type: 'ERROR', msg: 'Error getting authorization URL' })
+            useAlert().openAlert({ type: 'ERROR', msg: 'Error getting authorization URL for Google Sheets' })
             loading.value = false
         }
     }
@@ -65,7 +62,7 @@ export const useLinkGoogleCalendar = () => {
     return { loading, link }
 }
 
-const shouldCalendarBeSetAsDefault = async () => {
+const shouldSheetsBeSetAsDefault = async () => {
     const { id: user_id } = useUser()
     const fetchedIntegrations = ref([])
     await getFirestoreSubCollection('users', user_id.value!, 'integrations', fetchedIntegrations)

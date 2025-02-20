@@ -15,12 +15,23 @@ export default defineEventHandler(async (event) => {
   const clientId = import.meta.env.G_AUTH_CLIENT_ID
   const clientSecret = import.meta.env.G_AUTH_CLIENT_SECRET
 
+  // Determine integration type from query parameter; default to 'calendar'
+  const query = getQuery(event) || {}
+  const integration = query.integration ? String(query.integration).toLowerCase() : 'calendar'
+
+  // Set scopes based on integration type
+  let scopes: string[]
+  switch (integration) {
+    case 'spreadsheet':
+      scopes = ['https://www.googleapis.com/auth/spreadsheets', 'email', 'profile', 'openid']
+      break
+    case 'calendar':
+    default:
+      scopes = ['https://www.googleapis.com/auth/calendar', 'email', 'profile', 'openid']
+  }
 
   // Create OAuth2Client
   const oauth2Client = new OAuth2Client(clientId, clientSecret, redirectUri)
-
-  // Set the scopes for Google Calendar API
-  const scopes = ['https://www.googleapis.com/auth/calendar', 'email', 'profile', 'openid']
 
   // Generate the authorization URL
   const authUrl = oauth2Client.generateAuthUrl({
