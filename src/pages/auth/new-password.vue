@@ -2,7 +2,7 @@
 	<div class="h-full p-4 overflow-auto" :class="windowHeight < 650 ? 'py-8' : 'center'">
 		<div class="flex flex-col gap-8 w-full max-w-[420px] mx-auto">
 			<div class="flex flex-col gap-2.5 text-center">
-				<h2 class="text-textHeadline text-[30px] font-bold leading-[40px]">
+				<h2 class="text-headline text-[30px] font-bold leading-[40px]">
 					Set your new password
 				</h2>
 				<p class="text-textSecondary text-base font-semibold">

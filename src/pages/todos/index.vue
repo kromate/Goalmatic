@@ -1,7 +1,7 @@
 <template>
 	<main class="p-6 flex flex-col gap-8">
 		<div class="flex flex-col gap-1">
-			<h3 class="text-textHeadline font-semibold text-2xl md:text-[28px]">
+			<h3 class="text-headline font-semibold text-2xl md:text-[28px]">
 				Your To-do's
 			</h3>
 			<p class="text-base text-[#37363D]">

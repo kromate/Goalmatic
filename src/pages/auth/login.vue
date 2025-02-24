@@ -2,7 +2,7 @@
 	<div class="h-full p-4 overflow-auto" :class="windowHeight < 650 ? 'py-8' : 'center'">
 		<div class="flex flex-col gap-8 w-full max-w-[400px] mx-auto">
 			<div class="flex flex-col gap-2.5 text-center">
-				<h2 class="text-textHeadline text-[34px] font-bold leading-[40px]">
+				<h2 class="text-headline text-[34px] font-bold leading-[40px]">
 					Login to your account
 				</h2>
 				<p class="text-textSecondary text-base font-semibold">

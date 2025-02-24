@@ -1,42 +1,40 @@
 <template>
-	<main id="landing_bg" class="min-h-screen center p-4 pt-20 relative overflow-hidden">
-		<div class="flex items-center gap-4 justify-between bg-transparent absolute px-4 md:px-8 py-6 top-0 w-full">
-			<img src="@/assets/img/logo-white.svg">
+	<main class="min-h-screen p-4 pt-40 relative overflow-hidden flex flex-col items-center">
+		<PagesLandingInteractiveGridPattern
 
-			<NuxtLink v-if="!isLoggedIn" to="/auth/login" class="flex px-4 py-2.5 rounded-lg bg-primary text-white text-sm border border-white font-semibold button_shadow">
-				Sign In
-			</NuxtLink>
-			<NuxtLink v-else to="/goals" class="px-4 py-2.5 rounded-lg bg-primary text-white text-sm border border-white font-semibold button_shadow">
-				Dashboard
-			</NuxtLink>
-		</div>
-		<div class="flex flex-col items-center gap-10">
-			<h1 class="text-white font-bold text-[49px] md:text-[80px] text-center leading-[60px] md:leading-[80px]">
-				Your AI Personal Assistant
+			:width="80"
+			:height="80"
+			:squares="[200, 200]"
+			squares-class-name="hover:fill-blue-500"
+		/>
+
+		<div class="flex flex-col items-center md:gap-10 gap-7 z-30 2xl:mt-64  mt-16">
+			<h1 class="text-headline font-bold text-[49px] md:text-[80px] lg:max-w-[800px] text-center leading-[40px] md:leading-[80px]">
+				Your AI-Powered Goal Assistant
 			</h1>
-			<p class="text-sm md:text-[18px] text-white text-center max-w-[300px] md:max-w-[640px]">
-				Goalmatic doesn't just help you set goals and to-dos, it also provides you with an assistant to make achieving them easier.
+			<p class="text-sm md:text-[18px] text-dark text-center  md:max-w-[760px] leading-[30px]">
+				Goalmatic transforms your aspirations into clear, actionable steps—complete with milestones, to-dos, and an AI assistant that keeps you on track. Stay focused on what matters most, and let us handle the rest.
 			</p>
-			<div class="bg-white rounded-lg px-4 py-2 md:py-3 flex items-center gap-4 justify-between w-full max-w-[600px]">
+			<div class="bg-transparent border border-dark rounded-lg px-4 py-2 md:py-3 flex items-center gap-4 justify-between w-full max-w-[600px]">
 				<textarea
 					ref="textarea"
 					v-model="userGoal"
 					placeholder="What's your goal today?"
-					class="h-full flex-grow focus:outline-none text-subText resize-none overflow-hidden"
+					class="h-full flex-grow focus:outline-none text-subText resize-none overflow-hidden bg-transparent"
 					rows="1"
 					@input="adjustTextareaHeight"
 					@keydown="handleKeyDown"
 				/>
 				<button
 					:disabled="!userGoal"
-					class=" disabled:opacity-50 disabled:cursor-not-allowed px-4 py-2 md:py-2.5 rounded-lg bg-primary text-white text-sm center gap-2 border border-white font-semibold button_shadow"
+					class="btn-primary"
 					@click="urlRedirect"
 				>
 					Go
 					<MoveRight :stroke-width="2.5" :size="14" />
 				</button>
 			</div>
-			<button class="text-sm font-semibold text-tertiary center gap-0.5 mt-4 py-2 px-3 hover:bg-[rgba(212,212,212,0.1)] transition-all duration-500 rounded-md custom_shadow" @click="generateSampleGoal">
+			<button class="text-sm font-semibold text-secondary center gap-0.5 mt-4 py-2 px-3 bg-secondaryLight hover:bg-[#ccc2efc4] bordertransition-all duration-500 rounded-md custom_shadow" @click="generateSampleGoal">
 				<IconsMagicwand />
 				No Goal in Mind? Try a Sample Goal!
 			</button>
@@ -92,8 +90,8 @@ onMounted(() => watchUserStateChange())
 
 <style scoped>
 #landing_bg {
-	background-color: #000;
-	background-image: url('@/assets/img/landing-bg.svg');
+	/* background-color: #dcd7df; */
+	/* background-image: url('@/assets/img/landing-bg.svg'); */
 	background-size: cover;
 	background-position: center;
 	background-repeat: no-repeat;

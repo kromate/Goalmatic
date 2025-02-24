@@ -29,7 +29,7 @@
 		<section class="p-4 flex flex-col gap-10">
 			<div class="flex justify-between items-center flex-wrap gap-4">
 				<div class="flex flex-col gap-1">
-					<h3 class="text-textHeadline font-semibold text-2xl md:text-[28px]">
+					<h3 class="text-headline font-semibold text-2xl md:text-[28px]">
 						Welcome to your goals
 					</h3>
 					<p class="text-base text-[#37363D]">

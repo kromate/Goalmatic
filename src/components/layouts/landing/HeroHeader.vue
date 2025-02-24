@@ -1,7 +1,7 @@
 <template>
-	<header class="container flex items-center justify-between py-8 md:px-5 px-4 bg-transparent flex-wrap">
+	<header class="container flex items-center justify-between py-8 md:px-5 px-4 bg-transparent flex-wrap absolute mx-auto inset-x-0 z-50">
 		<nuxt-link to="/">
-			<img src="/lt.svg" alt="logo" class=" md:w-auto w-32">
+			<img src="/lt.svg" alt="logo" class=" md:w-64 w-32">
 		</nuxt-link>
 
 

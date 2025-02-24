@@ -60,7 +60,7 @@ a.mbtn, .mbtn {
 	// }
 }
 .link {
-	@apply flex items-center gap-2.5 text-textHeadline py-3 !px-4 rounded-lg hover:text-primary hover:font-medium hover:border hover:bg-tertiary border-primary
+	@apply flex items-center gap-2.5 text-headline py-3 !px-4 rounded-lg hover:text-primary hover:font-medium hover:border hover:bg-tertiary border-primary
 }
 
 .link_active {

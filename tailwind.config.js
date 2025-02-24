@@ -42,7 +42,7 @@ module.exports = {
 				line: 'var(--line)',
 				hover: 'var(--hover)',
 				subText: 'var(--subText)',
-				textHeadline: 'var(--text-headline)',
+				headline: 'var(--headline)',
 				textSecondary: 'var(--text-secondary)'
 			},
 			borderColor: {

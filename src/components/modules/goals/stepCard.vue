@@ -1,6 +1,6 @@
 <template>
 	<div class="bg-[#F7F7F7] rounded-md p-4 flex flex-col gap-3">
-		<h3 class="text-base font-bold text-textHeadline">
+		<h3 class="text-base font-bold text-headline">
 			{{ idx + 1 }}. {{ step.title }}
 		</h3>
 		<div class="flex items-center gap-3 flex-wrap">

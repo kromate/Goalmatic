@@ -2,7 +2,7 @@
 	<div class="h-full p-4 overflow-auto" :class="windowHeight < 650 ? 'py-8' : 'center'">
 		<div v-if="step === 1" class="flex flex-col gap-8 w-full max-w-[400px] mx-auto transition-all">
 			<div class="flex flex-col gap-2.5 text-center">
-				<h2 class="text-textHeadline text-[34px] font-bold leading-[40px]">
+				<h2 class="text-headline text-[34px] font-bold leading-[40px]">
 					Forgot Password
 				</h2>
 				<p class="text-textSecondary text-base font-semibold">
@@ -28,7 +28,7 @@
 		</div>
 
 		<div v-else class="flex flex-col gap-7 max-w-[300px] mx-auto">
-			<h2 class="text-[28px] font-bold text-textHeadline text-center leading-[33px]">
+			<h2 class="text-[28px] font-bold text-headline text-center leading-[33px]">
 				We’ve sent a reset <br> link to your email
 			</h2>
 			<p class="font-medium leading-[28px] text-sm text-textSecondary text-center">

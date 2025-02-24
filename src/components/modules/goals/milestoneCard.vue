@@ -1,10 +1,10 @@
 <template>
 	<div class="bg-[#F7F7F7] rounded-md p-4 flex flex-col gap-3">
-		<p class="bg-white text-xs text-textHeadline px-2 py-0.5 rounded-md font-medium w-fit">
+		<p class="bg-white text-xs text-headline px-2 py-0.5 rounded-md font-medium w-fit">
 			Milestones {{ idx + 1 }}
 		</p>
 		<div class="flex flex-col gap-1.5">
-			<h3 class="text-base font-bold text-textHeadline">
+			<h3 class="text-base font-bold text-headline">
 				{{ milestone.title }}
 			</h3>
 			<p class="text-xs text-[#4D4D53]">

@@ -5,7 +5,7 @@
 				Create Agent
 			</button>
 		</div>
-		<h1 class="text-[32px] font-bold text-textHeadline">
+		<h1 class="text-[32px] font-bold text-headline">
 			Explore Agents
 		</h1>
 		<p class="text-base text-subText font-medium">

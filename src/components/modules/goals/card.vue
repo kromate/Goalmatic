@@ -4,7 +4,7 @@
 			<p class="text-sm text-[#908F93] font-semibold">
 				Goal Overview
 			</p>
-			<p class="text-[11px] text-textHeadline font-medium bg-[#F2F2F2] rounded-full py-1 px-2">
+			<p class="text-[11px] text-headline font-medium bg-[#F2F2F2] rounded-full py-1 px-2">
 				{{ goal.started === true ? 'Ongoing' : 'Not Started' }}
 			</p>
 		</div>

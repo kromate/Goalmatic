@@ -11,7 +11,7 @@ import { useSmartGoal } from '@/composables/genericGoals/smart'
 const { step } = useSmartGoal()
 
 definePageMeta({
-	layout: 'landing'
+	layout: false
 })
 </script>
 

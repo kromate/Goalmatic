@@ -15,7 +15,7 @@
 				</div>
 
 				<div class="flex flex-col gap-2 items-start">
-					<h2 class="text-sm font-semibold text-textHeadline">
+					<h2 class="text-sm font-semibold text-headline">
 						{{ agentDetails.name }}
 					</h2>
 					<div class="info">
@@ -52,7 +52,7 @@
 
 
 		<section id="about" class="card md:mt-8 mt-4 gap-2">
-			<h1 class="text-textHeadline text-base font-semibold">
+			<h1 class="text-headline text-base font-semibold">
 				About
 			</h1>
 			<p class="text-subText md:text-[15px] text-xs">
@@ -62,7 +62,7 @@
 
 		<section id="system-info" class="card border md:mt-8 mt-4 gap-2">
 			<div class="flex justify-between items-center">
-				<h1 class="text-textHeadline text-base font-semibold">
+				<h1 class="text-headline text-base font-semibold">
 					System Information
 				</h1>
 				<button
@@ -103,7 +103,7 @@
 
 		<section id="tools" class="card border md:mt-10 mt-4 gap-2">
 			<div class="flex justify-between items-center">
-				<h1 class="text-textHeadline text-base font-semibold">
+				<h1 class="text-headline text-base font-semibold">
 					Agent Tool Library
 				</h1>
 				<button
@@ -135,7 +135,7 @@
 					class="flex flex-col items-center gap-2 "
 				>
 					<PencilRuler :size="24" color="#601DED" />
-					<span class="text-textHeadline text-lg font-semibold"
+					<span class="text-headline text-lg font-semibold"
 					>No tools added</span
 					>
 				</div>
@@ -148,7 +148,7 @@
 						<div class="flex items-center gap-2">
 							<img :src="tool.icon" alt="google calendar" class="size-7">
 							<div class="flex flex-col">
-								<span class="text-textHeadline text-sm font-bold">{{ tool.name }}</span>
+								<span class="text-headline text-sm font-bold">{{ tool.name }}</span>
 								<span class="text-subText text-[10px]  font-semibold">{{ tool.id.split('_')[0] }}</span>
 							</div>
 						</div>
@@ -162,7 +162,7 @@
 					<div v-for="tool in toolsModel" :key="tool.id" class="card2">
 						<img :src="tool.icon" alt="google calendar" class="size-7">
 						<div class="flex flex-col">
-							<span class="text-textHeadline text-sm font-bold">{{ tool.name }}</span>
+							<span class="text-headline text-sm font-bold">{{ tool.name }}</span>
 							<span class="text-subText text-xs  font-normal">{{ tool.id.split('_')[0] }}</span>
 						</div>
 						<button class="gap-2 ml-4" @click="removeTool(tool)">
@@ -196,7 +196,7 @@
 								<img :src="tool.icon" :alt="tool.name" class="w-8 h-8">
 								<div class="flex flex-col gap-2 w-full">
 									<div class="flex justify-between items-center w-full">
-										<h3 class="text-sm font-semibold text-textHeadline">
+										<h3 class="text-sm font-semibold text-headline">
 											{{ tool.name }}
 										</h3>
 										<div class="flex items-center gap-1 text-xs">
@@ -313,7 +313,7 @@ definePageMeta({
 .card {
 	@apply bg-[#f6f5ffa3]   rounded-lg py-4 px-3.5 w-full flex flex-col;
 	h2 {
-		@apply text-textHeadline text-2xl font-semibold;
+		@apply text-headline text-2xl font-semibold;
 	}
 	.info {
 		@apply text-subText text-xs flex items-center gap-1;

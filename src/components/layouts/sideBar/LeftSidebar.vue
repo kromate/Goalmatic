@@ -114,7 +114,7 @@ const isRouteActive = (menuItem: RouteType) => {
 }
 
 .link {
-	@apply flex items-center gap-2.5 text-textHeadline py-3 !px-4 rounded-lg hover:bg-tertiary
+	@apply flex items-center gap-2.5 text-headline py-3 !px-4 rounded-lg hover:bg-tertiary
 }
 
 .link_active {

@@ -28,7 +28,7 @@
         letter-spacing: -0.5px;
         text-underline-position: from-font;
         text-decoration-skip-ink: none;
-        @apply font-medium text-sm text-textHeadline text-left;
+        @apply font-medium text-sm text-headline text-left;
     }
 
     .input {
@@ -90,7 +90,7 @@
     }
 
     .btn-primary {
-        @apply btn bg-primary text-light;
+        @apply btn bg-primary text-light hover:bg-[#5f1dede1] hover:border-[#5f1dede1];
     }
 
     .btn-primary-inverse {

@@ -20,7 +20,7 @@
 				<DropdownMenuRoot v-slot="{ open }">
 					<DropdownMenuTrigger as="button" :disabled="disabled" class="cursor-pointer flex items-center gap-1.5 p-1.5 pl-4 py-0 bg-transparent focus:outline-none">
 						<span class="text-xl rounded-full">{{ selectedCountry.flag }}</span>
-						<span class="truncate text-textHeadline text-[13px]">{{ selectedCountry.dial_code }}</span>
+						<span class="truncate text-headline text-[13px]">{{ selectedCountry.dial_code }}</span>
 						<ChevronDown name="down" :class="['ml-0 w-4 duration-300', open ? 'rotate-180' : '']" />
 					</DropdownMenuTrigger>
 
@@ -38,7 +38,7 @@
 										<span class="text-xl">{{ country.flag }}</span>
 										<span class="text-textSecondary">{{ country.dial_code }}</span>
 									</div>
-									<p class="flex items-center text-sm text-textHeadline">
+									<p class="flex items-center text-sm text-headline">
 										{{ country.name }}
 									</p>
 								</DropdownMenuItem>

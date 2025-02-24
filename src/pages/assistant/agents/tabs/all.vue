@@ -8,7 +8,7 @@
 	<div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 		<div v-for="agent in [defaultGoalmaticAgent, ...agents]" :key="agent.id" class="flex flex-col card" @click="$router.push(`/assistant/agents/${agent.id}`)">
 			<img src="/bot.png" alt="agent">
-			<h2 class="text-sm font-semibold text-textHeadline mt-4 mb-2">
+			<h2 class="text-sm font-semibold text-headline mt-4 mb-2">
 				{{ agent.name }}
 			</h2>
 			<p class="text-xs text-subText">
