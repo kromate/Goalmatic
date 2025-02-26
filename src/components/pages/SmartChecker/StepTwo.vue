@@ -16,11 +16,12 @@
 						<IconsSmiley2 :size="14" />
 					</h4>
 					<p class="text-sm text-subText">
-						If you would like to make suggestions about the steps, please let us know.
+						If you would like to make suggestions about the steps, please let us know in the input field below.
 					</p>
 				</article>
 			</div>
 		</section>
+
 
 		<transition name="show" appear>
 			<section v-if="steps.length && !loading" class="flex flex-col gap-8 max-w-[var(--mw2)] w-full">
@@ -33,6 +34,24 @@
 						<hr class="w-full mt-4">
 					</div>
 					<div class="flex flex-col w-full">
+						<div class="flex justify-end mb-2 gap-2">
+							<button
+								class="px-2 py-1 rounded-md bg-gray-100 text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
+								:disabled="!canUndo || history.length <=2"
+								title="Undo changes"
+								@click="undoStepChanges">
+								<Undo :size="16" />
+								<span class="text-xs">Undo</span>
+							</button>
+							<button
+								class="px-2 py-1 rounded-md bg-gray-100 text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
+								:disabled="!canRedo"
+								title="Redo changes"
+								@click="redoStepChanges">
+								<Redo :size="16" />
+								<span class="text-xs">Redo</span>
+							</button>
+						</div>
 						<div v-if="steps.length && !loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-2 w-full">
 							<ModulesGoalsStepCard v-for="(step, idx) in steps" :key="idx" :step="step" :idx="idx" />
 						</div>
@@ -60,7 +79,7 @@
 						</article>
 						<article v-else class="bg-[#F4F3FF] p-4 rounded-lg w-full ">
 							<h4 class="text-lg font-semibold flex items-center gap-2">
-								Looks like you’re not signed in
+								Looks like you're not signed in
 								<IconsSadface :size="14" />
 							</h4>
 							<p class="text-sm text-subText mt-2">
@@ -88,40 +107,89 @@
 		</transition>
 
 
+		<div v-if="loading" class="flex  w-full p-4">
+			<Skeleton radius="12px" height="280px" width="890px" class=" mx-auto md:w-[var(--mw2)] w-full" />
+		</div>
 
-
-
-		<div v-if="loading" class="flex  w-full ">
-			<Skeleton radius="12px" height="280px" width="920px" class=" mx-auto" />
+		<!-- Input for step suggestions -->
+		<div class="fixed  bg-white pt-2.5 px-3 center z-20" :class="isHomePage ? 'md:w-[var(--mw2)] w-full mx-auto bottom-20  md:bottom-4 ' : 'inset-x-0 bottom-4'">
+			<form class="relative w-full md:max-w-[var(--mw2)] flex flex-wrap mt-auto mx-auto" @submit.prevent="handleSubmitStepSuggestion">
+				<textarea
+					ref="textarea"
+					v-model="stepSuggestion"
+					class="input-field !pb-4 !pt-4 !pr-16 w-full resize-none overflow-hidden h-auto transition-all duration-300 ease-in-out"
+					placeholder="Suggest changes to the steps to fit your needs"
+					rows="1"
+					@input="adjustTextareaHeight"
+					@keydown="handleKeyDown"
+				/>
+				<button
+					:disabled="!stepSuggestion || suggestionLoading"
+					class="absolute bottom-2.5 right-4 disabled:opacity-50 disabled:cursor-not-allowed px-4 py-2 md:py-2.5 rounded-lg bg-primary text-white text-sm center gap-2 border border-white font-semibold button_shadow"
+					type="submit"
+				>
+					<Spinner v-if="suggestionLoading" size="14px" />
+					<MoveRight v-else :stroke-width="2.5" :size="14" class="-rotate-90" />
+				</button>
+			</form>
 		</div>
 	</section>
 </template>
 
 <script setup lang="ts">
-import { Clock, CalendarCheck, RadioTower } from 'lucide-vue-next'
+import { Clock, CalendarCheck, RadioTower, MoveRight, Undo, Redo } from 'lucide-vue-next'
+import { onMounted, watch } from 'vue'
 import { useSmartGoal } from '@/composables/genericGoals/smart'
 import { useGenerateGoalActionableStep } from '@/composables/genericGoals/timeline'
-import { transformString, numberToString } from '@/composables/utils/formatter'
-import { useUser } from '@/composables/auth/user'
 import { useCreateGoals } from '@/composables/dashboard/goals/create'
+import { useUser } from '@/composables/auth/user'
+import { useStepHistory } from '@/composables/genericGoals/stepHistory'
+import { useStepSuggestion } from '@/composables/genericGoals/stepSuggestion'
 
+defineProps<{
+	isHomePage?: boolean
+}>()
 
 const { isLoggedIn } = useUser()
 const { userGoal } = useSmartGoal()
-const { saveUnauthorisedGoal, steps, loading } = useGenerateGoalActionableStep()
+const { saveUnauthorisedGoal, steps: originalSteps, loading, submitStepSuggestion, suggestionLoading } = useGenerateGoalActionableStep()
 const { createGoals, loading: createLoading } = useCreateGoals()
 
+// Use the step history composable
+const { steps, canUndo, canRedo, history, undoStepChanges, redoStepChanges } = useStepHistory(originalSteps, loading)
 
+// Use the step suggestion composable
+const { textarea, stepSuggestion, adjustTextareaHeight } = useStepSuggestion()
 
+// Handle step suggestion submission
+const handleSubmitStepSuggestion = async () => {
+	if (!stepSuggestion.value || suggestionLoading.value) return
+	const success = await submitStepSuggestion(stepSuggestion.value)
+	if (success) {
+		stepSuggestion.value = ''
+	}
+}
+
+const handleKeyDown = (event: KeyboardEvent) => {
+	if (event.key === 'Enter' && !event.shiftKey) {
+		event.preventDefault()
+		handleSubmitStepSuggestion()
+	}
+}
+
+onMounted(() => {
+	adjustTextareaHeight()
+})
+
+watch(stepSuggestion, () => {
+	adjustTextareaHeight()
+})
 </script>
 
 <style>
-
 .heading {
 	@apply text-xl font-medium underline mb-4
 }
-
-
 
 .outline {
 	line-height: 1.2;
@@ -167,5 +235,15 @@ li::first-letter {
 .show-leave-to {
 	opacity: 0;
 	transform: scale(0.5);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+	transition: opacity 0.5s;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+	opacity: 0;
 }
 </style>

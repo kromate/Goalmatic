@@ -1,7 +1,7 @@
+import { Timestamp } from 'firebase/firestore'
 import { updateFirestoreSubDocument } from '@/firebase/firestore/edit'
 import { useUser } from '@/composables/auth/user'
 import { useDashboardModal } from '@/composables/core/modals'
-
 const selectedTodo = ref()
 
 export const useEditTodo = () => {
@@ -14,9 +14,7 @@ export const useEditTodo = () => {
 
     const updateTodo = async () => {
         loading.value = true
-
-        await updateFirestoreSubDocument('users', user_id.value!, 'todos', selectedTodo.value.id, { title: selectedTodo.value.title, description: selectedTodo.value.description })
-
+        await updateFirestoreSubDocument('users', user_id.value!, 'todos', selectedTodo.value.id, { title: selectedTodo.value.title, description: selectedTodo.value.description, updated_at: Timestamp.fromDate(new Date()) })
         useDashboardModal().closeEditTodo()
         loading.value = false
     }

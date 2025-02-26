@@ -1,4 +1,5 @@
 import { User } from 'firebase/auth'
+import { Timestamp } from 'firebase/firestore'
 import { unauthorisedGoalSync, syncAfterAuth } from '../genericGoals/timeline'
 import { useUser } from './user'
 import { setFirestoreDocument } from '@/firebase/firestore/create'
@@ -16,12 +17,12 @@ export const afterAuthCheck = async (user: User | null) => {
                 email: user.email,
                 phone: user.phoneNumber,
                 username: user.displayName,
-                created_at: new Date().toISOString(),
-                updated_at: new Date().toISOString(),
+                created_at: Timestamp.fromDate(new Date()),
+                updated_at: Timestamp.fromDate(new Date()),
                 timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
             })
         }
-        if (unauthorisedGoalSync.value.stepsk) {
+        if (unauthorisedGoalSync.value.steps) {
             setTimeout(() => {
                 syncAfterAuth()
             }, 100)

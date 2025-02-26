@@ -7,7 +7,7 @@ const userGoal = ref('')
 const gemini_response = ref<GoalEvaluation | Record<string, any>>({})
 const loading = ref(false)
 const step = ref(1)
-const sessionId = ref('')
+const conversationHistory = ref([] as any[])
 
 
 export const useSmartGoal = () => {
@@ -16,7 +16,7 @@ export const useSmartGoal = () => {
     })
 
     const smartPercentage = computed(() => {
-        if (!gemini_response.value || !!gemini_response.value.error_msg) return 0
+        if (!gemini_response.value || !!gemini_response.value.has_error) return 0
         return gemini_response.value.is_specific + gemini_response.value.is_measurable + gemini_response.value.is_achievable + gemini_response.value.is_relevant + gemini_response.value.is_time_bound
     })
 
@@ -31,19 +31,23 @@ export const useSmartGoal = () => {
         loading.value = true
         isComponentOpen.value = true
         gemini_response.value = {}
+
+        conversationHistory.value.push({
+            role: 'user',
+            parts: userGoal.value
+        })
+
         try {
-            const { data, error: fetchError } = await useFetch('/api/gemini/chat', {
+            const { data, error: fetchError } = await useFetch('/api/gemini/parallel-smart-check', {
                 method: 'POST',
                 body: JSON.stringify({
-                    prompt: userGoal.value,
-                    promptType: 'SMART_CHECKER',
-                    sessionId: sessionId.value
+                    prompt: userGoal.value
                 })
-            }) as { data: Ref<{ text: string, sessionId: string }>, error: any }
+            }) as { data: Ref<{ response: GoalEvaluation }>, error: any }
 
-            sessionId.value = data.value?.sessionId
+
             ex_userGoal.value = userGoal.value
-            gemini_response.value = JSON.parse(data.value.text) as GoalEvaluation
+            gemini_response.value = data.value.response
         } catch (e) {
             gemini_response.value!.has_error = true
             gemini_response.value!.error_msg = e instanceof Error ? e.message : 'An unexpected error occurred, please try again'
@@ -54,7 +58,7 @@ export const useSmartGoal = () => {
     }
 
 
-    return { closeModal, isComponentOpen, userGoal, checkIfGoalIsSmart, loading, gemini_response, hasUserGoalChanged, smartPercentage, step, sessionId }
+    return { closeModal, isComponentOpen, userGoal, checkIfGoalIsSmart, loading, gemini_response, hasUserGoalChanged, smartPercentage, step, conversationHistory }
 }
 
 export const smartGoals = [

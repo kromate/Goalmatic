@@ -1,31 +1,5 @@
 <template>
 	<main>
-		<!-- <section v-if="!loading" class="p-4 grid md:grid-cols-2 gap-4">
-			<nuxt-link v-for="goal in userGoals" :key="goal.id" class="flex flex-col gap-3 items-start p-4 border border-line rounded-md " :to="`/goals/${goal.id}`">
-				<h2 class="font-medium  text-base md:text-xl">
-					{{ goal.title }}
-				</h2>
-				<h4 class="!border-dark bg-hover card_ans text-sm md:text-base h-full font-normal">
-					{{ goal.desc }}
-				</h4>
-			</nuxt-link>
-		</section>
-
-		<section v-else class="p-4">
-			<Skeleton height="50px" />
-		</section>
-
-		<section v-if="userGoals.length === 0 && !loading" class="center flex-col min-h-[70vh] gap-4">
-			<Target :size="80" />
-			<h1 class="text-xl font-bold mt-3">
-				You currently have no Goals yet
-			</h1>
-			<p> Click the button below to create a goal </p>
-			<nuxt-link to="/goals/create" class="btn-primary">
-				Create
-			</nuxt-link>
-		</section> -->
-
 		<section class="p-4 flex flex-col gap-10">
 			<div class="flex justify-between items-center flex-wrap gap-4">
 				<div class="flex flex-col gap-1">
@@ -42,11 +16,24 @@
 				</nuxt-link>
 			</div>
 
+			<section v-if="userGoals.length === 0 && !loading" class="center flex-col mt-40 gap-4">
+				<Target :size="80" />
+				<h1 class="text-xl font-bold mt-3">
+					You currently have no Goals yet
+				</h1>
+				<p> Click the button below to create a goal </p>
+				<nuxt-link to="/goals/create" class="btn-primary">
+					Create
+				</nuxt-link>
+			</section>
 
 
-			<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+			<div v-if="!loading" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
 				<ModulesGoalsCard v-for="goal in userGoals" :key="goal.id" :goal="goal" />
 			</div>
+			<section v-else class="p-4">
+				<Skeleton height="50px" />
+			</section>
 		</section>
 	</main>
 </template>

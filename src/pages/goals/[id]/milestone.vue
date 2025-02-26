@@ -1,6 +1,6 @@
 <template>
 	<section>
-		<section v-if="!goalDetails.started" class="center flex-col  gap-4">
+		<section v-if="!goalDetails.started && milestones.length === 0" class="center flex-col  gap-4">
 			<Milestone :size="80" />
 			<h1 class="text-xl font-bold mt-3">
 				Start the goal to generate milestones

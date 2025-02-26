@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid'
+import { Timestamp } from 'firebase/firestore'
 import { useGenerateGoalActionableStep } from '@/composables/genericGoals/timeline'
 import { setFirestoreDocument } from '@/firebase/firestore/create'
 import { useAlert } from '@/composables/core/notification'
@@ -9,6 +10,7 @@ export const useCreateGoals = () => {
     const title = ref('')
     const loading = ref(false)
     const sessionId = ref('')
+    const titleConversationHistory = ref([] as any[])
 
     const createGoals = async () => {
         const { id: user_id } = useUser()
@@ -17,11 +19,17 @@ export const useCreateGoals = () => {
 
         const id = uuidv4()
         try {
-            const { data, error: fetchError } = await useFetch('/api/gemini/chat', {
+            // Add the prompt to conversation history
+            titleConversationHistory.value.push({
+                role: 'user',
+                parts: userGoal.value
+            })
+
+            const { data, error: fetchError } = await useFetch('/api/gemini/generate-title', {
                 method: 'POST',
                 body: JSON.stringify({
                     prompt: userGoal.value,
-                    promptType: 'SMART_TITLE',
+                    history: titleConversationHistory.value,
                     sessionId: sessionId.value
                 })
             }) as { data: Ref<{ text: string, sessionId: string }>, error: any }
@@ -35,32 +43,43 @@ export const useCreateGoals = () => {
             }
 
             sessionId.value = data.value.sessionId
-            title.value = JSON.parse(data.value.text).title
-        } catch (e) {
-            loading.value = false
-            useAlert().openAlert({ type: 'ERROR', msg: e instanceof Error ? e.message : 'An unexpected error occurred, please try again' })
-        }
-        const sent_data = {
+            const parsedResponse = JSON.parse(data.value.text)
+
+            // Add the AI response to conversation history
+            titleConversationHistory.value.push({
+                role: 'assistant',
+                parts: data.value.text
+            })
+
+            title.value = parsedResponse.title
+
+                const sent_data = {
             id,
             title: title.value,
             desc: userGoal.value,
             steps: steps.value.map((step) => { return { ...step, id: uuidv4() } }),
             user_id: user_id.value,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
+            created_at: Timestamp.fromDate(new Date()),
+            updated_at: Timestamp.fromDate(new Date()),
             started: false
         }
 
-        await setFirestoreDocument('goals', sent_data.id, sent_data)
-        useRouter().push(`/goals/${sent_data.id}`)
-        loading.value = false
+            await setFirestoreDocument('goals', sent_data.id, sent_data)
+                useRouter().push(`/goals/${sent_data.id}`)
+        } catch (e) {
+            loading.value = false
+            useAlert().openAlert({ type: 'ERROR', msg: e instanceof Error ? e.message : 'An unexpected error occurred, please try again' })
+        } finally {
+            loading.value = false
+        }
     }
 
     const resetForm = () => {
         step.value = 1
         userGoal.value = ''
         steps.value = []
+        titleConversationHistory.value = []
     }
 
-    return { createGoals, resetForm, loading }
+    return { createGoals, resetForm, loading, titleConversationHistory }
 }

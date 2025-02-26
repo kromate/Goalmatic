@@ -27,7 +27,6 @@ export const useChatAssistant = () => {
       const sent_data = {
         prompt: sentUserInput,
         history: conversationHistory.value,
-        sessionId: sessionId.value,
         agent: selectedAgent.value
       }
 

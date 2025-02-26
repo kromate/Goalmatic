@@ -16,6 +16,7 @@
     "emu": "firebase emulators:start --import=./dummy_data --export-on-exit"
   },
   "dependencies": {
+    "@ai-sdk/google": "^1.1.17",
     "@firebasegen/default-connector": "link:dataconnect-generated/js/default-connector",
     "@genkit-ai/googleai": "^0.9.12",
     "@google/generative-ai": "^0.21.0",
@@ -32,6 +33,7 @@
     "@schedule-x/scroll-controller": "^2.14.3",
     "@schedule-x/theme-default": "^2.14.3",
     "@schedule-x/vue": "^2.12.2",
+    "@ai-sdk/openai": "^1.1.9",
     "@tailwindcss/container-queries": "^0.1.1",
     "@tailwindcss/forms": "^0.5.7",
     "@tiptap/extension-color": "^2.7.4",
@@ -41,6 +43,7 @@
     "@tiptap/vue-3": "^2.7.4",
     "@vueuse/core": "^10.11.1",
     "@vueuse/nuxt": "^9.3.1",
+    "ai": "^4.1.46",
     "firebase": "^9.12.1",
     "firebase-admin": "^11.2.1",
     "firebase-functions": "^4.1.0",

@@ -1,12 +1,6 @@
-import { v4 as uuidv4 } from 'uuid'
 import { InvalidPromptError, generateObject } from 'ai'
 import { systemPrompts } from './utils/system_prompt'
 import { isRateLimited } from './utils/rateLimit'
-
-
-
-
-
 
 export default defineEventHandler(async (event) => {
   try {
@@ -21,32 +15,21 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-
-
     // Request Body Parsing and Validation
     // ===========================================================================
-    const { prompt, promptType, history } = await readBody(event)
-    if (!prompt || !promptType) {
-      throw new Error('Missing required parameters: prompt or promptType')
+    const { prompt, history } = await readBody(event)
+    if (!prompt) {
+      throw new Error('Missing required parameter: prompt')
     }
 
-
-    const conversationHistory = history.map((msg: Record<string, any>) => ({
+    const conversationHistory = history?.map((msg: Record<string, any>) => ({
       role: msg.role,
       content: msg.parts ?? 'null'
-    }))
+    })) || []
 
-
-
-    const systemPrompt = systemPrompts[promptType].info
-    if (!systemPrompt) {
-      throw new Error(`Invalid promptType: ${promptType}`)
-    }
-
-    const systemModel = systemPrompts[promptType].model
-    const systemSchema = systemPrompts[promptType].schema
-
-
+    const systemPrompt = systemPrompts.SMART_TIMELINE.info
+    const systemModel = systemPrompts.SMART_TIMELINE.model
+    const systemSchema = systemPrompts.SMART_TIMELINE.schema
 
     const { object } = await generateObject({
       model: systemModel,
@@ -61,7 +44,7 @@ export default defineEventHandler(async (event) => {
   } catch (error) {
     // Error Handling
     // ===========================================================================
-    console.error('Error in Gemini API handler:', error)
+    console.error('Error in Generate Steps API handler:', error)
 
     if (error instanceof InvalidPromptError) {
       return createError({
@@ -81,5 +64,3 @@ export default defineEventHandler(async (event) => {
     }
   }
 })
-
-

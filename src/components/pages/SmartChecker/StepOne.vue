@@ -24,9 +24,7 @@
 
 		<transition name="show" appear>
 			<div v-if="!loading && gemini_response?.has_error" class="flex flex-col gap-4 max-w-[var(--mw)] bg-[#f9d8d8] w-full border border-red mx-auto p-4 px-4 shadow-md rounded-lg  ">
-				<p class="text-base">
-					{{ gemini_response?.error_msg }}
-				</p>
+				<p class="text-base" v-html="gemini_response?.error_msg" />
 			</div>
 		</transition>
 		<transition name="show" appear>
@@ -63,7 +61,7 @@
 		</transition>
 
 		<transition name="glide_up" appear>
-			<section v-if="!loading && gemini_response?.adjusted_goal && gemini_response?.percentage <= 85" class="w-full md:max-w-[var(--mw)] overflow-auto flex flex-col gap-6 items-start overflow-x-hidden ">
+			<section v-if="!loading && gemini_response?.adjusted_goal && (gemini_response?.percentage <= 85 || gemini_response?.has_error)" class="w-full md:max-w-[var(--mw)] overflow-auto flex flex-col gap-6 items-start overflow-x-hidden ">
 				<div class="flex flex-col gap-4 w-full">
 					<div class="flex gap-2 text-[#374151]">
 						<div class="bg-[#eaeaef] flex size-[30px] shrink-0  center rounded-full p-0.5  border-2">
@@ -74,14 +72,14 @@
 						</p>
 					</div>
 					<div class="flex flex-col gap-2 justify-end items-end pt-0 p-2">
-						<article class="bg-[#F4F3FF] p-4 rounded-lg ml-8">
+						<article class="bg-[#F4F3FF] p-4 rounded-lg ml-8 w-full">
 							<p class="text-sm text-subText">
 								{{ gemini_response?.adjusted_goal }}
 							</p>
 						</article>
 						<button
 							class="disabled:opacity-50 disabled:cursor-not-allowed px-4 py-2 md:py-2.5 rounded-lg bg-primary text-white text-sm center gap-2 border border-white font-semibold button_shadow"
-							@click="userGoal = gemini_response?.adjusted_goal">
+							@click="useThisGoalClicked">
 							Use this goal
 						</button>
 					</div>
@@ -90,7 +88,7 @@
 		</transition>
 
 		<transition name="glide_up" appear>
-			<section v-if="!loading && gemini_response?.percentage >= 85" class="w-full md:max-w-[var(--mw)] overflow-auto flex flex-col gap-6 items-start overflow-x-hidden ">
+			<section v-if="!loading && !gemini_response?.has_error && gemini_response?.percentage >= 85" class="w-full md:max-w-[var(--mw)] overflow-auto flex flex-col gap-6 items-start overflow-x-hidden ">
 				<div class="flex flex-col gap-4 w-full">
 					<div class="flex gap-2 text-[#374151]">
 						<div class="bg-[#eaeaef] flex size-[30px] shrink-0  center rounded-full p-0.5  border-2">
@@ -173,6 +171,11 @@ const handleKeyDown = (event: KeyboardEvent) => {
 		event.preventDefault()
 		checkIfGoalIsSmart()
 	}
+}
+
+const useThisGoalClicked = () => {
+	userGoal.value = gemini_response.value?.adjusted_goal
+	checkIfGoalIsSmart()
 }
 
 onMounted(() => {
