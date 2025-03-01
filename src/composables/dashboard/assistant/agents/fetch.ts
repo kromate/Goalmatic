@@ -1,3 +1,4 @@
+import { Timestamp } from 'firebase/firestore'
 import { getFirestoreCollectionWithWhereQuery } from '@/firebase/firestore/query'
 import { useAlert } from '@/composables/core/notification'
 import { useUser } from '@/composables/auth/user'
@@ -6,7 +7,7 @@ export const defaultGoalmaticAgent = {
     id: 0,
     name: 'Goalmatic 1.0',
     description: 'The Default plain agent for Goalmatic',
-    published: true,
+    public: true,
     user: {
         name: 'goalmatic'
     },
@@ -14,7 +15,7 @@ export const defaultGoalmaticAgent = {
         systemInfo: 'You are a helpful assistant',
         tools: []
     },
-    created_at: new Date('2025-01-01').toISOString()
+    created_at: Timestamp.fromDate(new Date('2025-01-01'))
 }
 
 
@@ -29,7 +30,7 @@ export const useFetchAgents = () => {
 
     const fetchAllAgents = async () => {
         try {
-            await getFirestoreCollectionWithWhereQuery('agents', fetchedAllAgents, { name: 'public', operator: '==', value: true }, { name: 'status', operator: '==', value: 'APPROVED' })
+            await getFirestoreCollectionWithWhereQuery('agents', fetchedAllAgents, { name: 'public', operator: '==', value: true })
             loading.value = false
         } catch (e: any) {
             loading.value = false

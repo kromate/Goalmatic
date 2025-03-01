@@ -6,13 +6,24 @@
 				<button v-if="status && hasGlobalConfig" class="btn-text !py-1" @click="emit('editConfig', { id, integration_id, config })">
 					Edit config
 				</button>
-				<button
-					:class="[
-						'px-3.5 py-1.5 rounded-full text-sm font-medium border',
-						status ? 'text-green-700 bg-green-50' : 'text-light bg-primary',
-					]" @click="emit('update', { integration_id, status: !status })">
-					<span>{{ status ? 'Connected' : 'Connect' }}</span>
-				</button>
+				<div class="integration-button-container">
+					<button
+						:class="[
+							'px-3.5 py-1.5 rounded-full text-sm font-medium border transition-colors duration-200',
+							status
+								? isHovering
+									? 'text-light bg-red border-red-700'
+									: 'text-green-700 bg-green-50'
+								: 'text-light bg-primary',
+						]"
+						@click="emit('update', { integration_id, status: !status, id })"
+						@mouseenter="isHovering = true"
+						@mouseleave="isHovering = false"
+					>
+						<span v-if="status && isHovering">Disconnect</span>
+						<span v-else>{{ status ? 'Connected' : 'Connect' }}</span>
+					</button>
+				</div>
 			</div>
 		</div>
 		<div class="flex flex-col items-start  mb-2">
@@ -31,6 +42,7 @@
 </template>
 
 <script setup lang="ts">
+
 interface Props {
     name: string;
     icon: string;
@@ -46,6 +58,8 @@ interface Props {
 
 defineProps<Props>()
 const emit = defineEmits(['update', 'editConfig'])
+
+const isHovering = ref(false)
 </script>
 
 <style scoped>

@@ -21,12 +21,13 @@
 					<div class="info">
 						{{ agentDetails.user.name }} <span class="dot" />
 						{{
-							formatDateString(agentDetails.created_at, {
+							formatDateString(agentDetails.created_at.toDate(), {
 								month: 'short',
 								day: 'numeric',
 								year: 'numeric',
 							})
 						}}
+
 						<span class="dot" />
 						<div
 							class="flex items-center gap-1.5 bg-[#EFE8FD] border border-[#CFBBFA] text-[#601DED] px-2 py-1 rounded-lg text-sm font-semibold"

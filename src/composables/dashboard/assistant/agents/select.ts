@@ -34,9 +34,16 @@ export const useOnAssistantLoad = () => {
     const selectedAgentRef = ref()
     const fetchSelectedAgent = async () => {
         await getSingleFirestoreDocument('users', user_id.value!, selectedUser)
-        if (selectedUser.value?.selected_agent_id) {
-        await getSingleFirestoreDocument('agents', selectedUser.value?.selected_agent_id, selectedAgentRef)
-            selectedAgent.value = selectedAgentRef.value
+        console.log(selectedUser.value?.selected_agent_id)
+        try {
+            if (selectedUser.value?.selected_agent_id) {
+                await getSingleFirestoreDocument('agents', selectedUser.value?.selected_agent_id, selectedAgentRef)
+                selectedAgent.value = selectedAgentRef.value
+            } else {
+                selectedAgent.value = defaultGoalmaticAgent
+            }
+        } catch (error) {
+            console.error(error)
         }
     }
 

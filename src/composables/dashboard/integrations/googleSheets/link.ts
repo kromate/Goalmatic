@@ -1,10 +1,10 @@
 import axios from 'axios'
 import { v4 as uuidv4 } from 'uuid'
+import { Timestamp } from 'firebase/firestore'
 import { setFirestoreSubDocument } from '@/firebase/firestore/create'
 import { getFirestoreSubCollection } from '@/firebase/firestore/fetch'
 import { useAlert } from '@/composables/core/notification'
 import { useUser } from '@/composables/auth/user'
-
 const integrationKeys = {
     GOOGLESHEETS: 'GOOGLESHEETS'
 }
@@ -36,8 +36,8 @@ export const useLinkGoogleSheets = () => {
                                 provider: 'GOOGLE',
                                 email: oauthResult.email,
                                 expiry_date: oauthResult.expiry_date,
-                                created_at: new Date().toISOString(),
-                                updated_at: new Date().toISOString(),
+                                created_at: Timestamp.fromDate(new Date()),
+                                updated_at: Timestamp.fromDate(new Date()),
                                 is_default: isDefaultSheets,
                                 integration_id: integrationKeys.GOOGLESHEETS,
                                 user_id: user_id.value!

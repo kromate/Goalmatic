@@ -14,7 +14,14 @@ export const useEditTodo = () => {
 
     const updateTodo = async () => {
         loading.value = true
-        await updateFirestoreSubDocument('users', user_id.value!, 'todos', selectedTodo.value.id, { title: selectedTodo.value.title, description: selectedTodo.value.description, updated_at: Timestamp.fromDate(new Date()) })
+        const sent_data = {
+            title: selectedTodo.value.title,
+            description: selectedTodo.value.description || '',
+            updated_at: Timestamp.fromDate(new Date())
+        }
+
+        console.log(sent_data)
+        await updateFirestoreSubDocument('users', user_id.value!, 'todos', selectedTodo.value.id, sent_data)
         useDashboardModal().closeEditTodo()
         loading.value = false
     }

@@ -1,11 +1,11 @@
 import { v4 as uuidv4 } from 'uuid'
+import { Timestamp } from 'firebase/firestore'
 import { useUser } from '@/composables/auth/user'
 import { useAlert } from '~/src/composables/core/notification'
 import { callFirebaseFunction } from '~/src/firebase/functions'
 import { getSingleFirestoreDocument } from '~/src/firebase/firestore/fetch'
 import { setFirestoreSubDocument } from '@/firebase/firestore/create'
 import { useIntegrationsModal } from '~/src/composables/core/modals'
-
 
 const loading = ref(false)
 const step = ref(1)
@@ -52,8 +52,8 @@ export const useLinkWhatsapp = () => {
             type: 'MESSAGING',
             provider: 'WHATSAPP',
             phone: phoneNumber.value.replace('+', '').trim(),
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
+            created_at: Timestamp.fromDate(new Date()),
+            updated_at: Timestamp.fromDate(new Date()),
             integration_id: 'WHATSAPP',
             user_id: user_id.value!
         })

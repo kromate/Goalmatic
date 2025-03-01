@@ -6,24 +6,12 @@ import { db } from '../init'
 
 const FETCHLIMIT = 300
 
-export const getSingleFirestoreDocument = async(
+export const getSingleFirestoreDocument = async (
 	collection: string,
 	id: string,
 	DocumentRef: Ref<any>
 ) => {
-	// if (process.server) {
-	// 	const { data, error } = await useFetch(`/api/getSingleFirestoreDocument?collection=${collection}&id=${id}`)
-	// 	if (data) {
-	// 		DocumentRef = data
-	// 	return DocumentRef.value
-	// 	} else {
-	// 		DocumentRef.value = {}
-	// 		return DocumentRef.value
-	// 	}
-	// }
-
-	// if (process.client) {
-			return new Promise((resolve, reject) => {
+	return new Promise((resolve, reject) => {
 		const singleDocumentRef = doc(db, collection, id)
 		const unsub = onSnapshot(singleDocumentRef, (docSnap) => {
 			if (docSnap.exists()) {
@@ -32,14 +20,13 @@ export const getSingleFirestoreDocument = async(
 			} else {
 				DocumentRef.value = {}
 				resolve(DocumentRef.value)
-				// reject(new Error('Document does not exist'))
+				reject(new Error('Document does not exist'))
 			}
 		})
 	})
-	// }
 }
 
-export const getSingleFirestoreSubDocument = async(
+export const getSingleFirestoreSubDocument = async (
 	collectionName: string,
 	documentName: string,
 	subCollectionName: string,
@@ -112,22 +99,22 @@ export const getFirestoreSubSubCollection = async (
 const onDataRefChange = (resolve, q, ArrayRef, findFn) => {
 	const unsub = onSnapshot(q, (snapshot) => {
 		snapshot.docChanges().forEach((change) => {
-            if (change.type === 'added') {
+			if (change.type === 'added') {
 				const existingItem = ArrayRef.value.find((item) => findFn(item, change.doc.data()))
-                if (!existingItem) {
+				if (!existingItem) {
 					ArrayRef.value.push(change.doc.data())
 				}
-            } else if (change.type === 'modified') {
-                const index = ArrayRef.value.findIndex((item) => findFn(item, change.doc.data()))
-                if (index !== -1) {
-                    ArrayRef.value[index] = change.doc.data()
-                }
-            } else if (change.type === 'removed') {
-                ArrayRef.value = ArrayRef.value.filter((item) => !findFn(item, change.doc.data()))
-            }
+			} else if (change.type === 'modified') {
+				const index = ArrayRef.value.findIndex((item) => findFn(item, change.doc.data()))
+				if (index !== -1) {
+					ArrayRef.value[index] = change.doc.data()
+				}
+			} else if (change.type === 'removed') {
+				ArrayRef.value = ArrayRef.value.filter((item) => !findFn(item, change.doc.data()))
+			}
 		})
 
-        resolve(ArrayRef.value)
+		resolve(ArrayRef.value)
 	})
 }
 

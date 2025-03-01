@@ -34,10 +34,12 @@ import { useFetchIntegrations } from '@/composables/dashboard/integrations/fetch
 import { usePageHeader } from '@/composables/utils/header'
 import { formattedAvailableIntegrations } from '@/composables/dashboard/integrations/list'
 import { useConnectIntegration } from '@/composables/dashboard/integrations/connect'
+import { useDisconnectIntegration } from '@/composables/dashboard/integrations/disconnect'
 import { useEditIntegrationsConfig } from '@/composables/dashboard/integrations/editConfig'
 
 
 const { connectIntegration, loading: connectIntegrationLoading } = useConnectIntegration()
+const { disconnectIntegration, loading: disconnectIntegrationLoading } = useDisconnectIntegration()
 const { fetchUserIntegrations, loading: IntegrationListLoading, fetchedIntegrations } = useFetchIntegrations()
 const { editConfig } = useEditIntegrationsConfig()
 
@@ -47,7 +49,7 @@ const updateIntegration = (data: any) => {
 	if (data.status) {
 		connectIntegration(data.integration_id)
 	} else {
-		// disconnectIntegration(data.id)
+		disconnectIntegration(data.id)
 	}
 }
 
