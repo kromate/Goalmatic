@@ -16,7 +16,7 @@ export const useSelectAgent = () => {
     const selectAgent = async (agentDetails: Record<string, any>) => {
         loading.value = true
         await updateFirestoreDocument('users', user_id.value!, { selected_agent_id: agentDetails.id })
-        selectedAgent.value = agentDetails
+        selectedAgent.value = agentDetails as any
         loading.value = false
         useRouter().push('/assistant')
     }
@@ -25,7 +25,7 @@ export const useSelectAgent = () => {
 }
 
 export const updateSelectedAgent = (agentDetails: Record<string, any>) => {
-    selectedAgent.value = agentDetails
+    selectedAgent.value = agentDetails as any
 }
 
 export const useOnAssistantLoad = () => {
@@ -40,7 +40,7 @@ export const useOnAssistantLoad = () => {
                 await getSingleFirestoreDocument('agents', selectedUser.value?.selected_agent_id, selectedAgentRef)
                 selectedAgent.value = selectedAgentRef.value
             } else {
-                selectedAgent.value = defaultGoalmaticAgent
+                selectedAgent.value = defaultGoalmaticAgent as any
             }
         } catch (error) {
             console.error(error)
