@@ -1,9 +1,9 @@
 import { useStorage } from '@vueuse/core'
+import { Timestamp } from 'firebase/firestore'
 import { defaultGoalmaticAgent } from './fetch'
 import { updateFirestoreDocument } from '@/firebase/firestore/edit'
 import { getSingleFirestoreDocument } from '@/firebase/firestore/fetch'
 import { useUser } from '@/composables/auth/user'
-
 
 
 export const selectedAgent = useStorage('selectedAgent', defaultGoalmaticAgent as Record<string, any>)
@@ -15,7 +15,7 @@ export const useSelectAgent = () => {
 
     const selectAgent = async (agentDetails: Record<string, any>) => {
         loading.value = true
-        await updateFirestoreDocument('users', user_id.value!, { selected_agent_id: agentDetails.id })
+        await updateFirestoreDocument('users', user_id.value!, { selected_agent_id: agentDetails.id, updated_at: Timestamp.fromDate(new Date()) })
         selectedAgent.value = agentDetails as any
         loading.value = false
         useRouter().push('/assistant')

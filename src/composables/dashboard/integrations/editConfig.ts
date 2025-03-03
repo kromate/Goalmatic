@@ -1,8 +1,8 @@
+import { Timestamp } from 'firebase/firestore'
 import { availableIntegrations } from '@/composables/dashboard/integrations/list'
 import { updateFirestoreSubDocument } from '@/firebase/firestore/edit'
 import { useUser } from '@/composables/auth/user'
 import { useAlert } from '@/composables/core/notification'
-
 
 
 export type EditConfigField = {
@@ -53,8 +53,9 @@ export const useEditIntegrationsConfig = () => {
     const updateConfig = async () => {
         try {
             loading.value = true
-            updateFirestoreSubDocument('users', user_id.value!, 'integrations', selectedIntegrationId.value, {
-                config: modalData.value.config
+             updateFirestoreSubDocument('users', user_id.value!, 'integrations', selectedIntegrationId.value, {
+                config: modalData.value.config,
+                updated_at: Timestamp.fromDate(new Date())
             })
             loading.value = false
             useAlert().openAlert({ type: 'SUCCESS', msg: 'Config updated successfully' })

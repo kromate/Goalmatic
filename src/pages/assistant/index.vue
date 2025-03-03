@@ -30,7 +30,7 @@
 						{{ message.role === 'user' ? 'You' : `Goalmatic  ${selectedAgent.id != 0 ? `(${selectedAgent.name})` : '(Default)'}` }}
 					</p>
 				</div>
-				<article class="message-bubble" :class="{ 'ml-0 mr-7 !bg-light !border-[#9A6BFF]': message.role === 'user' }" v-html="markdownProcessor(message.parts)" />
+				<article class="message-bubble" :class="{ 'ml-0 mr-7 !bg-light !border-[#9A6BFF]': message.role === 'user' }" v-html="markdownProcessor(message.content)" />
 			</div>
 		</section>
 

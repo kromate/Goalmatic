@@ -68,7 +68,7 @@
 							<img class="size-5" src="/og.png" alt="goalmatic logo">
 						</div>
 						<p class="w-full overflow-x-hidden font-semibold mt-0.5">
-							Hi!, {{ gemini_response.error_msg ? 'You can try out a sample goal below': 'here is a refined version of your goal' }}
+							Hi!, {{ gemini_response.has_error ? 'You can try out a sample goal below': 'here is a refined version of your goal' }}
 						</p>
 					</div>
 					<div class="flex flex-col gap-2 justify-end items-end pt-0 p-2">

@@ -19,13 +19,12 @@ export const useChatAssistant = () => {
 
     conversationHistory.value.push({
       role: 'user',
-      parts: sentUserInput
+      content: sentUserInput
     })
 
 
     try {
       const sent_data = {
-        prompt: sentUserInput,
         history: conversationHistory.value,
         agent: selectedAgent.value
       }
@@ -40,7 +39,7 @@ export const useChatAssistant = () => {
 
       conversationHistory.value.push({
         role: 'assistant',
-        parts: data.response
+        content: data.response
       })
 
       ai_loading.value = false

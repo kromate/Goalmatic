@@ -14,9 +14,9 @@
 				<div class="flex flex-col gap-0.5">
 					<div class="flex items-center gap-4 justify-between">
 						<label class="label">{{ isEmail ? 'Email Address' : 'Phone Number' }}</label>
-						<button type="button" class="text-sm font-semibold text-grey_four" @click="isEmail = !isEmail">
+						<!-- <button type="button" class="text-sm font-semibold text-grey_four" @click="isEmail = !isEmail">
 							{{ isEmail ? 'Use Phone Number' : 'Use Email' }}
-						</button>
+						</button> -->
 					</div>
 					<input v-if="isEmail" v-model.trim="authCredentienalsForm.email.value" required type="email" class="input-field" placeholder="Enter email">
 					<PhoneInput v-else />

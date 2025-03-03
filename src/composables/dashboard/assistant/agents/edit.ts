@@ -1,10 +1,10 @@
+import { Timestamp } from 'firebase/firestore'
 import { useEditToolConfig } from './tools/config'
 import { updateFirestoreDocument } from '@/firebase/firestore/edit'
 import { useAlert } from '@/composables/core/notification'
 import { formattedAvailableTools } from '@/composables/dashboard/assistant/agents/tools/fetch'
 import { useSelectAgent } from '@/composables/dashboard/assistant/agents/select'
 import { useFetchIntegrations } from '@/composables/dashboard/integrations/fetch'
-
 const isEditingSystemInfo = ref(false)
 const systemInfoModel = ref('')
 const isEditingTools = ref(false)
@@ -44,7 +44,7 @@ export const useEditAgent = () => {
 
             await updateFirestoreDocument('agents', id, {
                 spec: updatedSpec,
-                updated_at: new Date().toISOString()
+                updated_at: Timestamp.fromDate(new Date())
             })
             isEditingSystemInfo.value = false
             useAlert().openAlert({ type: 'SUCCESS', msg: 'System information updated successfully' })

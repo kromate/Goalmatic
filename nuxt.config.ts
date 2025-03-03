@@ -5,6 +5,7 @@ import app from './app_config'
 const GA_ID = import.meta.env.VITE_GA_ID as string
 
 export default {
+  compatibilityDate: '2024-03-01',
   ssr: true,
   devtools: { enabled: false },
   modules: ['@vueuse/nuxt', '@nuxtjs/tailwindcss', 'nuxt-gtag'],
