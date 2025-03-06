@@ -10,7 +10,7 @@
 
 @layer utilities {
     .transite {
-        @apply transition-all duration-75 md:duration-150 ease-linear;
+        @apply transition-all duration-75 ease-linear;
     }
 
     .center {

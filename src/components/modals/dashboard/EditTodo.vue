@@ -15,6 +15,54 @@
 				<textarea id="start" v-model="selectedTodo.description" class="input-textarea" autocomplete="off" />
 			</div>
 
+			<!-- Date and Time Section -->
+			<div class="grid grid-cols-2 gap-4 mt-4 w-full">
+				<div class="field relative">
+					<label for="dueDate">Due Date</label>
+					<input
+						id="dueDate"
+						v-model="selectedTodo.dueDate"
+						type="date"
+						class="input-field"
+					>
+				</div>
+				<div class="field relative">
+					<label for="dueTime">Due Time</label>
+					<input
+						id="dueTime"
+						v-model="selectedTodo.dueTime"
+						type="time"
+						class="input-field"
+					>
+				</div>
+			</div>
+
+			<!-- Duration Section -->
+			<div class="grid grid-cols-2 gap-4 mt-4">
+				<div class="field relative">
+					<label for="estimatedDuration">Estimated Duration (minutes)</label>
+					<input
+						id="estimatedDuration"
+						v-model="selectedTodo.estimatedDuration"
+						type="number"
+						min="0"
+						class="input-field"
+						placeholder="0"
+					>
+				</div>
+				<div class="field relative">
+					<label for="actualDuration">Actual Duration (minutes)</label>
+					<input
+						id="actualDuration"
+						v-model="selectedTodo.actualDuration"
+						type="number"
+						min="0"
+						class="input-field"
+						placeholder="0"
+					>
+				</div>
+			</div>
+
 			<!-- Subtasks Section -->
 			<div class="field relative mt-4">
 				<label class="flex justify-between items-center">
@@ -32,7 +80,7 @@
 					No subtasks yet. Add one to break down this task.
 				</div>
 
-				<div v-for="(subtask, index) in selectedTodo.subtasks" :key="index" class="flex items-center gap-2 mt-2">
+				<div v-for="(subtask, index) in selectedTodo.subtasks" :key="index" class="flex items-center gap-2 mt-2 w-full">
 					<input
 						v-model="subtask.title"
 						type="text"
@@ -66,10 +114,27 @@ import { useEditTodo } from '@/composables/dashboard/todo/edit'
 
 const { selectedTodo, updateTodo, loading } = useEditTodo()
 
-// Initialize subtasks array if it doesn't exist
+// Initialize necessary properties if they don't exist
 onMounted(() => {
   if (!selectedTodo.value.subtasks) {
     selectedTodo.value.subtasks = []
+  }
+
+  // Initialize new fields with default values if they don't exist
+  if (selectedTodo.value.estimatedDuration === undefined) {
+    selectedTodo.value.estimatedDuration = null
+  }
+
+  if (selectedTodo.value.actualDuration === undefined) {
+    selectedTodo.value.actualDuration = null
+  }
+
+  if (!selectedTodo.value.dueDate) {
+    selectedTodo.value.dueDate = ''
+  }
+
+  if (!selectedTodo.value.dueTime) {
+    selectedTodo.value.dueTime = ''
   }
 })
 

@@ -65,22 +65,21 @@
 						</p>
 					</div>
 
-					<div class="bg-white p-4 shadow rounded-lg flex items-center gap-2 justify-between">
-						<CirclePlus :size="16" class="text-[#4D4D53]" />
+					<div class="relative flex items-center gap-2">
 						<input
 							v-model.trim="title"
 							type="text"
-							class="flex-grow focus:outline-none"
+							class="input-field "
 							placeholder="Add a custom to do for the day"
 							@keyup.enter="title.length && createNewTodo()"
 						>
-						<button class="bg-[#F9F8FB] p-1.5 px-2.5 border border-[#E9E9E9] rounded-md disabled:cursor-not-allowed" :disabled="!title?.length" @click="createNewTodo">
+						<button class="btn-primary !px-2.5 !py-2 absolute right-4" :disabled="!title?.length" @click="createNewTodo">
 							<ArrowRight :size="14" />
 						</button>
 					</div>
 
 					<div
-						class="px-2 flex flex-col gap-2 min-h-[100px]"
+						class=" flex flex-col gap-2 min-h-[100px]"
 						@dragover.prevent
 						@drop="onDropToday"
 					>

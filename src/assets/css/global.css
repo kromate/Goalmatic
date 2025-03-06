@@ -109,7 +109,7 @@ select {
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: 0.125s opacity ease-out;
+  transition: 0.1s all linear;
 }
 .glide_up-enter-active,
 .glide_up-leave-active {

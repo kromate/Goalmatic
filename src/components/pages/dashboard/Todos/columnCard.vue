@@ -30,12 +30,12 @@
 </template>
 
 <script setup lang="ts">
-import { useUpdateCompleteStatusOfTodo } from '@/composables/dashboard/todo/completed'
+
 import { useEditTodo } from '@/composables/dashboard/todo/edit'
 
 
 
-const { updateCompleteStatusOfTodo } = useUpdateCompleteStatusOfTodo()
+
 const { highlightTodo } = useEditTodo()
 
 const props = defineProps<{
@@ -48,7 +48,7 @@ const props = defineProps<{
 }>()
 
 const toggleComplete = () => {
-  updateCompleteStatusOfTodo(props.todo, !props.todo.completed)
+
 }
 </script>
 
