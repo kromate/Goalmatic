@@ -15,9 +15,17 @@
 					<button class="h-11 center bg-white border border-[#E9E9E9] px-4 shadow rounded-full" @click="getNextMonth(false)">
 						<ChevronLeft :size="16" :stroke-width="2.5" />
 					</button>
-					<p class="text-lg text-[#1F1F1F] font-semibold">
-						{{ day }} {{ month }} {{ year }}
-					</p>
+					<div class="flex items-center gap-2">
+						<p class="text-lg text-[#1F1F1F] font-semibold">
+							{{ day }} {{ month }} {{ year }}
+						</p>
+						<button
+							class="h-8 center bg-[#8F61F2] text-white border border-[#E9E9E9] px-3 shadow rounded-full text-sm"
+							@click="goToToday"
+						>
+							Today
+						</button>
+					</div>
 					<button class="h-11 center bg-white border border-[#E9E9E9] px-4 shadow rounded-full" @click="getNextMonth(true)">
 						<ChevronRight :size="16" :stroke-width="2.5" />
 					</button>
@@ -59,24 +67,50 @@
 
 					<div class="bg-white p-4 shadow rounded-lg flex items-center gap-2 justify-between">
 						<CirclePlus :size="16" class="text-[#4D4D53]" />
-						<input v-model.trim="title" type="text" class="flex-grow focus:outline-none" placeholder="Add a custom to do for the day">
+						<input
+							v-model.trim="title"
+							type="text"
+							class="flex-grow focus:outline-none"
+							placeholder="Add a custom to do for the day"
+							@keyup.enter="title.length && createNewTodo()"
+						>
 						<button class="bg-[#F9F8FB] p-1.5 px-2.5 border border-[#E9E9E9] rounded-md disabled:cursor-not-allowed" :disabled="!title?.length" @click="createNewTodo">
 							<ArrowRight :size="14" />
 						</button>
 					</div>
 
-					<div class="px-2 flex flex-col gap-2">
-						<template v-for="n in currentDayTodo" :key="n?.id">
-							<ModulesTodosTaskCard v-if="!n?.completed" :todo="n" />
+					<div
+						class="px-2 flex flex-col gap-2 min-h-[100px]"
+						@dragover.prevent
+						@drop="onDropToday"
+					>
+						<template v-for="todo in todayTasks" :key="todo?.id">
+							<ModulesTodosTaskCard
+								:todo="todo"
+								:draggable="true"
+								@dragstart="onDragStart($event, todo)"
+							/>
 						</template>
+						<div v-if="completedTasks.length > 0" class="mt-4 pt-4 border-t border-dashed border-gray-200">
+							<p class="text-sm text-[#908F93] mb-2">
+								Completed
+							</p>
+							<template v-for="todo in completedTasks" :key="todo?.id">
+								<ModulesTodosTaskCard
+									:todo="todo"
+									:draggable="true"
+									@dragstart="onDragStart($event, todo)"
+								/>
+							</template>
+						</div>
 					</div>
 				</div>
 				<div class="p-4 bg-[#F2F2F2] flex flex-col gap-4 rounded-lg">
 					<div class="flex items-center gap-4 justify-between">
 						<div class="flex items-center gap-3">
-							<IconsCheck />
+							<ClockIcon :size="18" class="text-[#4D4D53]" />
 							<p class="text-[#4D4D53] text-lg font-semibold">
-								Completed Tasks
+								Later
 							</p>
 						</div>
 						<button class="bg-white py-1 px-2 shadow rounded">
@@ -84,9 +118,17 @@
 						</button>
 					</div>
 
-					<div class="px-2 flex flex-col gap-2">
-						<template v-for="n in currentDayTodo" :key="n?.id">
-							<ModulesTodosTaskCard v-if="n?.completed" :todo="n" />
+					<div
+						class="px-2 flex flex-col gap-2 min-h-[100px]"
+						@dragover.prevent
+						@drop="onDropLater"
+					>
+						<template v-for="todo in laterTasks" :key="todo?.id">
+							<ModulesTodosTaskCard
+								:todo="todo"
+								:draggable="true"
+								@dragstart="onDragStart($event, todo)"
+							/>
 						</template>
 					</div>
 				</div>
@@ -96,15 +138,18 @@
 </template>
 
 <script setup lang="ts">
-import { ArrowRight, ChevronDown, ChevronLeft, ChevronRight, CircleArrowLeft, CircleArrowRight, CirclePlus } from 'lucide-vue-next'
+import { ArrowRight, ChevronDown, ChevronLeft, ChevronRight, CircleArrowLeft, CircleArrowRight, CirclePlus, Clock as ClockIcon } from 'lucide-vue-next'
 import { useFetchUserTodos } from '@/composables/dashboard/todo/fetch'
 import { capitalize } from '@/composables/utils/formatter'
 import { useTodoDate } from '@/composables/dashboard/todo/date_logic'
 import { useCreateTodo } from '@/composables/dashboard/todo/create'
+import { useEditTodo } from '@/composables/dashboard/todo/edit'
 
 const title = ref('')
 const { createTodo, createBoardForm } = useCreateTodo()
 const { loading, groupTodosByDate, userTodos } = useFetchUserTodos()
+const { onDragStart, onDropToday, onDropLater } = useEditTodo()
+
 
 // Destructure the date logic composable
 const {
@@ -127,11 +172,26 @@ const currentDayTodo = computed(() => {
 	})
 })
 
+// Filter for today's tasks (not completed and not marked as "later")
+const todayTasks = computed(() => {
+	return currentDayTodo.value?.filter((todo) => !todo.completed && !todo.later)
+})
+
+// Filter for completed tasks
+const completedTasks = computed(() => {
+	return currentDayTodo.value?.filter((todo) => todo.completed)
+})
+
+// Filter for "later" tasks
+const laterTasks = computed(() => {
+	return currentDayTodo.value?.filter((todo) => todo.later)
+})
+
 function isSameDay(date1: Date, date2: Date) {
 	return (
 		date1.getFullYear() === date2.getFullYear() &&
 		date1.getMonth() === date2.getMonth() &&
-			date1.getDate() === date2.getDate()
+		date1.getDate() === date2.getDate()
 	)
 }
 
@@ -139,6 +199,7 @@ const createNewTodo = async () => {
 	const current_date = new Date(`${day.value}/${month.value}/${year.value}`)
 	createBoardForm.date = current_date.toISOString()
 	createBoardForm.title = title.value
+	createBoardForm.later = false
 	await createTodo()
 	createBoardForm.date = ''
 	title.value = ''
@@ -148,6 +209,12 @@ const isToday = computed(() => {
 	const today = new Date()
 	return isSameDay(today, new Date(`${day.value}/${month.value}/${year.value}`))
 })
+
+const goToToday = () => {
+	getCurrentMonthAndYear()
+	const today = new Date()
+	day.value = today.getDate()
+}
 
 // Initialize
 getCurrentMonthAndYear()

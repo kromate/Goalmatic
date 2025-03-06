@@ -6,7 +6,9 @@ import { useUser } from '@/composables/auth/user'
 const createBoardForm = reactive({
     title: '',
     desc: '',
-    date: ''
+    date: '',
+    later: false,
+    completed: false
 })
 
 
