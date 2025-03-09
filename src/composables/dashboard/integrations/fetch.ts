@@ -36,28 +36,40 @@ export const useFetchIntegrations = () => {
 export const useFetchCalendarIntegrations = () => {
     const { id: user_id } = useUser()
     const calendarIntegrations = ref([])
-    const _calendarIntegrationsCookie = useCookie('calendarIntegrations')
+    const STORAGE_KEY = 'calendarIntegrations'
+
+    // Get initial data from localStorage if available
+    const getStoredIntegrations = () => {
+        if (process.client) {
+            const stored = localStorage.getItem(STORAGE_KEY)
+            return stored ? JSON.parse(stored) : null
+        }
+        return null
+    }
 
     const fetchCalendarIntegrations = async () => {
         await getFirestoreSubCollectionWithWhereQuery('users', user_id.value!, 'integrations', calendarIntegrations, { name: 'type', operator: '==', value: 'CALENDAR' })
         if (calendarIntegrations.value.length) {
-            setAllCalendarIntegrationsCookie(calendarIntegrations.value)
+            setAllCalendarIntegrationsStorage(calendarIntegrations.value)
         }
     }
 
-    const setAllCalendarIntegrationsCookie = (data) => {
+    const setAllCalendarIntegrationsStorage = (data) => {
         if (!data.length) return
-        _calendarIntegrationsCookie.value = data
-    }
-
-    const getCalendarIntegrationsCookie = async () => {
-        if (!_calendarIntegrationsCookie.value) {
-            await fetchCalendarIntegrations()
-            return _calendarIntegrationsCookie.value
+        if (process.client) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
         }
-        return _calendarIntegrationsCookie.value
     }
 
-    return { fetchCalendarIntegrations, getCalendarIntegrationsCookie }
+    const getCalendarIntegrationsStorage = async () => {
+        const stored = getStoredIntegrations()
+        if (!stored) {
+            await fetchCalendarIntegrations()
+            return getStoredIntegrations()
+        }
+        return stored
+    }
+
+    return { fetchCalendarIntegrations, getCalendarIntegrationsStorage }
 }
 

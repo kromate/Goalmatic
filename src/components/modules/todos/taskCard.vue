@@ -4,7 +4,7 @@
 			class="bg-white p-3 shadow rounded-md flex flex-col gap-3"
 			:draggable="draggable"
 			:class="{ 'opacity-75': todo.completed }"
-			@dragstart="$emit('dragstart', $event)"
+			@dragstart="onDragStart($event, todo)"
 			@click="highlightTodo(todo)"
 		>
 			<div class="flex items-center gap-3 justify-between">
@@ -22,7 +22,14 @@
 				</div>
 
 				<div class="flex items-center gap-2">
-					<span v-if="todo.later" class="text-xs text-orange-500 bg-orange-50 px-2 py-1">Later</span>
+					<span v-if="todo.later && hasDueDate"
+						class="text-xs px-2 py-1 rounded"
+						:class="isOverdue ? 'bg-red-50 text-red-500' : 'bg-orange-50 text-orange-500'">
+						{{ isOverdue ? 'Overdue' : formattedDueDate }}
+					</span>
+					<span v-else-if="todo.later" class="text-xs bg-orange-50 text-orange-500 px-2 py-1 rounded">
+						Later
+					</span>
 
 					<button @click.stop="setDeleteTodoData(todo)">
 						<Trash2 :size="14" class="text-gray-400 hover:text-red-500" />
@@ -53,7 +60,7 @@
 			<!-- Subtasks section -->
 			<div v-if="hasSubtasks" class="pl-8 mt-1 space-y-2 border-t border-[#E9E9E9]">
 				<div class="flex items-center justify-between gap-2 text-grey_four text-sm pt-2" @click.stop="toggleSubtasks">
-					<p>{{ props.todo.subtasks.length }} sub task ({{ props.todo.subtasks.filter((subtask: any) => subtask.completed).length }} completed)</p>
+					<p>{{ props.todo.subtasks?.length }} sub task ({{ props.todo.subtasks?.filter((subtask: any) => subtask.completed).length }} completed)</p>
 					<button class="bg-hover py-1 px-2 border border-line rounded">
 						<ChevronDown :size="14" :class="{'rotate-180 transite': showSubtasks}" />
 					</button>
@@ -91,11 +98,18 @@ import { ref, computed } from 'vue'
 
 import { useEditTodo } from '@/composables/dashboard/todo/edit'
 import { useDeleteTodo } from '@/composables/dashboard/todo/delete'
+import type { Todo } from '@/types/todo'
 
 const { updateTodo, highlightTodo } = useEditTodo()
 const { setDeleteTodoData } = useDeleteTodo()
 
 const showSubtasks = ref(false)
+
+const onDragStart = (event: DragEvent, todo: Todo) => {
+	emit('dragstart', event, todo)
+	event?.dataTransfer?.setData('event', JSON.stringify(todo))
+	event?.dataTransfer?.setData('cursor-grab-at', event?.offsetY.toString())
+}
 
 const hasSubtasks = computed(() => {
 	return props.todo.subtasks && props.todo.subtasks.length > 0
@@ -108,6 +122,16 @@ const hasDueDate = computed(() => {
 const hasDuration = computed(() => {
 	return (props.todo.estimatedDuration && props.todo.estimatedDuration > 0) ||
 		(props.todo.actualDuration && props.todo.actualDuration > 0)
+})
+
+const isOverdue = computed(() => {
+	if (!props.todo.dueDate) return false
+
+	const dueDate = new Date(props.todo.dueDate)
+	const today = new Date()
+	today.setHours(0, 0, 0, 0) // Reset time to start of day for comparison
+
+	return dueDate < today
 })
 
 const durationDifference = computed(() => {
@@ -146,7 +170,7 @@ const toggleComplete = async () => {
 
 const toggleSubtaskComplete = async (subtask: any) => {
 	// Create a new array with the updated subtask
-	const updatedSubtasks = props.todo.subtasks.map((st: any) => {
+	const updatedSubtasks = props.todo.subtasks?.map((st: any) => {
 		if (st.id === subtask.id) {
 			return { ...st, completed: !st.completed }
 		}
@@ -161,7 +185,7 @@ const toggleSubtaskComplete = async (subtask: any) => {
 }
 
 const props = defineProps<{
-	todo: Record<string, any>,
+	todo: Todo,
 	draggable: boolean
 }>()
 

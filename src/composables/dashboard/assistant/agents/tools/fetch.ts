@@ -33,36 +33,8 @@ const availableTools = ref([
 		abilities: [
 			{ name: 'Search the web', id: 'GOOGLESEARCH_TOOL', icon: '/icons/googleSearch.svg', primary_id: 'GOOGLESEARCH' }
 		]
-	},
-	{
-		id: 'GOOGLESHEETS',
-		name: 'Google Sheets',
-		icon: '/icons/googleSheets.svg',
-		description: 'Access and manage your spreadsheets directly from the app',
-		checkStatus: true,
-		abilities: [
-			{
-				name: 'Read Sheets',
-				id: 'GOOGLESHEETS_READ_SHEET',
-				icon: '/icons/googleSheets.svg',
-				primary_id: 'GOOGLESHEETS'
-			},
-			{
-				name: 'Write Sheets',
-				id: 'GOOGLESHEETS_WRITE_SHEET',
-				icon: '/icons/googleSheets.svg',
-				primary_id: 'GOOGLESHEETS'
-			}
-		],
-		config: [
-			{
-				name: 'Sheet Id',
-				key: 'sheetId',
-				type: 'TEXT',
-				required: true
-			}
-		]
 	}
+
 
 
 ])

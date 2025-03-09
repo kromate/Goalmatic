@@ -55,7 +55,6 @@ export const useGenerateGoalActionableStep = () => {
                 throw new Error('No response received from the server')
             }
 
-            console.log(data.value)
 
             steps.value = data.value.response.steps as TimeLineObject[]
 

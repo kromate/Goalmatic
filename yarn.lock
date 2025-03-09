@@ -2173,18 +2173,6 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.8.tgz#6b79032e760a0899cd4204710beede972a3a185f"
   integrity sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==
 
-"@preact/signals-core@^1.7.0":
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/@preact/signals-core/-/signals-core-1.8.0.tgz#45ffadb81b48a298a4accd26b3f6c0140cd6dacc"
-  integrity sha512-OBvUsRZqNmjzCZXWLxkZfhcgT+Fk8DDcT/8vD6a1xhDemodyy87UJRJfASMuSD8FaAIeGgGm85ydXhm7lr4fyA==
-
-"@preact/signals@^2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@preact/signals/-/signals-2.0.1.tgz#61a156eb254451964135f3450745b56f8b3ee71e"
-  integrity sha512-f9p/utMgttPb9bJ+UgRBkTDZ9uQiZfX1/gV3pXGWz+yGNQj8MrnG55Xo8MAG4IHcb5UXQO6tvt9ZlsM4A2j+Rw==
-  dependencies:
-    "@preact/signals-core" "^1.7.0"
-
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@protobufjs/aspromise/-/aspromise-1.1.2.tgz#9b8b0cc663d669a7d8f6f5d0893a14d348f30fbf"
@@ -2459,61 +2447,6 @@
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@rtsao/scc/-/scc-1.1.0.tgz#927dd2fae9bc3361403ac2c7a00c32ddce9ad7e8"
   integrity sha512-zt6OdqaDoOnJ1ZYsCYGt9YmWzDXl4vQdKTyJev62gFhRGKdx7mcT54V9KIjg+d2wi9EXsPvAPKe7i7WjfVWB8g==
-
-"@schedule-x/calendar-controls@^2.14.3":
-  version "2.21.0"
-  resolved "https://registry.yarnpkg.com/@schedule-x/calendar-controls/-/calendar-controls-2.21.0.tgz#6ca4ed8e3bca66aae6a95668ef221cd7db2b64e4"
-  integrity sha512-RGP9JUua+pJiOMlQ924EeCpWkiQk0EVtEItbV1M4+aurNj0Ryza2sZCXogmht7eCrCfhEOKK0xTMbB3oIP2kEg==
-
-"@schedule-x/calendar@^2.14.3":
-  version "2.21.0"
-  resolved "https://registry.yarnpkg.com/@schedule-x/calendar/-/calendar-2.21.0.tgz#cef7c3f9f429402d3fee07c149ae799a80735ef0"
-  integrity sha512-wiot2lcjIMsbmKcHawD+9kxnLw2f1VSUZt3eOiiUHEZExQnYSmKhUVuufgVEHPZCPp+PrTxOJFlV8vM2pC+dhw==
-
-"@schedule-x/current-time@^2.14.3":
-  version "2.21.0"
-  resolved "https://registry.yarnpkg.com/@schedule-x/current-time/-/current-time-2.21.0.tgz#d64d01d65182c8ca0975d61be556fe7ec2b78516"
-  integrity sha512-Pm/zBblcELCphO0OyBtOlfn0kg5l6MwkekmQqcmFc1Ngj1jklIczaDgFCc7q//CFwWorMFm7r3dhsbyOcczrIg==
-
-"@schedule-x/date-picker@^2.14.3":
-  version "2.21.0"
-  resolved "https://registry.yarnpkg.com/@schedule-x/date-picker/-/date-picker-2.21.0.tgz#09b49673e206cad8886d492dc5bb45308efc0de1"
-  integrity sha512-e5YIw6wtVKePwpCZxnf8zVzVI8atH4Zg38pCdG3kgMlwBOmTtZkoYwOakSH+L5ersCR1jmsRw6QCHoTp07ha9Q==
-
-"@schedule-x/drag-and-drop@^2.14.3":
-  version "2.21.0"
-  resolved "https://registry.yarnpkg.com/@schedule-x/drag-and-drop/-/drag-and-drop-2.21.0.tgz#b5977fbd89d2be01388895fb475949ba13589ba1"
-  integrity sha512-8UsaJgdbt6YEPYRllZFgwK3TKqsKrxcGAYTSkTCCpChssFQXzeWx84rtNiiZoxvLZFDoLY87Rpfhlmj7bMmNbg==
-
-"@schedule-x/event-modal@^2.14.3":
-  version "2.21.0"
-  resolved "https://registry.yarnpkg.com/@schedule-x/event-modal/-/event-modal-2.21.0.tgz#e55df297e78c5f3bb8141c900fbe4291c64c7db1"
-  integrity sha512-8yB1XiBIcmMUD0szfdwBuyciVETlZxKHm50jQotp+N8xO4HWXg4DPyV7N55Rcqa6yyWNygxgn9qlVe6ZWFVXfA==
-
-"@schedule-x/events-service@^2.14.3":
-  version "2.21.0"
-  resolved "https://registry.yarnpkg.com/@schedule-x/events-service/-/events-service-2.21.0.tgz#1a46559ada0ad071013c75a975a6ca46ab3083a1"
-  integrity sha512-X5sK0uq5ZU9eIBQv6z0cZC/2p6RlBckfNyFI4KUp8jUcGzJSUreYF5VCr6kHTFieVFW2iXC3p5RAXl2VBp958g==
-
-"@schedule-x/resize@^2.14.3":
-  version "2.21.0"
-  resolved "https://registry.yarnpkg.com/@schedule-x/resize/-/resize-2.21.0.tgz#acd33f5a8d16b74ce60ed17cfb9b99db4c23ca06"
-  integrity sha512-TQzWpdjxnJcT0ueKLYbYyW2kiSeZm0lhFLuU4GTJPNOUMXfaDGVLQFDmVg2xO/8ybEp7isS6MlnIOgts0Kv96g==
-
-"@schedule-x/scroll-controller@^2.14.3":
-  version "2.21.0"
-  resolved "https://registry.yarnpkg.com/@schedule-x/scroll-controller/-/scroll-controller-2.21.0.tgz#0bf470c7235ac03ed4ef689df05a7f34018cf320"
-  integrity sha512-tMz5qV+/ltyu+A/vSXpHi09A4e8W/l2AyH9cAk3sUlHkVxRszU8B/6P3bagBejac7nVVEm5qw0BWvO5X3QVWlQ==
-
-"@schedule-x/theme-default@^2.14.3":
-  version "2.21.0"
-  resolved "https://registry.yarnpkg.com/@schedule-x/theme-default/-/theme-default-2.21.0.tgz#156e9cd241dbb5e5a80bbb2b8d9e87e813c95c3f"
-  integrity sha512-h0s2+Z28Lj3X9QRSpC4C3gX2FZJjzkWxNFTUXrNqTeBxIqEuCUSIvGz2kbzydkD7Av8Xurk/OUYaoKf+kNQa9w==
-
-"@schedule-x/vue@^2.12.2":
-  version "2.19.0"
-  resolved "https://registry.yarnpkg.com/@schedule-x/vue/-/vue-2.19.0.tgz#3769f8582cb97c10769df6d59db5ba87a5c9663c"
-  integrity sha512-mX+j33HgIv6YJPPiqZnyza54Pta/rD+BJOuZeFDdWbcT6MiLClxxdbBV6Z9SOLUxuKfYR1eOTbI+5LMBG5CDXQ==
 
 "@sideway/address@^4.1.5":
   version "4.1.5"
@@ -11997,6 +11930,11 @@ vue-bundle-renderer@^1.0.3:
   integrity sha512-EfjX+5TTUl70bki9hPuVp+54JiZOvFIfoWBcfXsSwLzKEiDYyHNi5iX8srnqLIv3YRnvxgbntdcG1WPq0MvffQ==
   dependencies:
     ufo "^1.1.1"
+
+vue-cal@^5.0.1-rc.1:
+  version "5.0.1-rc.1"
+  resolved "https://registry.yarnpkg.com/vue-cal/-/vue-cal-5.0.1-rc.1.tgz#8767e95ec040267cf746e7b5ce60a6ab801b56b8"
+  integrity sha512-rc4jDaD8hDluZA91aAiCbYM1tO2kS1RWEh2gHZfB3Wb7/r/FnPJj82EE/5+TGJwwSZ9luz/jEmQpDpoJFMFZBA==
 
 vue-datepicker-next@^1.0.3:
   version "1.0.3"

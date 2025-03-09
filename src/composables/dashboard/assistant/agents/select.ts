@@ -34,7 +34,7 @@ export const useOnAssistantLoad = () => {
     const selectedAgentRef = ref()
     const fetchSelectedAgent = async () => {
         await getSingleFirestoreDocument('users', user_id.value!, selectedUser)
-        console.log(selectedUser.value?.selected_agent_id)
+
         try {
             if (selectedUser.value?.selected_agent_id) {
                 await getSingleFirestoreDocument('agents', selectedUser.value?.selected_agent_id, selectedAgentRef)

@@ -18,7 +18,6 @@ export const useLinkGoogleSheets = () => {
 
         try {
             const { data } = await axios.get('/api/getAuthUrl?integration=spreadsheet')
-            console.log(data)
             if (data.authUrl) {
                 const authWindow = window.open(data.authUrl, '_blank')
                 const id = uuidv4()
@@ -44,7 +43,6 @@ export const useLinkGoogleSheets = () => {
                             })
                             localStorage.setItem('oauth_result', '')
                         } else {
-                            console.log('error')
                             // Optionally handle error with useAlert()
                         }
                         loading.value = false
