@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
 
     if (isRateLimited(ip)) {
       throw createError({
-        statusCode: 429,
+        status: 429,
         message: 'Too Many Requests'
       })
     }
@@ -48,17 +48,17 @@ export default defineEventHandler(async (event) => {
 
     if (error instanceof InvalidPromptError) {
       return createError({
-        statusCode: 400,
+        status: 400,
         message: 'Invalid prompt: ' + error.message
       })
     } else if (error instanceof Error) {
       return createError({
-        statusCode: 500,
+        status: 500,
         message: error.message
       })
     } else {
       return createError({
-        statusCode: 500,
+        status: 500,
         message: 'Internal Server Error'
       })
     }

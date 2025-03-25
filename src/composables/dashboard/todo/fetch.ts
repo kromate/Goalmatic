@@ -1,13 +1,19 @@
-import { getFirestoreCollectionWithWhereQuery, getFirestoreSubCollectionWithWhereQuery } from '@/firebase/firestore/query'
-import { getFirestoreSubCollection } from '@/firebase/firestore/fetch'
-import { useAlert } from '@/composables/core/notification'
+import { useTodoDate } from './date_logic'
+import { getFirestoreSubCollectionWithWhereQuery } from '@/firebase/firestore/query'
 import { useUser } from '@/composables/auth/user'
+import type { Todo } from '@/types/todo'
 
 
-
-const userTodos = ref([] as Record<string, any>[])
+const userTodos = ref([] as Todo[])
+const laterTodos = ref([] as Todo[])
 const loading = ref(false)
+
+// Track fetched months to avoid redundant calls
+const fetchedMonths = ref(new Set<string>())
+
+
 export const useFetchUserTodos = () => {
+    const { dateState, isSameDay } = useTodoDate()
     const { id: user_id } = useUser()
     const currentWeekOffset = ref(0)
     const fetchedWeeks = ref(new Set<number>())
@@ -30,106 +36,90 @@ export const useFetchUserTodos = () => {
         endOfWeek.setHours(23, 59, 59, 999)
 
         await getFirestoreSubCollectionWithWhereQuery(
-            'users',
-            user_id.value!,
-            'todos',
-            userTodos,
-            {
-                name: 'date',
-                operator: '>=',
-                value: startOfWeek.toISOString()
-            },
-            {
-                name: 'date',
-                operator: '<=',
-                value: endOfWeek.toISOString()
-            }
+            'users', user_id.value!, 'todos', userTodos,
+            { name: 'date', operator: '>=', value: startOfWeek.toISOString() },
+            { name: 'date', operator: '<=', value: endOfWeek.toISOString() }
         )
 
         // Mark this week as fetched
         fetchedWeeks.value.add(currentWeekOffset.value)
     }
 
-    const fetchTodos = async (paginatedDays:Record<string, any>[], current_month:string, current_year: number) => {
-        userTodos.value = []
+    const fetchMonthTodos = async (month: string, year: number) => {
+        // Create a unique key for this month/year combination
+        const monthKey = `${month}-${year}`
+
+        // Skip if we've already fetched this month
+        if (fetchedMonths.value.has(monthKey)) {
+            return
+        }
+
         loading.value = true
-        const startOfWeek = new Date(`${paginatedDays[0]?.date}/${current_month}/${current_year}`)
-        const endOfWeek = new Date(`${paginatedDays[paginatedDays?.length - 1]?.date}/${current_month}/${current_year}`)
-        await getFirestoreSubCollectionWithWhereQuery(
-            'users',
-            user_id.value!,
-            'todos',
-            userTodos,
-            {
-                name: 'date',
-                operator: '>=',
-                value: startOfWeek.toISOString()
-            },
-            {
-                name: 'date',
-                operator: '<=',
-                value: endOfWeek.toISOString()
-            }
-        )
-        loading.value = false
-        // // Mark this week as fetched
-        // fetchedWeeks.value.add(currentWeekOffset.value)
+        // userTodos.value = [] // Clear existing todos
+
+        // Calculate start and end of month
+        const monthIndex = new Date(`${month} 1, ${year}`).getMonth()
+        const startOfMonth = new Date(year, monthIndex, 1)
+        startOfMonth.setHours(0, 0, 0, 0)
+
+        const endOfMonth = new Date(year, monthIndex + 1, 0)
+        endOfMonth.setHours(23, 59, 59, 999)
+
+        try {
+            await getFirestoreSubCollectionWithWhereQuery(
+                'users',
+                user_id.value!,
+                'todos',
+                userTodos,
+                { name: 'date', operator: '>=', value: startOfMonth.toISOString() },
+                { name: 'date', operator: '<=', value: endOfMonth.toISOString() }
+            )
+
+            // Mark this month as fetched
+            fetchedMonths.value.add(monthKey)
+            console.log(`Fetched todos for ${monthKey}`)
+        } catch (error) {
+            console.error(`Error fetching todos for ${monthKey}:`, error)
+        } finally {
+            loading.value = false
+        }
     }
 
-    const navigateWeek = (direction: 'prev' | 'next') => {
-        currentWeekOffset.value += direction === 'next' ? 1 : -1
-        fetchUsersTodos()
+    // Legacy function kept for backward compatibility
+    const fetchTodos = async (paginatedDays: Record<string, any>[], current_month: string, current_year: number) => {
+        // This now just delegates to the optimized version
+        await fetchMonthTodos(current_month, current_year)
     }
 
-    const weekLabel = computed(() => {
-        const today = new Date()
-        const startOfWeek = new Date(today)
-        startOfWeek.setDate(today.getDate() - today.getDay() + (currentWeekOffset.value * 7))
-
-        const endOfWeek = new Date(startOfWeek)
-        endOfWeek.setDate(startOfWeek.getDate() + 6)
-
-        const formatDate = (date: Date) => date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
-        return `${formatDate(startOfWeek)} - ${formatDate(endOfWeek)}`
+    const currentDayTodo = computed(() => {
+        return userTodos.value?.filter((el) => {
+            const current_date = new Date(`${dateState.day}/${dateState.month}/${dateState.year}`)
+            const created_date = new Date(el?.date)
+            return isSameDay(current_date, created_date)
+        })
     })
 
-    const groupTodosByDate = computed(() => {
-        const groupedTasks = {} as Record<string, any>
-        const allTodos = [...userTodos.value]
-
-        // Generate dates for the week starting from Sunday with offset
-        const today = new Date()
-        const startOfWeek = new Date(today)
-        startOfWeek.setDate(today.getDate() - today.getDay() + (currentWeekOffset.value * 7))
-
-        const weekDays = Array.from({ length: 7 }, (_, i) => {
-            const date = new Date(startOfWeek.getTime())
-            date.setDate(startOfWeek.getDate() + i)
-            return date.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' })
-        })
-
-        // Initialize groupedTasks with empty arrays for each day of the week
-        weekDays.forEach((date) => {
-            groupedTasks[date] = { date, tasks: [] }
-        })
-
-        // Add all todos to their respective dates
-        allTodos.forEach((todo) => {
-            const date = new Date(todo.date).toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' })
-            if (groupedTasks[date]) {
-                groupedTasks[date].tasks.push(todo)
-                // Sort tasks array: uncompleted first, then completed
-                groupedTasks[date].tasks.sort((a: any, b: any) => {
-                    if (a.completed === b.completed) return 0
-                    return a.completed ? 1 : -1
-                })
-            }
-        })
-
-        return Object.values(groupedTasks)
+    const todayTasks = computed(() => {
+        return currentDayTodo.value?.filter((todo) => !todo.completed && !todo.later) as Todo[]
     })
 
-    return { loading, groupTodosByDate, fetchUsersTodos, navigateWeek, weekLabel, currentWeekOffset, fetchedWeeks, userTodos, fetchTodos }
+    // Filter for completed tasks
+    const completedTasks = computed(() => {
+        return currentDayTodo.value?.filter((todo) => todo.completed) as Todo[]
+    })
+
+    return {
+        loading,
+        todayTasks,
+        completedTasks,
+        fetchUsersTodos,
+        currentWeekOffset,
+        fetchedWeeks,
+        userTodos,
+        fetchTodos,
+        fetchMonthTodos,
+        fetchedMonths
+    }
 }
 
 
@@ -145,4 +135,29 @@ export const useFetchUserTodosByGoalId = () => {
     }
 
     return { fetchTodosByGoalId, todos, loading }
+}
+
+export const useFetchUserLaterTodos = () => {
+    const loading = ref(false)
+    const { id: user_id } = useUser()
+
+
+    const fetchlaterTodos = async () => {
+        loading.value = true
+        try {
+            await getFirestoreSubCollectionWithWhereQuery(
+                'users',
+                user_id.value!,
+                'todos',
+                laterTodos,
+                { name: 'later', operator: '==', value: true }
+            )
+        } catch (error: any) {
+            console.error('Error fetching later tasks:', error)
+        } finally {
+            loading.value = false
+        }
+    }
+
+    return { fetchlaterTodos, laterTodos, loading }
 }

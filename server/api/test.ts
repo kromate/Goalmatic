@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
   const { credentials, queryParams } = body
 
   if (!credentials) {
-    throw createError({ statusCode: 401, message: 'No credentials provided' })
+    throw createError({ status: 401, message: 'No credentials provided' })
   }
 
   const oAuth2Client = new google.auth.OAuth2(clientId, clientSecret)
@@ -29,10 +29,10 @@ export default defineEventHandler(async (event) => {
     })
 
     return {
-      statusCode: 200,
+      status: 200,
       data: response.data.items
     }
   } catch (error: any) {
-    throw createError({ statusCode: 401, message: error.message })
+    throw createError({ status: 401, message: error.message })
   }
 })

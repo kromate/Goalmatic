@@ -57,7 +57,12 @@ export const useFetchCalendarIntegrations = () => {
     const setAllCalendarIntegrationsStorage = (data) => {
         if (!data.length) return
         if (process.client) {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
+            // Convert array to object using ID as key
+            const integrationsMap = data.reduce((acc, integration) => {
+                acc[integration.id] = integration
+                return acc
+            }, {})
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(integrationsMap))
         }
     }
 
@@ -65,9 +70,9 @@ export const useFetchCalendarIntegrations = () => {
         const stored = getStoredIntegrations()
         if (!stored) {
             await fetchCalendarIntegrations()
-            return getStoredIntegrations()
+            return Object.values(getStoredIntegrations())
         }
-        return stored
+        return Object.values(stored)
     }
 
     return { fetchCalendarIntegrations, getCalendarIntegrationsStorage }

@@ -8,10 +8,18 @@ export default defineEventHandler(async (event) => {
   const clientSecret = import.meta.env.G_AUTH_CLIENT_SECRET
 
   const body = await readBody(event)
-  const { credentials, queryParams } = body
+  const { credentials, eventId, eventData } = body
 
   if (!credentials) {
     throw createError({ status: 401, message: 'No credentials provided' })
+  }
+
+  if (!eventId) {
+    throw createError({ status: 400, message: 'Event ID is required' })
+  }
+
+  if (!eventData) {
+    throw createError({ status: 400, message: 'No event data provided' })
   }
 
   const oAuth2Client = new google.auth.OAuth2(clientId, clientSecret)
@@ -48,41 +56,36 @@ export default defineEventHandler(async (event) => {
         })
       }
     } catch (error) {
-      console.error('Error refreshing token in fetch:', error)
+      console.error('Error refreshing token in update:', error)
       // Continue with the old token and hope for the best
     }
   }
 
   const calendar = google.calendar({ version: 'v3', auth: oAuth2Client })
 
-  // Verify queryParams has the required fields
-  if (!queryParams || !queryParams.timeMin || !queryParams.timeMax) {
-    throw createError({
-      status: 400,
-      message: 'Missing required query parameters: timeMin and timeMax'
-    })
-  }
-
   try {
-    const response = await calendar.events.list({
-      calendarId: 'primary',
-      ...queryParams
+    const calendarId = eventData.calendarId || 'primary'
+
+    const response = await calendar.events.update({
+      calendarId,
+      eventId,
+      requestBody: eventData
     })
 
-    // Return both the refreshed credentials (if any) and the events
+    // Return both the refreshed credentials (if any) and the updated event
     return {
       status: 200,
-      data: response.data.items,
+      data: response.data,
       credentials: {
         access_token: credentials.access_token,
         expiry_date: credentials.expiry_date
       }
     }
   } catch (error: any) {
-    console.error('Error fetching calendar events:', error)
+    console.error('Error updating calendar event:', error)
     throw createError({
-      status: error.code || 401,
-      message: error.message || 'Failed to fetch calendar events'
+      status: error.code || 400,
+      message: error.message || 'Failed to update calendar event'
     })
   }
 })

@@ -1,4 +1,4 @@
-import { useFetchUserTodos } from './fetch'
+import { useFetchUserTodos, useFetchUserLaterTodos } from './fetch'
 
 interface DayInfo {
     day: string
@@ -24,9 +24,16 @@ export const useTodoDate = () => {
         dateState.year = date.getFullYear()
     }
 
-    const getTodos = () => {
-        const { fetchTodos } = useFetchUserTodos()
-        fetchTodos(paginatedDays.value, dateState.month, dateState.year)
+    const getTodos = (type: string | null = null) => {
+        const { fetchMonthTodos } = useFetchUserTodos()
+        const { fetchlaterTodos } = useFetchUserLaterTodos()
+
+        // Fetch todos for the entire month instead of just the week
+        fetchMonthTodos(dateState.month, dateState.year)
+
+        if (!type) {
+            fetchlaterTodos()
+        }
     }
 
     const getNextMonth = (forward: boolean) => {
@@ -39,10 +46,10 @@ export const useTodoDate = () => {
         updateCurrentDay()
 
         getDaysInMonth(dateState.month, dateState.year)
-        getTodos()
+        getTodos('MONTH') // This will only fetch if the month hasn't been fetched before
     }
 
-    const getCurrentMonthAndYear = () => {
+    const getCurrentMonthAndYear = (type: string | null = null) => {
         const currentDate = new Date()
         setMonthAndYear(currentDate)
 
@@ -50,7 +57,7 @@ export const useTodoDate = () => {
         dateState.week = Math.ceil(dateState.day / 7)
 
         getDaysInMonth(dateState.month, dateState.year)
-        getTodos()
+        getTodos(type) // This will only fetch if the month hasn't been fetched before
     }
 
     const getDaysInMonth = (month: string, year: number) => {
@@ -82,12 +89,31 @@ export const useTodoDate = () => {
             dateState.week--
         }
         updateCurrentDay()
-        getTodos()
+        // Note: We don't need to fetch todos here anymore as we already have the month's data
+        // The TodoView will automatically filter the todos for the selected day
+    }
+    const isSameDay = (date1: Date, date2: Date) => {
+        return (
+            date1.getFullYear() === date2.getFullYear() &&
+            date1.getMonth() === date2.getMonth() &&
+            date1.getDate() === date2.getDate()
+        )
+    }
+
+    const isToday = computed(() => {
+        const today = new Date()
+        return isSameDay(today, new Date(`${dateState.day}/${dateState.month}/${dateState.year}`))
+    })
+
+    const goToToday = () => {
+	getCurrentMonthAndYear('TODAY')
+	const today = new Date()
+	dateState.day = today.getDate()
     }
 
     return {
-        ...toRefs(dateState),
-        getNextMonth,
+        dateState, isSameDay, isToday,
+        getNextMonth, goToToday,
         getCurrentMonthAndYear,
         getDaysInMonth,
         paginatedDays,

@@ -11,7 +11,7 @@
 					</p>
 					<button
 						class="h-8 center bg-[#8F61F2] text-white border border-[#E9E9E9] px-3 shadow rounded-full text-sm"
-						@click="goToToday"
+						@click="$emit('go-to-today')"
 					>
 						Today
 					</button>
@@ -129,7 +129,7 @@
 					@drop="onDropLater"
 				>
 					<transition name="fade">
-						<div v-if="laterTasks.length > 0">
+						<div v-if="laterTasks.length > 0" class="flex flex-col gap-2">
 							<template v-for="todo in laterTasks" :key="todo?.id">
 								<ModulesTodosTaskCard
 									:todo="todo"
@@ -236,9 +236,7 @@ const displayAnotherWeek = (forward: boolean) => {
   emit('display-another-week', forward)
 }
 
-const goToToday = () => {
-  emit('go-to-today')
-}
+
 
 const createNewTodo = () => {
   emit('create-new-todo', title.value)

@@ -1,14 +1,16 @@
 import { Timestamp } from 'firebase/firestore'
+import { useTodoDate } from './date_logic'
 import { updateFirestoreSubDocument } from '@/firebase/firestore/edit'
 import { useUser } from '@/composables/auth/user'
 import { useDashboardModal } from '@/composables/core/modals'
 import { Todo } from '@/types/todo'
-
 const selectedTodo = ref()
 
-export const useEditTodo = () => {
-    const draggedTodo = ref()
 
+export const useEditTodo = () => {
+    const { dateState } = useTodoDate()
+    const draggedTodo = ref()
+    const showSubtasks = ref(false)
     const { id: user_id } = useUser()
     const loading = ref(false)
     const highlightTodo = (todo: Record<string, any>) => {
@@ -37,10 +39,11 @@ export const useEditTodo = () => {
 
     async function onDropToday() {
         if (draggedTodo.value && draggedTodo.value.later) {
-            // When moving from Later to Today, update the task's date to the current selected date
-            // and set later to false
+            const targetDate = new Date(`${dateState.day}/${dateState.month}/${dateState.year}`)
             await updateTodo({
                 ...draggedTodo.value,
+                former_date: draggedTodo.value.date,
+                date: targetDate.toISOString(),
                 later: false
             })
         }
@@ -49,8 +52,6 @@ export const useEditTodo = () => {
 
     async function onDropLater() {
         if (draggedTodo.value && !draggedTodo.value.later && !draggedTodo.value.completed) {
-            // Move from "Today" to "Later" only if it's not completed
-            // When moving to Later, keep the original due date but mark it as later
             await updateTodo({
                 ...draggedTodo.value,
                 later: true
@@ -59,25 +60,33 @@ export const useEditTodo = () => {
         draggedTodo.value = null
     }
 
-    const updateTodoDate = async (todo: Todo, newDate: string) => {
-        try {
-            // Make a copy of the todo to avoid reference issues
-            const updatedTodo = { ...todo, date: newDate }
+    const toggleSubtasks = () => {
+	showSubtasks.value = !showSubtasks.value
+}
 
-            // If task is moved to a new date, it shouldn't be in the "Later" section
-            if (todo.later) {
-                updatedTodo.later = false
-            }
+    const toggleComplete = async (props) => {
+	await updateTodo({
+		...props.todo,
+		completed: !props.todo.completed,
+		later: props.todo.later && !props.todo.completed ? false : props.todo.later
+	})
+}
 
-            // Call your API to update the todo
-            await updateTodo(updatedTodo)
+const toggleSubtaskComplete = async (props: any, subtask: any) => {
+	const updatedSubtasks = props.todo.subtasks?.map((st: any) => {
+		if (st.id === subtask.id) {
+			return { ...st, completed: !st.completed }
+		}
+		return st
+	})
 
-            return true
-        } catch (error) {
-            console.error('Error updating todo date:', error)
-            return false
-        }
-    }
+	// Update the todo with the new subtasks array
+	await updateTodo({
+		...props.todo,
+		subtasks: updatedSubtasks
+	})
+}
 
-    return { highlightTodo, selectedTodo, updateTodo, loading, draggedTodo, onDragStart, onDropToday, onDropLater, updateTodoDate }
+
+    return { highlightTodo, selectedTodo, updateTodo, loading, draggedTodo, onDragStart, onDropToday, onDropLater, showSubtasks, toggleSubtasks, toggleComplete, toggleSubtaskComplete }
 }

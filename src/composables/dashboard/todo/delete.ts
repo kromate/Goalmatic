@@ -1,4 +1,3 @@
-import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import { useUser } from '../../auth/user'
 import { deleteFirestoreSubCollectionDocument } from '@/firebase/firestore/delete'

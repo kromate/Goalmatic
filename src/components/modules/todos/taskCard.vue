@@ -12,7 +12,7 @@
 					<button
 						class="w-5 h-5 rounded-full border flex-shrink-0 text-light"
 						:class="todo.completed ? 'bg-[#8F61F2] border-[#8F61F2]' : 'border-[#E9E9E9]'"
-						@click.stop="toggleComplete"
+						@click.stop="toggleComplete(props)"
 					>
 						<Check v-if="todo.completed" class="w-full h-full" />
 					</button>
@@ -58,7 +58,7 @@
 				</div>
 			</div>
 			<!-- Subtasks section -->
-			<div v-if="hasSubtasks" class="pl-8 mt-1 space-y-2 border-t border-[#E9E9E9]">
+			<div v-if="todo.subtasks && todo.subtasks.length > 0" class="pl-8 mt-1 space-y-2 border-t border-[#E9E9E9]">
 				<div class="flex items-center justify-between gap-2 text-grey_four text-sm pt-2" @click.stop="toggleSubtasks">
 					<p>{{ props.todo.subtasks?.length }} sub task ({{ props.todo.subtasks?.filter((subtask: any) => subtask.completed).length }} completed)</p>
 					<button class="bg-hover py-1 px-2 border border-line rounded">
@@ -76,7 +76,7 @@
 								<button
 									class="w-4 h-4 rounded-full border flex-shrink-0 text-light"
 									:class="subtask.completed ? 'bg-[#8F61F2] border-[#8F61F2]' : 'border-[#E9E9E9]'"
-									@click.stop="toggleSubtaskComplete(subtask)"
+									@click.stop="toggleSubtaskComplete(props, subtask)"
 								>
 									<Check v-if="subtask.completed" class="w-full h-full" />
 								</button>
@@ -94,26 +94,22 @@
 
 <script setup lang="ts">
 import { Check, Trash2, ChevronDown, Calendar, Clock } from 'lucide-vue-next'
-import { ref, computed } from 'vue'
 
 import { useEditTodo } from '@/composables/dashboard/todo/edit'
 import { useDeleteTodo } from '@/composables/dashboard/todo/delete'
 import type { Todo } from '@/types/todo'
 
-const { updateTodo, highlightTodo } = useEditTodo()
+const { highlightTodo, showSubtasks, toggleSubtasks, toggleComplete, toggleSubtaskComplete } = useEditTodo()
 const { setDeleteTodoData } = useDeleteTodo()
 
-const showSubtasks = ref(false)
+
 
 const onDragStart = (event: DragEvent, todo: Todo) => {
 	emit('dragstart', event, todo)
-	event?.dataTransfer?.setData('event', JSON.stringify(todo))
+	event?.dataTransfer?.setData('event', JSON.stringify({ ...todo, isTodoCard: true, class: 'calCard' }))
 	event?.dataTransfer?.setData('cursor-grab-at', event?.offsetY.toString())
 }
 
-const hasSubtasks = computed(() => {
-	return props.todo.subtasks && props.todo.subtasks.length > 0
-})
 
 const hasDueDate = computed(() => {
 	return props.todo.dueDate && props.todo.dueDate !== ''
@@ -156,33 +152,9 @@ const formattedDueDate = computed(() => {
 	}
 })
 
-const toggleSubtasks = () => {
-	showSubtasks.value = !showSubtasks.value
-}
 
-const toggleComplete = async () => {
-	await updateTodo({
-		...props.todo,
-		completed: !props.todo.completed,
-		later: props.todo.later && !props.todo.completed ? false : props.todo.later
-	})
-}
 
-const toggleSubtaskComplete = async (subtask: any) => {
-	// Create a new array with the updated subtask
-	const updatedSubtasks = props.todo.subtasks?.map((st: any) => {
-		if (st.id === subtask.id) {
-			return { ...st, completed: !st.completed }
-		}
-		return st
-	})
 
-	// Update the todo with the new subtasks array
-	await updateTodo({
-		...props.todo,
-		subtasks: updatedSubtasks
-	})
-}
 
 const props = defineProps<{
 	todo: Todo,

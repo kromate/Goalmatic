@@ -1,4 +1,3 @@
-
 import { useAlert } from '@/composables/core/notification'
 
 export const convertTo12HourFormat = (time: string): string => {
@@ -51,9 +50,15 @@ export const formatDate = (dateString: string | number, type?: 'dateInput'): str
   }
 }
 
+export const formatDateTimeForInput = (date: Date): string => {
+	const year = date.getFullYear()
+	const month = (date.getMonth() + 1).toString().padStart(2, '0')
+	const day = date.getDate().toString().padStart(2, '0')
+	const hours = date.getHours().toString().padStart(2, '0')
+	const minutes = date.getMinutes().toString().padStart(2, '0')
 
-
-
+	return `${year}-${month}-${day}T${hours}:${minutes}`
+}
 
 export const truncateString = (input: string, maxLength = 80): string => {
   if (!input) return ''
@@ -64,11 +69,8 @@ export const truncateString = (input: string, maxLength = 80): string => {
   }
 }
 
-
-
 export const formatDateString = (dateStr: string, options: Intl.DateTimeFormatOptions = { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' }): string => {
   const date = new Date(dateStr)
-
 
   return new Intl.DateTimeFormat('en-US', options).format(date)
 }
@@ -99,7 +101,6 @@ export const validate_data = (data: Record<string, any>, ignoreKeys: string[] = 
   }
   return true
 }
-
 
 export const transformString = (inputString: string): string => {
   const trimmedString = inputString.trim()

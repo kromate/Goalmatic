@@ -3,12 +3,12 @@
 		<DropdownMenuRoot v-slot="{open}" :modal="false">
 			<DropdownMenuTrigger as-child>
 				<button
-					class="flex outline-none items-center font-normal p-1 border rounded border-dark center card_btn"
+					class="flex outline-none items-center  center "
 					:class="btnClass"
 				>
 					<EllipsisIcon
 						:class="open ? '' : 'text-opacity-70'"
-						class="h-5 w-5"
+						class="h-4 w-4 rotate-90"
 						aria-hidden="true"
 					/>
 				</button>

@@ -8,10 +8,14 @@ export default defineEventHandler(async (event) => {
   const clientSecret = import.meta.env.G_AUTH_CLIENT_SECRET
 
   const body = await readBody(event)
-  const { credentials, queryParams } = body
+  const { credentials, eventData } = body
 
   if (!credentials) {
     throw createError({ status: 401, message: 'No credentials provided' })
+  }
+
+  if (!eventData) {
+    throw createError({ status: 400, message: 'No event data provided' })
   }
 
   const oAuth2Client = new google.auth.OAuth2(clientId, clientSecret)
@@ -48,41 +52,33 @@ export default defineEventHandler(async (event) => {
         })
       }
     } catch (error) {
-      console.error('Error refreshing token in fetch:', error)
+      console.error('Error refreshing token in create:', error)
       // Continue with the old token and hope for the best
     }
   }
 
   const calendar = google.calendar({ version: 'v3', auth: oAuth2Client })
 
-  // Verify queryParams has the required fields
-  if (!queryParams || !queryParams.timeMin || !queryParams.timeMax) {
-    throw createError({
-      status: 400,
-      message: 'Missing required query parameters: timeMin and timeMax'
-    })
-  }
-
   try {
-    const response = await calendar.events.list({
-      calendarId: 'primary',
-      ...queryParams
+    const response = await calendar.events.insert({
+      calendarId: eventData.calendarId || 'primary',
+      requestBody: eventData
     })
 
-    // Return both the refreshed credentials (if any) and the events
+    // Return both the refreshed credentials (if any) and the created event
     return {
       status: 200,
-      data: response.data.items,
+      data: response.data,
       credentials: {
         access_token: credentials.access_token,
         expiry_date: credentials.expiry_date
       }
     }
   } catch (error: any) {
-    console.error('Error fetching calendar events:', error)
+    console.error('Error creating calendar event:', error)
     throw createError({
-      status: error.code || 401,
-      message: error.message || 'Failed to fetch calendar events'
+      status: error.code || 400,
+      message: error.message || 'Failed to create calendar event'
     })
   }
 })

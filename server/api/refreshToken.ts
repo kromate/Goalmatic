@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
   const { refresh_token } = body
 
   if (!refresh_token) {
-    throw createError({ statusCode: 400, message: 'No refresh token provided' })
+    throw createError({ status: 400, message: 'No refresh token provided' })
   }
 
   try {
@@ -20,14 +20,14 @@ export default defineEventHandler(async (event) => {
     const { credentials } = await oAuth2Client.refreshAccessToken()
 
     return {
-      statusCode: 200,
+      status: 200,
       access_token: credentials.access_token,
       expiry_date: credentials.expiry_date
     }
   } catch (error: any) {
     console.error('Token refresh error:', error)
     throw createError({
-      statusCode: 401,
+      status: 401,
       message: error.message || 'Failed to refresh token'
     })
   }

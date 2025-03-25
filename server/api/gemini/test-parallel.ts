@@ -91,17 +91,17 @@ export default defineEventHandler(async (event) => {
 
     if (error instanceof InvalidPromptError) {
       return createError({
-        statusCode: 400,
+        status: 400,
         message: 'Invalid prompt: ' + error.message
       })
     } else if (error instanceof Error) {
       return createError({
-        statusCode: 500,
+        status: 500,
         message: error.message
       })
     } else {
       return createError({
-        statusCode: 500,
+        status: 500,
         message: 'Internal Server Error'
       })
     }

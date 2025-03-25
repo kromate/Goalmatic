@@ -10,6 +10,8 @@ import LoadingVerification from '@/components/modals/core/loading.vue'
 // ==================== DASHBOARD ===============================
 import StartGoal from '@/components/modals/dashboard/StartGoal.vue'
 import EditTodo from '@/components/modals/dashboard/EditTodo.vue'
+import EditEvent from '@/components/modals/dashboard/EditEvent.vue'
+import CreateEvent from '@/components/modals/dashboard/CreateEvent.vue'
 
 // ==================== BOTTOMBAR ===============================
 import BottomMenu from '@/components/layouts/bottomBar/modal/Main.vue'
@@ -26,14 +28,14 @@ import EditConfig from '@/components/modals/integrations/EditConfig.vue'
 
 
 type AuthTypes = 'Logout'
-type DashboardTypes = 'StartGoal' | 'EditTodo'
+type DashboardTypes = 'StartGoal' | 'EditTodo' | 'EditEvent' | 'CreateEvent'
 type CoreTypes = 'Confirmation' | 'LoadingVerification'
 type BottombarTypes = 'BottomMenu'
 type AssistantTypes = 'CreateAgent' | 'EditToolConfig'
 type IntegrationsTypes = 'ConnectWhatsapp' | 'EditConfig'
 
 const AuthModals = { Logout } as Record<AuthTypes, any>
-const DashboardModals = { StartGoal, EditTodo } as Record<DashboardTypes, any>
+const DashboardModals = { StartGoal, EditTodo, EditEvent, CreateEvent } as Record<DashboardTypes, any>
 const CoreModals = { Confirmation, LoadingVerification } as Record<CoreTypes, any>
 const BottombarModals = { BottomMenu } as Record<BottombarTypes, any>
 const AssistantModals = { CreateAgent, EditToolConfig } as Record<AssistantTypes, any>
